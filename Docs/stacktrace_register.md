@@ -1,0 +1,95 @@
+# 手动断点的 Stacktrace 与寄存器采集
+
+此脚本读取用户已经手动停住的 Cheat Engine 调试现场，生成寄存器表、启发式栈候选表及原始 MCP 快照。脚本不附加目标、不设置或删除断点、不暂停或继续目标、不写目标内存，结束时只关闭自己启动的 Gateway。
+
+## 环境与手动准备
+
+- Windows x64、Cheat Engine 7.7 x64，安装目录为 `C:\Program Files\Cheat Engine`。
+- 已按 [MCP 部署说明](mcp_setup.md) 启用 `CheatEngine.Mcp.dll`。本项目使用 `CheatEngine.Mcp-2.0.0-beta.2-win-x64` 包。
+- 已安装包所需的 .NET 10 运行时：`Microsoft.NETCore.App`、`Microsoft.AspNetCore.App`、`Microsoft.WindowsDesktop.App`；CE 的 runtimeconfig 需与部署要求一致。
+- Gateway 与 CE 使用同一个 Windows 用户运行，具备访问目标的权限。
+- Python 3.10 或更新版本；仅使用标准库及项目内的 `ce_mcp_client.py`、`opcode_report.py`。
+
+先在 CE 中选择目标进程，手动设置并命中断点，确认调试器处于 stopped/broken 状态，再运行采集。采集期间保持现场不动，不单步、不继续、不切换线程或目标进程。脚本的首尾状态和会话指纹校验无法识别两次调用之间发生的继续后再次停止，也不能替代用户保持现场稳定。
+
+## 执行命令
+
+从项目根目录运行：
+
+```powershell
+Set-Location D:\cebuild\ce-custom
+python ./Scripts/get_stacktrace_register_at_breakpoint.py
+```
+
+默认 Gateway：`McpExternals/CheatEngine.Mcp-2.0.0-beta.2-win-x64/CheatEngine.Mcp.Gateway.exe`。
+默认输出目录：项目根目录 `Output`。这两个默认值以脚本所在项目为基准，不受启动目录影响。
+
+可选参数：
+
+```powershell
+python ./Scripts/get_stacktrace_register_at_breakpoint.py --instance-id "<instance_list 返回的精确 ID>" --timeout 30 --output "D:\cebuild\ce-custom\Output"
+python ./Scripts/get_stacktrace_register_at_breakpoint.py --gateway "D:\path\CheatEngine.Mcp.Gateway.exe"
+```
+
+`--timeout` 为每次 MCP 请求的正整数超时秒数，默认 30。实例不唯一时必须指定 `--instance-id`，脚本不会猜选。`discoveryIncomplete=true` 时也不会采集。
+
+同一输出目录同一时刻只允许一个采集实例。脚本不提供并发锁；同时运行的两个实例会使用同一个 `streg_gateway.stderr.log`，可能截断彼此日志并覆盖同地址报告。需要并行运行时使用不同的 `--output` 目录。
+
+## 输出与字段解释
+
+成功写入 `Output/streg_<RIP-or-EIP>.md`。地址为当前停止上下文的 RIP（64 位）或 EIP（32 位），规范化为大写十六进制、无 `0x`、无前导零。**该地址不保证等于断点列表登记地址**，例如单步或异常停顿也可能产生停止上下文。
+
+同一地址再次成功采集会原子覆盖当前快照，旧的寄存器行不会残留。写入失败保留此前完整报告，因此目录中已有报告不表示本次采集成功；应同时检查退出码和报告采集时间。文件使用 UTF-8、LF。每次成功只写入一个 Markdown 报告，不生成额外 manifest。
+
+`streg_gateway.stderr.log` 是 Gateway 的诊断日志，每次启动覆盖，不能作为寄存器或栈数据使用。
+
+| 区域 | 含义 |
+| --- | --- |
+| 标题及元数据 | 停止指令地址、UTC 采集时间、CE 实例、目标 PID/名称、指针宽度、调试接口及 stopped 状态 |
+| Registers | MCP 返回的所有寄存器键和值，按名称稳定排序；始终请求 `includeExtraRegisters=true` |
+| FP/XMM | 后端提供时保留 FP0–FP7、XMM0–XMM15（32 位通常为 XMM0–XMM7）；字节序列为内存顺序，little-endian，低有效字节在前，不重新解释成浮点数 |
+| Stacktrace | 保持 CE 返回顺序的候选列表：序号、栈槽地址、候选返回地址、可选 callInstruction、可选 isHeuristic |
+| scannedSlots | 实际扫描栈槽数，范围 0–128；空候选列表仍记录扫描数量 |
+| Capture Contract | 只读范围、停止地址语义和启发式扫描限制 |
+| Raw MCP Snapshot | 完整状态、context、stacktrace、前后 overview、runtime 信息、会话指纹及资源计数，使用稳定缩进 JSON 保存 |
+| residueCheck | 成功报告为 `unchanged`，并包含前后 resourceCount/jobCount；变化时日志显示 `changed`，末次核对不可用时显示 `unavailable` 或传输错误，拒绝写入新报告 |
+
+FP/XMM 是否出现取决于调试器后端，缺失不等于零，不补猜测值。`activeInterface=null` 和未返回的可选 frame 字段在表格显示 `unavailable`，Raw JSON 保留原始结构。Markdown 中的控制字符、换行和分隔符会清洗，原始内容可从 JSON 还原。
+
+## Stacktrace 的适用边界
+
+`debugger_get_stack_trace(depth=128)` 最多扫描 **128 个栈槽**，不是保证返回 128 个调用帧。frame 是启发式候选，可能包含陈旧栈数据或误判的代码指针，并非符号器确认的调用链。`callInstruction` 只在 CE 能反汇编时提供候选信息，可缺省。分析时必须结合断点现场和反汇编人工复核；本脚本不额外调用反汇编或内存读取工具修正结果。
+
+业务调用限定为 `instance_list`、`runtime_get_info`、`runtime_get_overview`、`debugger_get_status`、`debugger_get_context`、`debugger_get_stack_trace`。启动期调用 `tools/list` 校验工具及参数。除实例发现外，每个业务调用均带本次发现的 `instanceId`。
+
+## 故障处理
+
+| 现象 | 退出码 | 人工处理 |
+| --- | ---: | --- |
+| 没有附加进程、调试器未附加、没有 stopped context 或状态无效 | 2 | 在 CE 手动选择目标并命中断点，保持停止后重试 |
+| 多个 CE 实例、指定实例不存在或发现不完整 | 2 | 确认实例列表，使用精确 `--instance-id`；待发现完整后重试 |
+| 工具目录/schema 漂移、响应字段或地址非法 | 2 | 核对已部署 MCP 包与接口合同，查看英文错误，不使用旧报告冒充新结果 |
+| Gateway 超时、通信失败或 JSON 无法解析 | 3 | 查看 stderr 日志，确认 CE 响应、同一 Windows 用户及 Gateway 进程环境；必要时增大 `--timeout` |
+| Gateway 路径错误、输出目录权限错误 | 2 | 修正路径或目录权限后重试 |
+| 输出文件被占用或原子替换失败 | 2 | 解除文件占用并检查目录权限；旧报告如已存在会保留 |
+| 采集中目标继续运行、会话身份或资源/作业计数变化 | 3 | 在 CE 人工检查目标、停止状态及资源；稳定现场后重试 |
+| `invalid_argument`、`capability_disabled`、`unsupported`、`not_found` | 2 | 根据 kind 检查参数、部署配置和能力 |
+| `not_attached`、`invalid_state`、`target_changed`、`stopping`、`instance_unavailable`、`cancelled` ToolError | 3 | 会话已失效，人工恢复目标及断点现场后重新运行 |
+| `host_refused` | 前置检查 2；采集中 3 | 手动确认停止现场；采集中拒绝时不信任本次快照 |
+| `memory_*_failed`、`partial_effect`、`limit_exceeded`、未知 kind 或非只读 hostEffect | 3 | 状态未确认，保留英文告警及日志进行人工排查 |
+| Ctrl+C | 130 | 本次 Gateway 会关闭，目标不自动继续；若中断发生在原子提交后，完整报告可能已存在 |
+
+成功退出码为 0。ToolError 诊断同时打印 `kind` 和 `hostEffect`；只接受 `not_started` 或 `started`，其他效果按状态未确认处理。
+
+## 验证命令与人工验收
+
+```powershell
+python -m unittest Scripts/tests/test_ce_mcp_client.py Scripts/tests/test_stacktrace_register.py -v
+python -m unittest discover -s Scripts/tests -p "test_*.py" -v
+python -m py_compile Scripts/get_stacktrace_register_at_breakpoint.py Scripts/tests/test_stacktrace_register.py
+git diff --check
+```
+
+离线测试使用假客户端和临时目录，不连接 CE，也不读取项目现有 Output 报告。
+
+真实验收须由用户手动准备断点：运行默认命令后，核对标题地址与 Raw JSON 的 RIP/EIP 一致，位宽对应的 SP/BP/IP 寄存器存在、`includesExtraRegisters=true`、`scannedSlots<=128`，并检查前后指纹与 `residueCheck.state=unchanged`。随后人工确认 CE 仍停在原指令、断点未增删、目标内存未被修改。记录 Gateway 版本、目标 PID、输出文件及实际执行命令；离线测试通过不代表已完成这项人工验收。
