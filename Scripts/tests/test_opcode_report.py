@@ -1,3 +1,5 @@
+"""opcode 报告校验、渲染和原子写入功能测试。"""
+
 import copy
 import sys
 import tempfile
@@ -10,6 +12,7 @@ from opcode_report import Target, atomic_text, validate_anchor, validate_window
 
 
 def window(address="1064"):
+    """生成指定地址的模拟连续指令窗口；参数为目标地址，返回响应字典。"""
     center = int(address, 16)
     return {
         "address": address,
@@ -23,9 +26,11 @@ def window(address="1064"):
 
 class WindowTests(unittest.TestCase):
     def test_valid_window(self):
+        """验证合法指令窗口可以通过校验；无参数和返回值。"""
         self.assertEqual(len(validate_window(Target("1064", "90"), window())), 201)
 
     def test_bad_windows(self):
+        """验证缺失、断裂和重复目标窗口会被拒绝；无参数和返回值。"""
         base = window()
         variants = []
         short = copy.deepcopy(base)
@@ -47,6 +52,7 @@ class WindowTests(unittest.TestCase):
                 validate_window(Target("1064", "90"), bad)
 
     def test_anchor_validation(self):
+        """验证锚点地址、长度和机器码校验；无参数和返回值。"""
         row = window()["instructions"][100]
         validate_anchor(Target("1064", "90"), {"instruction": row, "length": 1})
         cases = (
@@ -60,6 +66,7 @@ class WindowTests(unittest.TestCase):
                 validate_anchor(Target("1064", "90"), payload)
 
     def test_atomic_write_failure_keeps_old_file(self):
+        """验证原子写入失败时保留旧文件并清理临时文件；无参数和返回值。"""
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "opcode_1064.md"
             atomic_text(path, "old")

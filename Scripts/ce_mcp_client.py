@@ -1,3 +1,5 @@
+"""通过标准输入输出与 Cheat Engine MCP 网关通信的客户端实现。"""
+
 import json
 import os
 import queue
@@ -13,6 +15,7 @@ class TransportError(RuntimeError):
 
 class ToolError(RuntimeError):
     def __init__(self, payload):
+        """保存工具错误载荷并提取错误类型；参数为工具返回的错误字典，无返回值。"""
         self.payload = payload
         detail = payload.get("error", payload)
         self.kind = detail.get("kind", "tool_error") if isinstance(detail, dict) else "tool_error"
@@ -21,6 +24,7 @@ class ToolError(RuntimeError):
 
 class McpClient:
     def __init__(self, argv: list[str], timeout: float, log_path: Path):
+        """初始化 MCP 客户端；参数为网关命令、超时秒数和 stderr 日志路径，无返回值。"""
         if timeout <= 0:
             raise ValueError("timeout must be positive")
         self.argv, self.timeout, self.log_path = argv, timeout, log_path
@@ -32,6 +36,7 @@ class McpClient:
         self.broken = False
 
     def start(self):
+        """启动网关并完成 MCP 握手；无参数，返回已启动的客户端实例。"""
         self.log = self.log_path.open("w", encoding="utf-8")
         try:
             self.process = subprocess.Popen(
@@ -58,6 +63,7 @@ class McpClient:
             raise
 
     def _read(self):
+        """后台读取网关输出并放入消息队列；无参数和返回值。"""
         try:
             for line in self.process.stdout:
                 item = json.loads(line)
@@ -70,6 +76,7 @@ class McpClient:
             self.messages.put(TransportError("gateway stdout closed"))
 
     def _send(self, message):
+        """向网关发送 JSON-RPC 消息；参数为消息字典，无返回值。"""
         if self.broken:
             raise TransportError("MCP connection is unusable")
         try:
@@ -80,6 +87,7 @@ class McpClient:
             raise TransportError("gateway stdin closed") from exc
 
     def rpc(self, method: str, params: dict) -> dict:
+        """发送并等待 JSON-RPC 响应；参数为方法名和参数字典，返回结果字典。"""
         self.request_id += 1
         request_id = self.request_id
         self._send({"jsonrpc": "2.0", "id": request_id, "method": method, "params": params})
@@ -117,6 +125,7 @@ class McpClient:
             raise
 
     def tools(self) -> dict:
+        """分页获取网关工具目录；无参数，返回工具名到定义的映射。"""
         result, params, seen = {}, {}, set()
         while True:
             page = self.rpc("tools/list", params)
@@ -131,6 +140,7 @@ class McpClient:
             params = {"cursor": cursor}
 
     def call(self, name: str, arguments: dict) -> dict:
+        """调用 MCP 工具并解析结构化结果；参数为工具名和参数，返回结果字典。"""
         result = self.rpc("tools/call", {"name": name, "arguments": arguments})
         payload = result.get("structuredContent")
         if payload is None:
@@ -146,6 +156,7 @@ class McpClient:
         return payload
 
     def close(self):
+        """关闭网关进程、线程和日志文件；无参数和返回值。"""
         if self.process is not None:
             try:
                 if self.process.stdin:

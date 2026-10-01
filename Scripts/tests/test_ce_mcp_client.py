@@ -1,3 +1,5 @@
+"""MCP 客户端的握手、分页、错误和连接失效测试。"""
+
 import json
 import sys
 import tempfile
@@ -41,6 +43,7 @@ for line in sys.stdin:
 
 class ClientTests(unittest.TestCase):
     def setUp(self):
+        """创建临时测试服务和客户端；无参数和返回值。"""
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         root = Path(self.temp.name)
@@ -51,17 +54,20 @@ class ClientTests(unittest.TestCase):
         self.client.start()
 
     def test_handshake_pagination_and_results(self):
+        """验证握手、工具分页及结构化和文本结果解析；无参数和返回值。"""
         self.assertEqual(set(self.client.tools()), {"a", "b"})
         self.assertEqual(self.client.call("ok", {}), {"ok": True})
         self.assertEqual(self.client.call("text", {}), {"ok": True})
 
     def test_tool_failure(self):
+        """验证工具错误会转换为 ToolError 且连接仍可复用；无参数和返回值。"""
         with self.assertRaises(ToolError) as caught:
             self.client.call("error", {})
         self.assertEqual(caught.exception.kind, "memory_read_failed")
         self.assertEqual(self.client.call("ok", {}), {"ok": True})
 
     def test_timeout_invalidates_connection(self):
+        """验证请求超时会使客户端连接失效；无参数和返回值。"""
         self.client.timeout = 0.05
         with self.assertRaisesRegex(TransportError, "timed out"):
             self.client.call("slow", {})
@@ -69,10 +75,12 @@ class ClientTests(unittest.TestCase):
             self.client.call("ok", {})
 
     def test_eof(self):
+        """验证网关提前退出时报告传输错误；无参数和返回值。"""
         with self.assertRaises(TransportError):
             self.client.call("eof", {})
 
     def test_wrong_id(self):
+        """验证响应 ID 不匹配时报告传输错误；无参数和返回值。"""
         with self.assertRaisesRegex(TransportError, "response id"):
             self.client.call("wrong_id", {})
 

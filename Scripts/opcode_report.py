@@ -1,3 +1,5 @@
+"""校验 Cheat Engine 指令数据并渲染 opcode 报告文件。"""
+
 import os
 import re
 import tempfile
@@ -12,6 +14,7 @@ class Target:
 
 
 def hex_address(value: str) -> str:
+    """规范化十六进制地址；参数为地址文本，返回无前缀的大写地址。"""
     if not isinstance(value, str) or not re.fullmatch(r"(?:0x)?[0-9A-Fa-f]+", value):
         raise ValueError("invalid hexadecimal address")
     number = int(value, 16)
@@ -21,6 +24,7 @@ def hex_address(value: str) -> str:
 
 
 def hex_bytes(value: str) -> str:
+    """规范化机器码字节；参数为字节文本，返回连续的大写十六进制字符串。"""
     value = re.sub(r"\s+", "", value).upper()
     if not re.fullmatch(r"(?:[0-9A-F]{2}){1,15}", value):
         raise ValueError("invalid x86 instruction bytes")
@@ -28,6 +32,7 @@ def hex_bytes(value: str) -> str:
 
 
 def checked_instruction(row: dict) -> tuple[int, int]:
+    """校验单条指令字段；参数为指令字典，返回整数地址和指令长度。"""
     address = int(hex_address(row["address"]), 16)
     size = row["size"]
     if type(size) is not int or not 1 <= size <= 15:
@@ -46,6 +51,7 @@ def checked_instruction(row: dict) -> tuple[int, int]:
 
 
 def validate_anchor(target: Target, payload: dict) -> None:
+    """校验目标锚点指令；参数为目标和 CE 响应，成功时无返回值，失败抛出异常。"""
     row = payload["instruction"]
     address, size = checked_instruction(row)
     if address != int(target.address, 16) or payload["length"] != size:
@@ -55,6 +61,7 @@ def validate_anchor(target: Target, payload: dict) -> None:
 
 
 def validate_window(target: Target, payload: dict) -> list[dict]:
+    """校验 201 条连续指令窗口；参数为目标和 CE 响应，返回指令列表。"""
     if hex_address(payload["address"]) != target.address:
         raise ValueError("response address mismatch")
     rows = payload["instructions"]
@@ -76,10 +83,12 @@ def validate_window(target: Target, payload: dict) -> list[dict]:
 
 
 def md(value) -> str:
+    """转义 Markdown 表格文本；参数为任意值，返回单行安全字符串。"""
     return str(value).replace("\r", " ").replace("\n", " ").replace("|", r"\|")
 
 
 def render_target(target: Target, record: dict, rows: list[dict], metadata: dict) -> str:
+    """渲染单个目标的 Markdown 报告；参数为目标、记录、指令和元数据，返回文本。"""
     lines = [
         f"# Opcode window {target.address}", "",
         f"- Status: {record['status']}",
@@ -109,6 +118,7 @@ def render_target(target: Target, record: dict, rows: list[dict], metadata: dict
 
 
 def atomic_text(path: Path, text: str) -> None:
+    """以临时文件替换方式原子写入文本；参数为目标路径和内容，无返回值。"""
     temporary = None
     try:
         with tempfile.NamedTemporaryFile(

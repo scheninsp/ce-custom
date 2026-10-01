@@ -1,3 +1,5 @@
+"""通过 MCP 从 Cheat Engine 导出 Victoria 3 指令窗口并生成报告。"""
+
 import argparse
 import json
 import sys
@@ -49,14 +51,17 @@ class SessionChanged(RuntimeError):
 
 
 def now() -> str:
+    """获取当前 UTC ISO 时间；无参数，返回时间字符串。"""
     return datetime.now(timezone.utc).isoformat()
 
 
 def process_name(value) -> str:
+    """提取并规范化进程名；参数为原始名称，返回不含扩展名的小写名称。"""
     return (value or "").replace("\\", "/").rsplit("/", 1)[-1].casefold().removesuffix(".exe")
 
 
 def fingerprint(overview: dict) -> dict:
+    """校验目标进程并生成会话指纹；参数为运行概览，返回指纹字典。"""
     process = overview["process"]
     if not process["isOpen"] or process_name(process.get("processName")) != "victoria3":
         raise SessionChanged("victoria3 is not the selected process")
@@ -71,11 +76,13 @@ def fingerprint(overview: dict) -> dict:
 
 
 def resources(overview: dict) -> dict:
+    """提取 CE 资源计数；参数为运行概览，返回资源和任务数量字典。"""
     # 只读工具不会产生 CE 资源；仅记录计数用于运行期残留核对。
     return {"resourceCount": overview["resourceCount"], "jobCount": overview["jobCount"]}
 
 
 def load_targets() -> list[Target]:
+    """校验并加载固化目标列表；无参数，返回按地址排序的目标列表。"""
     # 在连接 CE 前校验固化列表；非法条目以 ValueError 失败，不接触 CE。
     targets = [Target(hex_address(address), hex_bytes(expected)) for address, expected in TARGETS]
     if not targets:
@@ -86,6 +93,7 @@ def load_targets() -> list[Target]:
 
 
 def select_instance(client, wanted):
+    """从 MCP 实例列表选择唯一实例；参数为客户端和可选实例 ID，返回实例 ID。"""
     listing = client.call("instance_list", {})
     if listing["discoveryIncomplete"]:
         raise ValueError("instance discovery incomplete; run again")
@@ -98,6 +106,7 @@ def select_instance(client, wanted):
 
 
 def bind_target(client, instance_id):
+    """检查 CE 已附加到 Victoria 3；参数为客户端和实例 ID，返回指纹及资源基线。"""
     # CE 已由用户手动附加：这里只做健康检查，不附加、不切换、不分离。
     arguments = {"instanceId": instance_id}
     client.call("runtime_get_info", arguments)
@@ -111,12 +120,14 @@ def bind_target(client, instance_id):
 
 
 def check_session(client, instance_id, baseline):
+    """比较当前会话与基线；参数为客户端、实例 ID 和基线，一致时无返回值。"""
     current = fingerprint(client.call("runtime_get_overview", {"instanceId": instance_id}))
     if current != baseline:
         raise SessionChanged("CE runtime or target selection changed")
 
 
 def check_residue(client, instance_id, metadata, interrupted):
+    """收尾核对 CE 资源是否残留；参数为客户端、实例、元数据和中断标志，返回核对结果。"""
     # 统一收尾残留核对：至多执行一次 overview 读取，从不重连，恒返回结构化结果供 manifest 落盘。
     # state：unchanged=计数一致；changed=计数变化；unavailable=尝试核对但失败；skipped=未执行（原因见 reason）。
     result = {
@@ -155,6 +166,7 @@ def check_residue(client, instance_id, metadata, interrupted):
 
 
 def save_progress(output, metadata, records, status):
+    """保存 manifest 和索引进度；参数为输出目录、元数据、记录及状态，无返回值。"""
     success = sum(record["status"] == "success" for record in records)
     document = {
         **metadata, "status": status, "updatedAt": now(),
@@ -179,6 +191,7 @@ def save_progress(output, metadata, records, status):
 
 
 def run_exports(client, instance_id, baseline, targets, output, metadata):
+    """逐个导出目标指令窗口；参数为客户端、会话信息、目标、输出目录和元数据，返回退出码。"""
     records, aborted = [], None
     for target in targets:
         rows = []
@@ -223,6 +236,7 @@ def run_exports(client, instance_id, baseline, targets, output, metadata):
 
 
 def positive_int(text):
+    """解析正整数命令行参数；参数为文本，返回整数，非法时抛出参数错误。"""
     value = int(text)
     if value <= 0:
         raise argparse.ArgumentTypeError("value must be positive")
@@ -230,6 +244,7 @@ def positive_int(text):
 
 
 def main(argv=None):
+    """执行命令行导出流程；参数为可选参数列表，返回进程退出码。"""
     parser = argparse.ArgumentParser(description="Export CE opcode windows through MCP")
     parser.add_argument("--output", type=Path, default=ROOT / "Output/opcodes")
     parser.add_argument("--gateway", type=Path, default=DEFAULT_GATEWAY)

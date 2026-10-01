@@ -1,3 +1,5 @@
+"""opcode 导出流程及异常收尾行为的集成测试。"""
+
 import contextlib
 import io
 import json
@@ -32,6 +34,7 @@ EXPECTED = [
 
 class FakeMcp:
     def __init__(self):
+        """初始化模拟 MCP 客户端状态；无参数和返回值。"""
         self.calls = []
         self.broken = False
         self.open = True
@@ -50,6 +53,7 @@ class FakeMcp:
         self.resources = {"resourceCount": 0, "jobCount": 0}
 
     def tools(self):
+        """返回模拟只读工具目录；无参数，返回工具定义字典。"""
         properties = {"instanceId": {}, "address": {}, "before": {}, "count": {}}
         return {
             name: {"inputSchema": {"properties": dict(properties)}}
@@ -57,6 +61,7 @@ class FakeMcp:
         }
 
     def overview(self):
+        """生成当前模拟运行概览；无参数，返回概览字典。"""
         self.overview_calls += 1
         if self.overview_fail_at == self.overview_calls:
             self.broken = True  # 模拟真实客户端：传输超时后连接失效。
@@ -74,6 +79,7 @@ class FakeMcp:
         }
 
     def call(self, name, arguments):
+        """处理模拟工具调用；参数为工具名和参数字典，返回模拟结果。"""
         self.calls.append((name, dict(arguments)))
         if name == "instance_list":
             return {"instances": self.instances, "discoveryIncomplete": False}
@@ -105,48 +111,60 @@ class FakeMcp:
 class Starter:
     # 替代 run_opcode_export.McpClient：把假客户端接入完整 main 流程，并记录启动/关闭。
     def __init__(self, client):
+        """包装模拟客户端并记录生命周期；参数为客户端，无返回值。"""
         self.client = client
         self.started = False
         self.closed = False
 
     @property
     def broken(self):
+        """返回底层客户端连接状态；无参数，返回布尔值。"""
         return self.client.broken
 
     def start(self):
+        """标记客户端已启动；无参数，返回自身。"""
         self.started = True
         return self
 
     def tools(self):
+        """转发工具目录查询；无参数，返回工具定义字典。"""
         return self.client.tools()
 
     def call(self, name, arguments):
+        """转发模拟工具调用；参数为工具名和参数字典，返回调用结果。"""
         return self.client.call(name, arguments)
 
     def close(self):
+        """标记客户端已关闭；无参数和返回值。"""
         self.closed = True
 
 
 class FakePipe:
     # 仅在启动中断测试中替代真实管道：记录关闭调用，不启动真实进程。
     def __init__(self):
+        """初始化模拟管道；无参数和返回值。"""
         self.closed = False
 
     def write(self, text):
+        """模拟写入管道；参数为文本，无返回值。"""
         pass
 
     def flush(self):
+        """模拟刷新管道；无参数和返回值。"""
         pass
 
     def close(self):
+        """关闭模拟管道；无参数和返回值。"""
         self.closed = True
 
     def __iter__(self):
+        """返回空的管道迭代器；无参数，返回迭代器。"""
         return iter(())
 
 
 class FakeGatewayProcess:
     def __init__(self):
+        """初始化模拟网关进程及管道；无参数和返回值。"""
         self.stdin = FakePipe()
         self.stdout = FakePipe()
         self.wait_calls = 0
@@ -154,19 +172,23 @@ class FakeGatewayProcess:
         self.kill_calls = 0
 
     def wait(self, timeout=None):
+        """模拟等待子进程结束；参数为超时秒数，返回零退出码。"""
         self.wait_calls += 1
         return 0
 
     def terminate(self):
+        """记录模拟终止请求；无参数和返回值。"""
         self.terminate_calls += 1
 
     def kill(self):
+        """记录模拟强制终止请求；无参数和返回值。"""
         self.kill_calls += 1
         return None
 
 
 class ExportTests(unittest.TestCase):
     def export(self, client):
+        """执行一次模拟导出并读取产物；参数为模拟客户端，返回退出码、清单和文件。"""
         baseline, resources_before = bind_target(client, "ce-test")
         targets = [Target("1064", "90"), Target("2064", "90")]
         with tempfile.TemporaryDirectory() as directory:
@@ -183,6 +205,7 @@ class ExportTests(unittest.TestCase):
             return code, manifest, files
 
     def run_main(self, client, targets=(("1064", "90"),)):
+        """通过模拟客户端运行完整主流程；参数为客户端和目标列表，返回退出码、清单和启动器。"""
         # 以假客户端走完整 main：统一收尾、manifest 与退出码都在覆盖范围内。
         starter = Starter(client)
         with tempfile.TemporaryDirectory() as directory:
@@ -198,6 +221,7 @@ class ExportTests(unittest.TestCase):
         return code, manifest, starter
 
     def test_fixed_target_list_matches_report(self):
+        """验证固化目标列表与预期报告一致；无参数和返回值。"""
         self.assertEqual(list(TARGETS), EXPECTED)
         targets = load_targets()
         self.assertEqual(len(targets), 9)
@@ -208,12 +232,14 @@ class ExportTests(unittest.TestCase):
         )
 
     def test_invalid_fixed_list_rejected_before_ce(self):
+        """验证非法目标列表在连接 CE 前被拒绝；无参数和返回值。"""
         for invalid in ([], [("ZZZZ", "90")], [("1064", "90"), ("1064", "90")]):
             with self.subTest(invalid=invalid), patch("run_opcode_export.TARGETS", invalid):
                 with self.assertRaises(ValueError):
                     load_targets()
 
     def test_success(self):
+        """验证成功导出生成完整清单和报告；无参数和返回值。"""
         code, result, files = self.export(FakeMcp())
         self.assertEqual(code, 0)
         self.assertEqual(result["status"], "complete")
@@ -226,6 +252,7 @@ class ExportTests(unittest.TestCase):
             self.assertNotIn("## Sources", text)
 
     def test_one_bad_address_does_not_block_next(self):
+        """验证单个地址失败不会阻止后续地址；无参数和返回值。"""
         client = FakeMcp()
         client.fail = "1064"
         code, result, files = self.export(client)
@@ -235,6 +262,7 @@ class ExportTests(unittest.TestCase):
         self.assertIn("## Instructions", files["opcode_2064.md"])
 
     def test_stale_bytes_skip_window_call(self):
+        """验证锚点机器码过期时跳过窗口读取；无参数和返回值。"""
         client = FakeMcp()
         client.stale = "1064"
         code, result, _ = self.export(client)
@@ -246,6 +274,7 @@ class ExportTests(unittest.TestCase):
         ))
 
     def test_transport_and_session_abort_remaining_reads(self):
+        """验证传输或会话变化会中止剩余读取；无参数和返回值。"""
         for field in ("timeout", "change"):
             client = FakeMcp()
             setattr(client, field, "1064")
@@ -256,6 +285,7 @@ class ExportTests(unittest.TestCase):
             self.assertFalse(any(args.get("address") == "2064" for _, args in client.calls))
 
     def test_manual_attach_is_required(self):
+        """验证脚本要求用户手动附加目标进程；无参数和返回值。"""
         client = FakeMcp()
         client.open = False
         with self.assertRaises(ValueError) as caught:
@@ -268,6 +298,7 @@ class ExportTests(unittest.TestCase):
         self.assertEqual(resources_before, {"resourceCount": 0, "jobCount": 0})
 
     def test_other_target_is_not_switched(self):
+        """验证脚本不会切换到其他进程；无参数和返回值。"""
         client = FakeMcp()
         client.name = "notepad.exe"
         with self.assertRaises(ValueError):
@@ -277,6 +308,7 @@ class ExportTests(unittest.TestCase):
         self.assertFalse(any(name in ("process_attach", "process_list") for name, _ in client.calls))
 
     def test_multiple_instances_require_selection(self):
+        """验证多个实例时必须显式选择；无参数和返回值。"""
         client = FakeMcp()
         client.instances.append({"instanceId": "ce-second"})
         with self.assertRaises(ValueError):
@@ -284,6 +316,7 @@ class ExportTests(unittest.TestCase):
         self.assertEqual(select_instance(client, "ce-second"), "ce-second")
 
     def test_success_calls_stay_read_only(self):
+        """验证成功流程只调用只读工具；无参数和返回值。"""
         client = FakeMcp()
         code, _, _ = self.export(client)
         self.assertEqual(code, 0)
@@ -291,6 +324,7 @@ class ExportTests(unittest.TestCase):
         self.assertLessEqual({name for name, _ in client.calls}, set(READ_ONLY_TOOLS))
 
     def test_resource_change_reports_changed_state(self):
+        """验证资源计数变化会被记录；无参数和返回值。"""
         client = FakeMcp()
         client.resources = {"resourceCount": 1, "jobCount": 0}
         check = check_residue(client, "ce-test", {
@@ -300,6 +334,7 @@ class ExportTests(unittest.TestCase):
         self.assertEqual(check["after"], {"resourceCount": 1, "jobCount": 0})
 
     def test_success_records_unchanged_residue(self):
+        """验证成功流程记录资源未变化；无参数和返回值。"""
         client = FakeMcp()
         code, manifest, starter = self.run_main(client)
         self.assertEqual(code, 0)
@@ -311,6 +346,7 @@ class ExportTests(unittest.TestCase):
         self.assertTrue(starter.started and starter.closed)
 
     def test_final_overview_failure_is_unavailable_and_exit_3(self):
+        """验证最终概览失败会标记不可确认并返回 3；无参数和返回值。"""
         client = FakeMcp()
         client.overview_fail_at = 4
         buffer = io.StringIO()
@@ -323,10 +359,12 @@ class ExportTests(unittest.TestCase):
         self.assertIn("residue check could not be completed", buffer.getvalue())
 
     def test_write_failure_still_checks_residue(self):
+        """验证写入失败时仍执行资源核对；无参数和返回值。"""
         client = FakeMcp()
         original = atomic_text
 
         def failing(path, text):
+            """模拟 opcode 文件写入失败；参数为路径和文本，失败时抛出权限异常。"""
             if path.name.startswith("opcode_"):
                 raise PermissionError("denied")
             return original(path, text)
@@ -339,6 +377,7 @@ class ExportTests(unittest.TestCase):
         self.assertEqual(client.overview_calls, 4)
 
     def test_interrupt_skips_check_without_extra_rpc(self):
+        """验证用户中断会跳过额外资源请求；无参数和返回值。"""
         client = FakeMcp()
         client.interrupt = "1064"
         code, manifest, _ = self.run_main(client)
@@ -349,6 +388,7 @@ class ExportTests(unittest.TestCase):
         self.assertEqual(client.overview_calls, 2)
 
     def test_transport_failure_records_skipped(self):
+        """验证传输失败会记录跳过资源核对；无参数和返回值。"""
         client = FakeMcp()
         client.timeout = "1064"
         code, manifest, _ = self.run_main(client)
@@ -358,6 +398,7 @@ class ExportTests(unittest.TestCase):
         self.assertEqual(manifest["residueCheck"]["reason"], "MCP connection is unusable")
 
     def test_missing_baseline_records_skipped(self):
+        """验证未建立资源基线时记录跳过；无参数和返回值。"""
         client = FakeMcp()
         client.open = False
         code, manifest, _ = self.run_main(client)
@@ -367,6 +408,7 @@ class ExportTests(unittest.TestCase):
             manifest["residueCheck"]["reason"], "no resource baseline was established")
 
     def test_resource_change_warns_and_still_exits_0(self):
+        """验证资源变化输出警告但保持成功退出；无参数和返回值。"""
         client = FakeMcp()
         client.resource_change_at = 4
         buffer = io.StringIO()
@@ -379,6 +421,7 @@ class ExportTests(unittest.TestCase):
         self.assertIn("WARN: CE resourceCount/jobCount changed", buffer.getvalue())
 
     def test_interrupt_during_start_reclaims_gateway(self):
+        """验证启动握手中断时会回收网关进程；无参数和返回值。"""
         # 初始化握手期间 Ctrl+C：main 仍须回收本次启动的 Gateway 子进程。
         fake = FakeGatewayProcess()
         with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as directory:
