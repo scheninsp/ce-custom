@@ -1,0 +1,184 @@
+info: ModelContextProtocol.Server.StdioServerTransport[857250842]
+      Server (stream) (CheatEngine.Mcp.Gateway) transport reading messages.
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Production
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: D:\cebuild\ce-custom
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0) method 'initialize' request handler called.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'initialize' request handler completed in 0.1928ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler called.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "instance_list" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler completed in 7.1979ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler called.
+info: ModelContextProtocol.Client.McpClient[1434756563]
+      Client (CheatEngine.Mcp.Gateway 2.0.0) client received server '{"name":"CheatEngine.Mcp","version":"2.0.0.0"}' capabilities: '{"logging":{},"prompts":{},"resources":{},"tools":{},"completions":{}}'.
+info: ModelContextProtocol.Client.McpClient[1017245113]
+      Client (CheatEngine.Mcp.Gateway 2.0.0) client created and connected.
+warn: ModelContextProtocol.Client.McpClient[1456959501]
+      Tool 'debugger_get_status' not found in cache during tools/call. Mcp-Param-* headers will not be sent. Call AddKnownTools or ListToolsAsync to populate the cache.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "debugger_get_status" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler completed in 17.4066ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler called.
+warn: ModelContextProtocol.Client.McpClient[1456959501]
+      Tool 'lua_execute' not found in cache during tools/call. Mcp-Param-* headers will not be sent. Call AddKnownTools or ListToolsAsync to populate the cache.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "lua_execute" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler completed in 4.475ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler called.
+warn: ModelContextProtocol.Client.McpClient[1456959501]
+      Tool 'runtime_get_overview' not found in cache during tools/call. Mcp-Param-* headers will not be sent. Call AddKnownTools or ListToolsAsync to populate the cache.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "runtime_get_overview" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler completed in 8.0719ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler called.
+warn: ModelContextProtocol.Client.McpClient[1456959501]
+      Tool 'memory_read' not found in cache during tools/call. Mcp-Param-* headers will not be sent. Call AddKnownTools or ListToolsAsync to populate the cache.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "memory_read" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler completed in 4.0681ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler called.
+warn: ModelContextProtocol.Client.McpClient[1456959501]
+      Tool 'memory_read' not found in cache during tools/call. Mcp-Param-* headers will not be sent. Call AddKnownTools or ListToolsAsync to populate the cache.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "memory_read" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler completed in 4.7162ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler called.
+warn: ModelContextProtocol.Client.McpClient[1456959501]
+      Tool 'memory_read' not found in cache during tools/call. Mcp-Param-* headers will not be sent. Call AddKnownTools or ListToolsAsync to populate the cache.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "memory_read" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler completed in 4.3238ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler called.
+warn: ModelContextProtocol.Client.McpClient[1456959501]
+      Tool 'memory_read' not found in cache during tools/call. Mcp-Param-* headers will not be sent. Call AddKnownTools or ListToolsAsync to populate the cache.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "memory_read" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler completed in 6.3767ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler called.
+warn: ModelContextProtocol.Client.McpClient[1456959501]
+      Tool 'memory_read' not found in cache during tools/call. Mcp-Param-* headers will not be sent. Call AddKnownTools or ListToolsAsync to populate the cache.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "memory_read" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler completed in 5.155ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler called.
+warn: ModelContextProtocol.Client.McpClient[1456959501]
+      Tool 'memory_read' not found in cache during tools/call. Mcp-Param-* headers will not be sent. Call AddKnownTools or ListToolsAsync to populate the cache.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "memory_read" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler completed in 4.4337ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler called.
+warn: ModelContextProtocol.Client.McpClient[1456959501]
+      Tool 'code_get_function_graph' not found in cache during tools/call. Mcp-Param-* headers will not be sent. Call AddKnownTools or ListToolsAsync to populate the cache.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "code_get_function_graph" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler completed in 87.1667ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler called.
+warn: ModelContextProtocol.Client.McpClient[1456959501]
+      Tool 'code_get_function_graph' not found in cache during tools/call. Mcp-Param-* headers will not be sent. Call AddKnownTools or ListToolsAsync to populate the cache.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "code_get_function_graph" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler completed in 56.2759ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler called.
+warn: ModelContextProtocol.Client.McpClient[1456959501]
+      Tool 'code_get_function_graph' not found in cache during tools/call. Mcp-Param-* headers will not be sent. Call AddKnownTools or ListToolsAsync to populate the cache.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "code_get_function_graph" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler completed in 43.2477ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler called.
+warn: ModelContextProtocol.Client.McpClient[1456959501]
+      Tool 'code_get_function_graph' not found in cache during tools/call. Mcp-Param-* headers will not be sent. Call AddKnownTools or ListToolsAsync to populate the cache.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "code_get_function_graph" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler completed in 52.0751ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler called.
+warn: ModelContextProtocol.Client.McpClient[1456959501]
+      Tool 'code_get_function_graph' not found in cache during tools/call. Mcp-Param-* headers will not be sent. Call AddKnownTools or ListToolsAsync to populate the cache.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "code_get_function_graph" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler completed in 22.8873ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler called.
+warn: ModelContextProtocol.Client.McpClient[1456959501]
+      Tool 'code_get_function_graph' not found in cache during tools/call. Mcp-Param-* headers will not be sent. Call AddKnownTools or ListToolsAsync to populate the cache.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "code_get_function_graph" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler completed in 107.921ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler called.
+warn: ModelContextProtocol.Client.McpClient[1456959501]
+      Tool 'code_get_function_graph' not found in cache during tools/call. Mcp-Param-* headers will not be sent. Call AddKnownTools or ListToolsAsync to populate the cache.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "code_get_function_graph" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler completed in 117.8951ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler called.
+warn: ModelContextProtocol.Client.McpClient[1456959501]
+      Tool 'debugger_get_status' not found in cache during tools/call. Mcp-Param-* headers will not be sent. Call AddKnownTools or ListToolsAsync to populate the cache.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "debugger_get_status" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler completed in 6.0087ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler called.
+warn: ModelContextProtocol.Client.McpClient[1456959501]
+      Tool 'lua_execute' not found in cache during tools/call. Mcp-Param-* headers will not be sent. Call AddKnownTools or ListToolsAsync to populate the cache.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "lua_execute" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler completed in 5.2604ms.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler called.
+warn: ModelContextProtocol.Client.McpClient[1456959501]
+      Tool 'runtime_get_overview' not found in cache during tools/call. Mcp-Param-* headers will not be sent. Call AddKnownTools or ListToolsAsync to populate the cache.
+info: ModelContextProtocol.Server.McpServer[2065726448]
+      "runtime_get_overview" completed. IsError = False.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (CheatEngine.Mcp.Gateway 2.0.0.0), Client (ce-opcode-export 1.0) method 'tools/call' request handler completed in 6.9544ms.
+info: ModelContextProtocol.Server.StdioServerTransport[1221292038]
+      Server (stream) (CheatEngine.Mcp.Gateway) transport completed reading messages.
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...
+info: ModelContextProtocol.Server.StdioServerTransport[1375634372]
+      Server (stream) (CheatEngine.Mcp.Gateway) shutting down.
+info: ModelContextProtocol.Server.StdioServerTransport[1256455528]
+      Server (stream) (CheatEngine.Mcp.Gateway) shut down.
+info: ModelContextProtocol.Client.McpClient[2103773711]
+      CheatEngine.Mcp.Gateway message processing canceled.

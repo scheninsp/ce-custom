@@ -485,6 +485,7 @@ function TickAndPostProcess():
 ## 8. 原始证据与复核方式
 
 - [开始断点快照](../Output/goal3_static_20261002/before/streg_7FF777CED5C9.md)。
+- [结束现场核对](../Output/goal3_static_20261002/final_verification.json)：仍为 stopped，全部返回寄存器、目标进程信息及 CE 资源计数与开始快照一致。这是首尾一致性检查，不是对两次查询之间所有外部操作的监控。
 - [模块信息](../Output/goal3_static_20261002/module.json)、[栈原始字节](../Output/goal3_static_20261002/stack.json)、[展开链](../Output/goal3_static_20261002/unwind_frames.json)。
 - [条目原始字节](../Output/goal3_static_20261002/entry.json)、[州容量附近原始字节](../Output/goal3_static_20261002/center.json)、[商品与常量](../Output/goal3_static_20261002/fields.json)、[回调目标核对](../Output/goal3_static_20261002/callback.json)。
 - [opcode 导出目录](../Output/goal3_static_20261002/opcodes)：使用现有脚本采集各层入口/返回点窗口。
