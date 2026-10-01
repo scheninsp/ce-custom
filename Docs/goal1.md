@@ -1,0 +1,1 @@
+`Docs\testdata-2026-10-1-10-58.md` 里有本次启动 victoria3.exe 进程时新获取的地址数据。请先以完成一个自动化脚本。可以通过 CE 获取所有 “The following opcodes accessed XXX“ 下面的地址附近前后100行的opcode。并且每个输出一个文件，例如 "opcode_7FF71C8D9218.md" 中存放 7FF71C8D9218 地址附近前后100行的 opcode。

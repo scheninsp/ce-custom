@@ -21,8 +21,7 @@ CE的可执行程序地址：`C:\Program Files\Cheat Engine`(和源码不是一�
 1. Cheat Engine Lua
 最适合你的需求。
 CE 本身支持 Lua 脚本，可以通过脚本完成：
-打开 victoria3.exe
-解析 victoria3.exe+11FD5C9
+解析 地址xxx
 设置断点
 设置条件
 断点命中后记录寄存器
@@ -32,8 +31,8 @@ CE 本身支持 Lua 脚本，可以通过脚本完成：
 你可以把文档中的操作变成一个配置文件：
 breakpoints = {
   {
-    address = "victoria3.exe+11FD5C9",
-    condition = "R14 == 0x32FDB11DB60",
+    address = "xxx",
+    condition = "R14 == yyy",
     reads = {
       "RDI",
       "[RDI]",
