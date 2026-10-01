@@ -1,0 +1,217 @@
+# Opcode window 7FF777D1BA8E
+
+- Status: success
+- Run: 20261001T111936909271Z_09d8369e
+- CE instance: ce-72480-42f4ba0154dd4fbd8087223e0f808fda
+- Target PID: 43884
+- Captured at: 2026-10-01T11:19:39.082974+00:00
+- Requested: 100 before + target + 100 after
+- Boundary method: CE estimated predecessors; continuity checked on success
+- Capture mode: live reads, not an atomic process snapshot
+- Expected target bytes: 442BBE581D0000
+
+## Instructions
+
+| Offset | Address | CE address | Bytes | Opcode | Extra | Marker |
+| ---: | --- | --- | --- | --- | --- | --- |
+| -100 | 7FF777D1B8FF | 7FF777D1B8FF | 41 8B 4F 04 | mov ecx,[r15+04] |  |  |
+| -99 | 7FF777D1B903 | 7FF777D1B903 | 41 69 C0 B3 85 D6 4A | imul eax,r8d,4AD685B3 |  |  |
+| -98 | 7FF777D1B90A | 7FF777D1B90A | 2B C8 | sub ecx,eax |  |  |
+| -97 | 7FF777D1B90C | 7FF777D1B90C | 8B C1 | mov eax,ecx |  |  |
+| -96 | 7FF777D1B90E | 7FF777D1B90E | C1 E8 08 | shr eax,08 |  |  |
+| -95 | 7FF777D1B911 | 7FF777D1B911 | 33 C1 | xor eax,ecx |  |  |
+| -94 | 7FF777D1B913 | 7FF777D1B913 | 05 A4 1D E3 68 | add eax,68E31DA4 |  |  |
+| -93 | 7FF777D1B918 | 7FF777D1B918 | 8B C8 | mov ecx,eax |  |  |
+| -92 | 7FF777D1B91A | 7FF777D1B91A | C1 E1 08 | shl ecx,08 |  |  |
+| -91 | 7FF777D1B91D | 7FF777D1B91D | 33 C8 | xor ecx,eax |  |  |
+| -90 | 7FF777D1B91F | 7FF777D1B91F | 41 8D 40 01 | lea eax,[r8+01] |  |  |
+| -89 | 7FF777D1B923 | 7FF777D1B923 | 41 89 07 | mov [r15],eax |  |  |
+| -88 | 7FF777D1B926 | 7FF777D1B926 | 69 D1 E9 C4 56 1B | imul edx,ecx,1B56C4E9 |  |  |
+| -87 | 7FF777D1B92C | 7FF777D1B92C | 8B C2 | mov eax,edx |  |  |
+| -86 | 7FF777D1B92E | 7FF777D1B92E | C1 E8 08 | shr eax,08 |  |  |
+| -85 | 7FF777D1B931 | 7FF777D1B931 | 33 C2 | xor eax,edx |  |  |
+| -84 | 7FF777D1B933 | 7FF777D1B933 | 69 C0 A2 00 00 00 | imul eax,eax,000000A2 |  |  |
+| -83 | 7FF777D1B939 | 7FF777D1B939 | 0F BA E0 08 | bt eax,08 |  |  |
+| -82 | 7FF777D1B93D | 7FF777D1B93D | 73 20 | jae 7FF777D1B95F |  |  |
+| -81 | 7FF777D1B93F | 7FF777D1B93F | C5 FC 10 45 C7 | vmovups ymm0,[rbp-39] |  |  |
+| -80 | 7FF777D1B944 | 7FF777D1B944 | C5 FC 10 4D E7 | vmovups ymm1,[rbp-19] |  |  |
+| -79 | 7FF777D1B949 | 7FF777D1B949 | C4 C1 7C 11 06 | vmovups [r14],ymm0 |  |  |
+| -78 | 7FF777D1B94E | 7FF777D1B94E | C5 FB 10 45 07 | vmovsd xmm0,[rbp+07] |  |  |
+| -77 | 7FF777D1B953 | 7FF777D1B953 | C4 C1 7C 11 4E 20 | vmovups [r14+20],ymm1 |  |  |
+| -76 | 7FF777D1B959 | 7FF777D1B959 | C4 C1 7B 11 46 40 | vmovsd [r14+40],xmm0 |  |  |
+| -75 | 7FF777D1B95F | 7FF777D1B95F | 48 8B 75 67 | mov rsi,[rbp+67] |  |  |
+| -74 | 7FF777D1B963 | 7FF777D1B963 | 49 83 C4 08 | add r12,08 |  |  |
+| -73 | 7FF777D1B967 | 7FF777D1B967 | 4C 3B 65 6F | cmp r12,[rbp+6F] |  |  |
+| -72 | 7FF777D1B96B | 7FF777D1B96B | 0F 85 CF FA FF FF | jne 7FF777D1B440 |  |  |
+| -71 | 7FF777D1B971 | 7FF777D1B971 | FE C3 | inc bl |  |  |
+| -70 | 7FF777D1B973 | 7FF777D1B973 | 4C 8D 25 76 E8 18 03 | lea r12,[7FF77AEAA1F0] | ["Instance has not been created!"] |  |
+| -69 | 7FF777D1B97A | 7FF777D1B97A | 80 FB 02 | cmp bl,02 |  |  |
+| -68 | 7FF777D1B97D | 7FF777D1B97D | 0F 85 61 FA FF FF | jne 7FF777D1B3E4 |  |  |
+| -67 | 7FF777D1B983 | 7FF777D1B983 | 49 8B C6 | mov rax,r14 |  |  |
+| -66 | 7FF777D1B986 | 7FF777D1B986 | C5 F8 77 | vzeroupper  |  |  |
+| -65 | 7FF777D1B989 | 7FF777D1B989 | 48 81 C4 98 00 00 00 | add rsp,00000098 |  |  |
+| -64 | 7FF777D1B990 | 7FF777D1B990 | 41 5F | pop r15 |  |  |
+| -63 | 7FF777D1B992 | 7FF777D1B992 | 41 5E | pop r14 |  |  |
+| -62 | 7FF777D1B994 | 7FF777D1B994 | 41 5D | pop r13 |  |  |
+| -61 | 7FF777D1B996 | 7FF777D1B996 | 41 5C | pop r12 |  |  |
+| -60 | 7FF777D1B998 | 7FF777D1B998 | 5F | pop rdi |  |  |
+| -59 | 7FF777D1B999 | 7FF777D1B999 | 5E | pop rsi |  |  |
+| -58 | 7FF777D1B99A | 7FF777D1B99A | 5B | pop rbx |  |  |
+| -57 | 7FF777D1B99B | 7FF777D1B99B | 5D | pop rbp |  |  |
+| -56 | 7FF777D1B99C | 7FF777D1B99C | C3 | ret  |  |  |
+| -55 | 7FF777D1B99D | 7FF777D1B99D | CC | int 3  |  |  |
+| -54 | 7FF777D1B99E | 7FF777D1B99E | CC | int 3  |  |  |
+| -53 | 7FF777D1B99F | 7FF777D1B99F | CC | int 3  |  |  |
+| -52 | 7FF777D1B9A0 | 7FF777D1B9A0 | 48 89 5C 24 20 | mov [rsp+20],rbx |  |  |
+| -51 | 7FF777D1B9A5 | 7FF777D1B9A5 | 89 54 24 10 | mov [rsp+10],edx |  |  |
+| -50 | 7FF777D1B9A9 | 7FF777D1B9A9 | 55 | push rbp |  |  |
+| -49 | 7FF777D1B9AA | 7FF777D1B9AA | 56 | push rsi |  |  |
+| -48 | 7FF777D1B9AB | 7FF777D1B9AB | 57 | push rdi |  |  |
+| -47 | 7FF777D1B9AC | 7FF777D1B9AC | 41 54 | push r12 |  |  |
+| -46 | 7FF777D1B9AE | 7FF777D1B9AE | 41 55 | push r13 |  |  |
+| -45 | 7FF777D1B9B0 | 7FF777D1B9B0 | 41 56 | push r14 |  |  |
+| -44 | 7FF777D1B9B2 | 7FF777D1B9B2 | 41 57 | push r15 |  |  |
+| -43 | 7FF777D1B9B4 | 7FF777D1B9B4 | 48 81 EC B0 02 00 00 | sub rsp,000002B0 |  |  |
+| -42 | 7FF777D1B9BB | 7FF777D1B9BB | 8B DA | mov ebx,edx |  |  |
+| -41 | 7FF777D1B9BD | 7FF777D1B9BD | 48 8B F1 | mov rsi,rcx |  |  |
+| -40 | 7FF777D1B9C0 | 7FF777D1B9C0 | 33 D2 | xor edx,edx |  |  |
+| -39 | 7FF777D1B9C2 | 7FF777D1B9C2 | E8 89 E2 FF FF | call 7FF777D19C50 |  |  |
+| -38 | 7FF777D1B9C7 | 7FF777D1B9C7 | 89 86 58 1D 00 00 | mov [rsi+00001D58],eax |  |  |
+| -37 | 7FF777D1B9CD | 7FF777D1B9CD | 33 D2 | xor edx,edx |  |  |
+| -36 | 7FF777D1B9CF | 7FF777D1B9CF | 48 8B CE | mov rcx,rsi |  |  |
+| -35 | 7FF777D1B9D2 | 7FF777D1B9D2 | E8 99 EA FF FF | call 7FF777D1A470 |  |  |
+| -34 | 7FF777D1B9D7 | 7FF777D1B9D7 | 44 8B F8 | mov r15d,eax |  |  |
+| -33 | 7FF777D1B9DA | 7FF777D1B9DA | 89 86 5C 1D 00 00 | mov [rsi+00001D5C],eax |  |  |
+| -32 | 7FF777D1B9E0 | 7FF777D1B9E0 | 85 C0 | test eax,eax |  |  |
+| -31 | 7FF777D1B9E2 | 7FF777D1B9E2 | 0F 8E 38 03 00 00 | jng 7FF777D1BD20 |  |  |
+| -30 | 7FF777D1B9E8 | 7FF777D1B9E8 | 80 BE B8 11 00 00 00 | cmp byte ptr [rsi+000011B8],00 |  |  |
+| -29 | 7FF777D1B9EF | 7FF777D1B9EF | 74 24 | je 7FF777D1BA15 |  |  |
+| -28 | 7FF777D1B9F1 | 7FF777D1B9F1 | 8B 86 48 0B 00 00 | mov eax,[rsi+00000B48] |  |  |
+| -27 | 7FF777D1B9F7 | 7FF777D1B9F7 | 83 F8 FF | cmp eax,-01 |  |  |
+| -26 | 7FF777D1B9FA | 7FF777D1B9FA | 74 19 | je 7FF777D1BA15 |  |  |
+| -25 | 7FF777D1B9FC | 7FF777D1B9FC | 89 84 24 F0 02 00 00 | mov [rsp+000002F0],eax |  |  |
+| -24 | 7FF777D1BA03 | 7FF777D1BA03 | 48 8D 8C 24 F0 02 00 00 | lea rcx,[rsp+000002F0] |  |  |
+| -23 | 7FF777D1BA0B | 7FF777D1BA0B | E8 A0 79 59 FF | call 7FF7772B33B0 |  |  |
+| -22 | 7FF777D1BA10 | 7FF777D1BA10 | 8B 48 10 | mov ecx,[rax+10] |  |  |
+| -21 | 7FF777D1BA13 | 7FF777D1BA13 | EB 20 | jmp 7FF777D1BA35 |  |  |
+| -20 | 7FF777D1BA15 | 7FF777D1BA15 | 8B 86 48 0E 00 00 | mov eax,[rsi+00000E48] |  |  |
+| -19 | 7FF777D1BA1B | 7FF777D1BA1B | 89 84 24 F0 02 00 00 | mov [rsp+000002F0],eax |  |  |
+| -18 | 7FF777D1BA22 | 7FF777D1BA22 | 48 8D 8C 24 F0 02 00 00 | lea rcx,[rsp+000002F0] |  |  |
+| -17 | 7FF777D1BA2A | 7FF777D1BA2A | E8 81 50 58 FF | call 7FF7772A0AB0 |  |  |
+| -16 | 7FF777D1BA2F | 7FF777D1BA2F | 8B 88 D4 09 00 00 | mov ecx,[rax+000009D4] |  |  |
+| -15 | 7FF777D1BA35 | 7FF777D1BA35 | 89 8C 24 F0 02 00 00 | mov [rsp+000002F0],ecx |  |  |
+| -14 | 7FF777D1BA3C | 7FF777D1BA3C | 48 8D 8C 24 F0 02 00 00 | lea rcx,[rsp+000002F0] |  |  |
+| -13 | 7FF777D1BA44 | 7FF777D1BA44 | E8 37 49 59 FF | call 7FF7772B0380 |  |  |
+| -12 | 7FF777D1BA49 | 7FF777D1BA49 | 48 8D 88 48 08 00 00 | lea rcx,[rax+00000848] |  |  |
+| -11 | 7FF777D1BA50 | 7FF777D1BA50 | E8 5B 50 58 FF | call 7FF7772A0AB0 |  |  |
+| -10 | 7FF777D1BA55 | 7FF777D1BA55 | 48 8B E8 | mov rbp,rax |  |  |
+| -9 | 7FF777D1BA58 | 7FF777D1BA58 | 83 3D E1 3A EB 03 00 | cmp dword ptr [7FF77BBCF540],00 |  |  |
+| -8 | 7FF777D1BA5F | 7FF777D1BA5F | 75 18 | jne 7FF777D1BA79 |  |  |
+| -7 | 7FF777D1BA61 | 7FF777D1BA61 | 48 8D 05 1E 64 6C 04 | lea rax,[7FF77C3E1E86] | [00000000] |  |
+| -6 | 7FF777D1BA68 | 7FF777D1BA68 | 48 89 44 24 28 | mov [rsp+28],rax |  |  |
+| -5 | 7FF777D1BA6D | 7FF777D1BA6D | 48 8D 0D 5C 01 1B 03 | lea rcx,[7FF77AECBBD0] | ["NGameState::GameStateAccess._Value != EGameStateAccess::Uninitialized"] |  |
+| -4 | 7FF777D1BA74 | 7FF777D1BA74 | E8 47 6D 87 02 | call 7FF77A5927C0 |  |  |
+| -3 | 7FF777D1BA79 | 7FF777D1BA79 | 48 8B 0D D0 CF 68 04 | mov rcx,[7FF77C3A8A50] | [5A151800] |  |
+| -2 | 7FF777D1BA80 | 7FF777D1BA80 | 48 8B 91 08 06 00 00 | mov rdx,[rcx+00000608] |  |  |
+| -1 | 7FF777D1BA87 | 7FF777D1BA87 | 4C 8B AA 20 01 00 00 | mov r13,[rdx+00000120] |  |  |
+| 0 | 7FF777D1BA8E | 7FF777D1BA8E | 44 2B BE 58 1D 00 00 | sub r15d,[rsi+00001D58] |  | TARGET |
+| 1 | 7FF777D1BA95 | 7FF777D1BA95 | 45 32 E4 | xor r12b,r12b |  |  |
+| 2 | 7FF777D1BA98 | 7FF777D1BA98 | 48 8D 4C 24 30 | lea rcx,[rsp+30] |  |  |
+| 3 | 7FF777D1BA9D | 7FF777D1BA9D | E8 1E 77 C0 FF | call 7FF7779231C0 |  |  |
+| 4 | 7FF777D1BAA2 | 7FF777D1BAA2 | 90 | nop  |  |  |
+| 5 | 7FF777D1BAA3 | 7FF777D1BAA3 | 4C 8B B6 D8 1D 00 00 | mov r14,[rsi+00001DD8] |  |  |
+| 6 | 7FF777D1BAAA | 7FF777D1BAAA | 48 63 86 E4 1D 00 00 | movsxd  rax,dword ptr [rsi+00001DE4] |  |  |
+| 7 | 7FF777D1BAB1 | 7FF777D1BAB1 | 49 8D 04 C6 | lea rax,[r14+rax*8] |  |  |
+| 8 | 7FF777D1BAB5 | 7FF777D1BAB5 | 48 89 84 24 F0 02 00 00 | mov [rsp+000002F0],rax |  |  |
+| 9 | 7FF777D1BABD | 7FF777D1BABD | 4C 3B F0 | cmp r14,rax |  |  |
+| 10 | 7FF777D1BAC0 | 7FF777D1BAC0 | 0F 84 F2 01 00 00 | je 7FF777D1BCB8 |  |  |
+| 11 | 7FF777D1BAC6 | 7FF777D1BAC6 | 66 66 0F 1F 84 00 00 00 00 00 | nop word ptr [rax+rax+00000000] |  |  |
+| 12 | 7FF777D1BAD0 | 7FF777D1BAD0 | 49 8B 3E | mov rdi,[r14] |  |  |
+| 13 | 7FF777D1BAD3 | 7FF777D1BAD3 | 80 BE B8 11 00 00 00 | cmp byte ptr [rsi+000011B8],00 |  |  |
+| 14 | 7FF777D1BADA | 7FF777D1BADA | 75 33 | jne 7FF777D1BB0F |  |  |
+| 15 | 7FF777D1BADC | 7FF777D1BADC | 33 D2 | xor edx,edx |  |  |
+| 16 | 7FF777D1BADE | 7FF777D1BADE | 33 C9 | xor ecx,ecx |  |  |
+| 17 | 7FF777D1BAE0 | 7FF777D1BAE0 | 48 63 85 14 24 00 00 | movsxd  rax,dword ptr [rbp+00002414] |  |  |
+| 18 | 7FF777D1BAE7 | 7FF777D1BAE7 | 85 C0 | test eax,eax |  |  |
+| 19 | 7FF777D1BAE9 | 7FF777D1BAE9 | 7E 24 | jle 7FF777D1BB0F |  |  |
+| 20 | 7FF777D1BAEB | 7FF777D1BAEB | 4C 8B C0 | mov r8,rax |  |  |
+| 21 | 7FF777D1BAEE | 7FF777D1BAEE | 48 8B 85 08 24 00 00 | mov rax,[rbp+00002408] |  |  |
+| 22 | 7FF777D1BAF5 | 7FF777D1BAF5 | 48 39 38 | cmp [rax],rdi |  |  |
+| 23 | 7FF777D1BAF8 | 7FF777D1BAF8 | 74 10 | je 7FF777D1BB0A |  |  |
+| 24 | 7FF777D1BAFA | 7FF777D1BAFA | FF C2 | inc edx |  |  |
+| 25 | 7FF777D1BAFC | 7FF777D1BAFC | 48 FF C1 | inc rcx |  |  |
+| 26 | 7FF777D1BAFF | 7FF777D1BAFF | 48 83 C0 08 | add rax,08 |  |  |
+| 27 | 7FF777D1BB03 | 7FF777D1BB03 | 49 3B C8 | cmp rcx,r8 |  |  |
+| 28 | 7FF777D1BB06 | 7FF777D1BB06 | 7C ED | jl 7FF777D1BAF5 |  |  |
+| 29 | 7FF777D1BB08 | 7FF777D1BB08 | EB 05 | jmp 7FF777D1BB0F |  |  |
+| 30 | 7FF777D1BB0A | 7FF777D1BB0A | 83 FA FF | cmp edx,-01 |  |  |
+| 31 | 7FF777D1BB0D | 7FF777D1BB0D | 75 60 | jne 7FF777D1BB6F |  |  |
+| 32 | 7FF777D1BB0F | 7FF777D1BB0F | 48 8B D7 | mov rdx,rdi |  |  |
+| 33 | 7FF777D1BB12 | 7FF777D1BB12 | 48 8B CD | mov rcx,rbp |  |  |
+| 34 | 7FF777D1BB15 | 7FF777D1BB15 | E8 66 8F A0 FF | call 7FF777724A80 |  |  |
+| 35 | 7FF777D1BB1A | 7FF777D1BB1A | 34 01 | xor al,01 |  |  |
+| 36 | 7FF777D1BB1C | 7FF777D1BB1C | 75 51 | jne 7FF777D1BB6F |  |  |
+| 37 | 7FF777D1BB1E | 7FF777D1BB1E | 48 8B D7 | mov rdx,rdi |  |  |
+| 38 | 7FF777D1BB21 | 7FF777D1BB21 | 48 8B CE | mov rcx,rsi |  |  |
+| 39 | 7FF777D1BB24 | 7FF777D1BB24 | E8 A7 EF FF FF | call 7FF777D1AAD0 |  |  |
+| 40 | 7FF777D1BB29 | 7FF777D1BB29 | 84 C0 | test al,al |  |  |
+| 41 | 7FF777D1BB2B | 7FF777D1BB2B | 0F 85 6E 01 00 00 | jne 7FF777D1BC9F |  |  |
+| 42 | 7FF777D1BB31 | 7FF777D1BB31 | 48 63 5F 10 | movsxd  rbx,dword ptr [rdi+10] |  |  |
+| 43 | 7FF777D1BB35 | 7FF777D1BB35 | 8B CB | mov ecx,ebx |  |  |
+| 44 | 7FF777D1BB37 | 7FF777D1BB37 | E8 F4 AA DF FF | call 7FF777B16630 |  |  |
+| 45 | 7FF777D1BB3C | 7FF777D1BB3C | 84 C0 | test al,al |  |  |
+| 46 | 7FF777D1BB3E | 7FF777D1BB3E | 74 2F | je 7FF777D1BB6F |  |  |
+| 47 | 7FF777D1BB40 | 7FF777D1BB40 | 0F B6 C3 | movzx eax,bl |  |  |
+| 48 | 7FF777D1BB43 | 7FF777D1BB43 | 24 3F | and al,3F |  |  |
+| 49 | 7FF777D1BB45 | 7FF777D1BB45 | 0F B6 C8 | movzx ecx,al |  |  |
+| 50 | 7FF777D1BB48 | 7FF777D1BB48 | 48 8B C3 | mov rax,rbx |  |  |
+| 51 | 7FF777D1BB4B | 7FF777D1BB4B | 48 C1 E8 06 | shr rax,06 |  |  |
+| 52 | 7FF777D1BB4F | 7FF777D1BB4F | 49 8B 84 C5 C8 05 00 00 | mov rax,[r13+rax*8+000005C8] |  |  |
+| 53 | 7FF777D1BB57 | 7FF777D1BB57 | 48 0F A3 C8 | bt rax,rcx |  |  |
+| 54 | 7FF777D1BB5B | 7FF777D1BB5B | 73 12 | jae 7FF777D1BB6F |  |  |
+| 55 | 7FF777D1BB5D | 7FF777D1BB5D | 49 8B 85 B0 05 00 00 | mov rax,[r13+000005B0] |  |  |
+| 56 | 7FF777D1BB64 | 7FF777D1BB64 | 48 83 3C D8 00 | cmp qword ptr [rax+rbx*8],00 |  |  |
+| 57 | 7FF777D1BB69 | 7FF777D1BB69 | 0F 8F 30 01 00 00 | jg 7FF777D1BC9F |  |  |
+| 58 | 7FF777D1BB6F | 7FF777D1BB6F | 48 63 5F 10 | movsxd  rbx,dword ptr [rdi+10] |  |  |
+| 59 | 7FF777D1BB73 | 7FF777D1BB73 | 8B CB | mov ecx,ebx |  |  |
+| 60 | 7FF777D1BB75 | 7FF777D1BB75 | E8 B6 AA DF FF | call 7FF777B16630 |  |  |
+| 61 | 7FF777D1BB7A | 7FF777D1BB7A | 84 C0 | test al,al |  |  |
+| 62 | 7FF777D1BB7C | 7FF777D1BB7C | 74 2A | je 7FF777D1BBA8 |  |  |
+| 63 | 7FF777D1BB7E | 7FF777D1BB7E | 0F B6 C3 | movzx eax,bl |  |  |
+| 64 | 7FF777D1BB81 | 7FF777D1BB81 | 24 3F | and al,3F |  |  |
+| 65 | 7FF777D1BB83 | 7FF777D1BB83 | 0F B6 C8 | movzx ecx,al |  |  |
+| 66 | 7FF777D1BB86 | 7FF777D1BB86 | 48 8B C3 | mov rax,rbx |  |  |
+| 67 | 7FF777D1BB89 | 7FF777D1BB89 | 48 C1 E8 06 | shr rax,06 |  |  |
+| 68 | 7FF777D1BB8D | 7FF777D1BB8D | 48 8B 84 C6 A8 1D 00 00 | mov rax,[rsi+rax*8+00001DA8] |  |  |
+| 69 | 7FF777D1BB95 | 7FF777D1BB95 | 48 0F A3 C8 | bt rax,rcx |  |  |
+| 70 | 7FF777D1BB99 | 7FF777D1BB99 | 73 0D | jae 7FF777D1BBA8 |  |  |
+| 71 | 7FF777D1BB9B | 7FF777D1BB9B | 48 8B 8E 90 1D 00 00 | mov rcx,[rsi+00001D90] |  |  |
+| 72 | 7FF777D1BBA2 | 7FF777D1BBA2 | 48 8B 0C D9 | mov rcx,[rcx+rbx*8] |  |  |
+| 73 | 7FF777D1BBA6 | 7FF777D1BBA6 | EB 02 | jmp 7FF777D1BBAA |  |  |
+| 74 | 7FF777D1BBA8 | 7FF777D1BBA8 | 33 C9 | xor ecx,ecx |  |  |
+| 75 | 7FF777D1BBAA | 7FF777D1BBAA | 49 BC 09 E1 D1 C6 11 6B F1 29 | mov r12,29F16B11C6D1E109 |  |  |
+| 76 | 7FF777D1BBB4 | 7FF777D1BBB4 | 49 8B C4 | mov rax,r12 |  |  |
+| 77 | 7FF777D1BBB7 | 7FF777D1BBB7 | 48 F7 E9 | imul rcx |  |  |
+| 78 | 7FF777D1BBBA | 7FF777D1BBBA | 48 C1 FA 0E | sar rdx,0E |  |  |
+| 79 | 7FF777D1BBBE | 7FF777D1BBBE | 48 8B C2 | mov rax,rdx |  |  |
+| 80 | 7FF777D1BBC1 | 7FF777D1BBC1 | 48 C1 E8 3F | shr rax,3F |  |  |
+| 81 | 7FF777D1BBC5 | 7FF777D1BBC5 | 48 03 D0 | add rdx,rax |  |  |
+| 82 | 7FF777D1BBC8 | 7FF777D1BBC8 | 8B DA | mov ebx,edx |  |  |
+| 83 | 7FF777D1BBCA | 7FF777D1BBCA | F7 DB | neg ebx |  |  |
+| 84 | 7FF777D1BBCC | 7FF777D1BBCC | 0F 48 DA | cmovs ebx,edx |  |  |
+| 85 | 7FF777D1BBCF | 7FF777D1BBCF | 44 2B FB | sub r15d,ebx |  |  |
+| 86 | 7FF777D1BBD2 | 7FF777D1BBD2 | 4C 8B C7 | mov r8,rdi |  |  |
+| 87 | 7FF777D1BBD5 | 7FF777D1BBD5 | 48 8D 94 24 00 03 00 00 | lea rdx,[rsp+00000300] |  |  |
+| 88 | 7FF777D1BBDD | 7FF777D1BBDD | 48 8B CE | mov rcx,rsi |  |  |
+| 89 | 7FF777D1BBE0 | 7FF777D1BBE0 | E8 6B EF FF FF | call 7FF777D1AB50 |  |  |
+| 90 | 7FF777D1BBE5 | 7FF777D1BBE5 | 4C 8B 08 | mov r9,[rax] |  |  |
+| 91 | 7FF777D1BBE8 | 7FF777D1BBE8 | 48 63 DB | movsxd  rbx,ebx |  |  |
+| 92 | 7FF777D1BBEB | 7FF777D1BBEB | 48 69 CB A0 86 01 00 | imul rcx,rbx,000186A0 |  |  |
+| 93 | 7FF777D1BBF2 | 7FF777D1BBF2 | BA 33 F3 04 B5 | mov edx,B504F333 |  |  |
+| 94 | 7FF777D1BBF7 | 7FF777D1BBF7 | 48 8D 04 11 | lea rax,[rcx+rdx] |  |  |
+| 95 | 7FF777D1BBFB | 7FF777D1BBFB | 49 B8 66 E6 09 6A 01 00 00 00 | mov r8,000000016A09E666 |  |  |
+| 96 | 7FF777D1BC05 | 7FF777D1BC05 | 49 3B C0 | cmp rax,r8 |  |  |
+| 97 | 7FF777D1BC08 | 7FF777D1BC08 | 77 0F | ja 7FF777D1BC19 |  |  |
+| 98 | 7FF777D1BC0A | 7FF777D1BC0A | 49 8D 04 11 | lea rax,[r9+rdx] |  |  |
+| 99 | 7FF777D1BC0E | 7FF777D1BC0E | 49 3B C0 | cmp rax,r8 |  |  |
+| 100 | 7FF777D1BC11 | 7FF777D1BC11 | 77 06 | ja 7FF777D1BC19 |  |  |

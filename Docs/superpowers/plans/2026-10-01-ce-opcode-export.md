@@ -136,7 +136,7 @@ Instruction      -> {address, addressText, opcode, extra, text, bytes: str, size
 
 **执行步骤：**
 
-- [ ] 新建以下文件。客户端只允许一个在途请求，逐行读取 stdio JSON；stderr 单独落盘，不能阻塞 stdout。通知不占请求 ID，未知服务端请求返回 `-32601`；超时、EOF、无效响应使连接失效，不复用连接或盲目重发请求。
+- [x] 新建以下文件。客户端只允许一个在途请求，逐行读取 stdio JSON；stderr 单独落盘，不能阻塞 stdout。通知不占请求 ID，未知服务端请求返回 `-32601`；超时、EOF、无效响应使连接失效，不复用连接或盲目重发请求。
 
 #### 文件：Scripts/ce_mcp_client.py
 
@@ -314,7 +314,7 @@ class McpClient:
             self.log = None
 ```
 
-- [ ] 新建下面的测试文件。假服务覆盖握手、通知、目录分页、结构化结果、文本 JSON 兼容、工具错误、请求超时、EOF 和异常请求 ID；测试只启动自己的 Python 子进程。
+- [x] 新建下面的测试文件。假服务覆盖握手、通知、目录分页、结构化结果、文本 JSON 兼容、工具错误、请求超时、EOF 和异常请求 ID；测试只启动自己的 Python 子进程。
 
 #### 文件：Scripts/tests/test_ce_mcp_client.py
 
@@ -402,8 +402,8 @@ if __name__ == "__main__":
     unittest.main()
 ```
 
-- [ ] 运行 `python -m unittest discover -s Scripts/tests -p test_ce_mcp_client.py -v`，预期全部通过。
-- [ ] 独立产出判定：不用启动 CE 即可验证传输；连接真实 Gateway 时能完成 `tools/list` 和 `instance_list`，关闭客户端后 CE/游戏仍在运行。
+- [x] 运行 `python -m unittest discover -s Scripts/tests -p test_ce_mcp_client.py -v`，预期全部通过。
+- [x] 独立产出判定：不用启动 CE 即可验证传输；连接真实 Gateway 时能完成 `tools/list` 和 `instance_list`，关闭客户端后 CE/游戏仍在运行。
 
 
 ### 任务2：交付窗口校验和文件渲染
@@ -421,7 +421,7 @@ if __name__ == "__main__":
 
 **执行步骤：**
 
-- [ ] 新建以下文件。模块内不做报告解析、不读取任何输入文件；只做机器码/窗口校验、Markdown 渲染与原子写文件。
+- [x] 新建以下文件。模块内不做报告解析、不读取任何输入文件；只做机器码/窗口校验、Markdown 渲染与原子写文件。
 
 #### 文件：Scripts/opcode_report.py
 
@@ -553,7 +553,7 @@ def atomic_text(path: Path, text: str) -> None:
             temporary.unlink(missing_ok=True)
 ```
 
-- [ ] 新建下面的单元测试。不读取真实报告文件；固化列表一致性回归放在 `test_opcode_export.py`，微型边界样本内联在测试中。
+- [x] 新建下面的单元测试。不读取真实报告文件；固化列表一致性回归放在 `test_opcode_export.py`，微型边界样本内联在测试中。
 
 #### 文件：Scripts/tests/test_opcode_report.py
 
@@ -634,8 +634,8 @@ if __name__ == "__main__":
     unittest.main()
 ```
 
-- [ ] 运行 `python -m unittest discover -s Scripts/tests -p test_opcode_report.py -v`，预期全部通过。
-- [ ] 独立产出判定：离线校验 201 条窗口；对 200 条、错位目标、机器码变化、锚点不一致、非连续地址、无效解码拒绝生成成功窗口。
+- [x] 运行 `python -m unittest discover -s Scripts/tests -p test_opcode_report.py -v`，预期全部通过。
+- [x] 独立产出判定：离线校验 201 条窗口；对 200 条、错位目标、机器码变化、锚点不一致、非连续地址、无效解码拒绝生成成功窗口。
 
 
 ### 任务3：交付一条命令完成导出的编排器
@@ -652,7 +652,7 @@ if __name__ == "__main__":
 
 **执行步骤：**
 
-- [ ] 新建以下文件。所有默认路径基于 `__file__` 定位仓库，不依赖启动目录。目标来自脚本头部 `TARGETS` 固化列表，连接 CE 前先校验格式；不附加、不切换、不分离，CE 必须已由用户手动附加 victoria3；多个 CE 用 `--instance-id` 消除歧义，不能选择“第一个”。
+- [x] 新建以下文件。所有默认路径基于 `__file__` 定位仓库，不依赖启动目录。目标来自脚本头部 `TARGETS` 固化列表，连接 CE 前先校验格式；不附加、不切换、不分离，CE 必须已由用户手动附加 victoria3；多个 CE 用 `--instance-id` 消除歧义，不能选择“第一个”。
 
 #### 文件：Scripts/run_opcode_export.py
 
@@ -978,7 +978,7 @@ if __name__ == "__main__":
     raise SystemExit(main())
 ```
 
-- [ ] 新建集成测试文件；所有目标读写均使用假对象。注意“导出过程中 CE 被切到其他目标”与“单地址无法读取”必须有不同的行为：前者终止后续 MCP 调用，后者继续处理其他目标。另加固化列表一致性测试（`EXPECTED` 副本对照 `TARGETS`）与只读调用集合子集断言。
+- [x] 新建集成测试文件；所有目标读写均使用假对象。注意“导出过程中 CE 被切到其他目标”与“单地址无法读取”必须有不同的行为：前者终止后续 MCP 调用，后者继续处理其他目标。另加固化列表一致性测试（`EXPECTED` 副本对照 `TARGETS`）与只读调用集合子集断言。
 
 #### 文件：Scripts/tests/test_opcode_export.py
 
@@ -1387,16 +1387,16 @@ if __name__ == "__main__":
     unittest.main()
 ```
 
-- [ ] 执行 `python -m unittest discover -s Scripts/tests -p "test_*.py" -v`，三个测试文件全部通过。
-- [ ] 执行 `python Scripts/run_opcode_export.py --help`，确认参数仅包含 `--output`、`--gateway`、`--instance-id`、`--timeout`（无 `--input`、`--pid`、`--attach`）。
-- [ ] 独立产出判定：假会话能生成独立文件和 manifest；任何一个目标失败均不返回 0；传输超时/会话改变不再读取剩余地址，也不回收 CE/游戏；成功运行的完整调用集合仅含只读工具。
+- [x] 执行 `python -m unittest discover -s Scripts/tests -p "test_*.py" -v`，三个测试文件全部通过。
+- [x] 执行 `python Scripts/run_opcode_export.py --help`，确认参数仅包含 `--output`、`--gateway`、`--instance-id`、`--timeout`（无 `--input`、`--pid`、`--attach`）。
+- [x] 独立产出判定：假会话能生成独立文件和 manifest；任何一个目标失败均不返回 0；传输超时/会话改变不再读取剩余地址，也不回收 CE/游戏；成功运行的完整调用集合仅含只读工具。
 
 
 ## 4. 真实会话验收与操作说明（任务3的交付组成）
 
 ### 4.1 写入操作说明
 
-- [ ] 新建 `Docs/opcode_export.md`，写入下列操作内容。实际运行前游戏与 CE 保持打开，CE 插件已启用，并由用户在 CE 中手动附加 victoria3.exe（脚本不代附加）；Gateway 和 CE 由同一 Windows 用户运行。默认包路径已在仓库中，Python 3.11+ 无需安装第三方包。
+- [x] 新建 `Docs/opcode_export.md`，写入下列操作内容。实际运行前游戏与 CE 保持打开，CE 插件已启用，并由用户在 CE 中手动附加 victoria3.exe（脚本不代附加）；Gateway 和 CE 由同一 Windows 用户运行。默认包路径已在仓库中，Python 3.11+ 无需安装第三方包。
 
 ```markdown
 # 导出固化列表中的 opcode 窗口
@@ -1573,7 +1573,7 @@ print("PASS: 9 windows, 1809 instructions per run, identical windows, "
 ```
 
 - [ ] 在 CE 内存查看器人工抽查两组各一个目标：`7FF777D19218` 和 `7FF777D1B9DA`。比较目标 bytes/opcode、紧邻前后指令与导出文件，确认 CE 使用同一 PID。人工抽查用于检查展示一致性，不能代替全量结构校验。
-- [ ] 使用离线测试覆盖错误注入；不要为测试而破坏正在运行的游戏：机器码不匹配、短窗口、目标错位、字节长度异常、单地址失败、超时、会话改变、多个实例、未附加/目标错误、固化列表非法条目、原子替换失败、仅最终 overview 失败（`residueCheck=unavailable` 且退出码 0→3）、写文件失败后的统一收尾、Ctrl+C 收尾、连接失效/无基线收尾、启动握手期间 Ctrl+C 的 Gateway 回收。
+- [x] 使用离线测试覆盖错误注入；不要为测试而破坏正在运行的游戏：机器码不匹配、短窗口、目标错位、字节长度异常、单地址失败、超时、会话改变、多个实例、未附加/目标错误、固化列表非法条目、原子替换失败、仅最终 overview 失败（`residueCheck=unavailable` 且退出码 0→3）、写文件失败后的统一收尾、Ctrl+C 收尾、连接失效/无基线收尾、启动握手期间 Ctrl+C 的 Gateway 回收。
 - [ ] 检查本次脚本只回收自己创建的 Gateway，原 CE 和 victoria3 仍在（含启动握手期间中断的场合）；确认没有新断点、内存写入、注入脚本或修改 CE 设置；核对 manifest：`residueCheck.state=unchanged` 且 `before/after` 计数一致（见 4.4）。
 - [ ] 实施者记录本次实际退出码、输出目录、9/9 成功数、1809 条总数，以及人工抽查结果。若当前游戏已重启导致地址失效，记录真实失败，重新采集报告并手动更新 `TARGETS` 后再验收；不能宣告 goal1 完成。
 
@@ -1596,7 +1596,17 @@ print("PASS: 9 windows, 1809 instructions per run, identical windows, "
 
 残留清理边界：脚本只终止自己启动的 Gateway 子进程；不关闭 CE/游戏、不分离用户已手动建立的目标、不删除用户断点或 CE 资源。运行目录与其中的 Markdown/manifest 由验收人员自行保留或清理。统一收尾在关闭客户端前核对一次 `resourceCount/jobCount` 并写入 manifest 的 `residueCheck`：changed 时打印 WARN 交人工核查（只读工具不会产生 CE 资源）；unavailable 时若数据全成功则退出码由 0 升为 3；skipped 时 reason 注明原因（中断、连接失效或未建立基线）。manifest 的结构化记录为尽力保存；磁盘不可写时以 stderr 诊断为准。
 
+## 本次实施记录（2026-10-01）
+
+- 已新增 3 个实现模块、3 个测试文件及操作说明；28 项离线测试通过，CLI 参数核验通过。真实 Gateway 完成初始化、工具目录和实例发现。
+- 首次真实导出退出码为 1，成功 5/9，成功窗口共 1005 条指令。产物目录：`Output/opcodes/20261001T111936909271Z_09d8369e/`。
+- 地址 `7FF7777927334`、`7FF7777927358`、`7FF7777CED5BB`、`7FF7777CED5C9` 返回 `memory_read_failed`。按原文保留地址，未猜测或删减十六进制位；需重新采集或核实这 4 个指令地址后手动更新 `TARGETS`。
+- 收尾核对 `residueCheck.state=unchanged`，运行前后 resourceCount/jobCount 均为 0/0。原 CE PID 72480 和游戏 PID 43884 在运行后仍存在。
+- 首次验收失败，第二次真实导出、重复运行一致性验收和 CE 内存查看器人工抽查尚未完成。goal1 尚未完成，相关复选框保持未勾选。
+
 ## 5. 完成标准与覆盖自检
+
+后续修正记录（2026-10-01）：用户确认 `7FF777927334` 后，已通过只读解码确认四个失败地址均为报告中多了一位 `7`。现已同步修正 `Scripts/run_opcode_export.py` 的 `TARGETS` 和测试 `EXPECTED`；28 项离线测试再次通过。`7FF777927334` 已在 `Output/opcodes/20261001T113450443706Z_76a020f9/` 单独成功导出 201 条。剩余三个目标 `7FF777927358`、`7FF777CED5BB`、`7FF777CED5C9` 已在 `Output/opcodes/20261001T114219239448Z_dfa3881b/` 成功导出，共 603 条，退出码 0，资源计数前后均为 0/0。旧失败产物保留；两次完整九目标验收及人工抽查仍未完成。
 
 | goal1 / 易错点 | 对应实现或验收 |
 | --- | --- |
