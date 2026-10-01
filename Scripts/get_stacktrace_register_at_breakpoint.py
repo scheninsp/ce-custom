@@ -1,4 +1,7 @@
 """只读采集 CE 手动断点现场的寄存器与启发式栈候选，并原子生成 Markdown 报告。"""
+# exp.
+# cd D:\cebuild\ce-custom
+# python Scripts\get_stacktrace_register_at_breakpoint.py
 
 import argparse
 import html
@@ -360,6 +363,19 @@ def safe_cell(value) -> str:
     return md(text).replace("*", "&#42;").replace("_", "&#95;")
 
 
+def filter_report_snapshot(value):
+    """递归移除报告副本中的 evidence、capabilities、hostVersion 和 platform 字段；参数为任意 JSON 值，返回清理后的副本。"""
+    if isinstance(value, dict):
+        return {
+            key: filter_report_snapshot(item)
+            for key, item in value.items()
+            if key not in {"evidence", "capabilities", "hostVersion", "platform"}
+        }
+    if isinstance(value, list):
+        return [filter_report_snapshot(item) for item in value]
+    return value
+
+
 def render_report(snapshot) -> str:
     """渲染寄存器与栈候选报告；参数为已校验快照，返回 UTF-8 文件所需的 LF 文本。"""
     process, status = snapshot["process"], snapshot["status"]
@@ -401,7 +417,7 @@ def render_report(snapshot) -> str:
               "Before/after stopped-state and session checks cannot detect a resume/re-break between calls.",
               "No attach, breakpoint changes, continue, or target memory writes are performed.",
               "", "## Raw MCP Snapshot", ""]
-    raw = json.dumps(snapshot, ensure_ascii=True, indent=2, sort_keys=True)
+    raw = json.dumps(filter_report_snapshot(snapshot), ensure_ascii=True, indent=2, sort_keys=True)
     fence = "`" * max(3, 1 + max((len(item) for item in re.findall(r"`+", raw)), default=0))
     return "\n".join(lines + [fence + "json", raw, fence, ""])
 
