@@ -14,7 +14,14 @@
 
 ## 执行命令
 
-从项目根目录运行：
+在 CMD 中直接运行，无需额外参数：
+
+```cmd
+cd /d D:\cebuild\ce-custom
+python Scripts\get_stacktrace_register_at_breakpoint.py
+```
+
+`cd /d` 同时切换盘符和目录。PowerShell 中也可从项目根目录运行：
 
 ```powershell
 Set-Location D:\cebuild\ce-custom
@@ -60,7 +67,17 @@ FP/XMM 是否出现取决于调试器后端，缺失不等于零，不补猜测�
 
 `debugger_get_stack_trace(depth=128)` 最多扫描 **128 个栈槽**，不是保证返回 128 个调用帧。frame 是启发式候选，可能包含陈旧栈数据或误判的代码指针，并非符号器确认的调用链。`callInstruction` 只在 CE 能反汇编时提供候选信息，可缺省。分析时必须结合断点现场和反汇编人工复核；本脚本不额外调用反汇编或内存读取工具修正结果。
 
-业务调用限定为 `instance_list`、`runtime_get_info`、`runtime_get_overview`、`debugger_get_status`、`debugger_get_context`、`debugger_get_stack_trace`。启动期调用 `tools/list` 校验工具及参数。除实例发现外，每个业务调用均带本次发现的 `instanceId`。
+正常路径的业务调用为 `instance_list`、`runtime_get_info`、`runtime_get_overview`、`debugger_get_status`、`debugger_get_context`、`debugger_get_stack_trace`。启动期调用 `tools/list` 校验工具及参数。除实例发现外，每个业务调用均带本次发现的 `instanceId`。
+
+## 无需重编译 DLL 的状态兼容路径
+
+部分现场的 `debug_isBroken()` 返回函数对象，使 MCP 状态查询报告 `stateValid=false`。脚本仅识别这一项已确认的非布尔返回错误，并自动通过 `lua_execute` 发送固定只读查询，以 `debug_isDebugging()` 和 `debug_getCurrentContextTable(false)` 确认停止状态，不调用异常的 `debug_isBroken()`。其他状态错误仍按原规则失败。
+
+该兼容功能按用户要求扩展了原计划的六工具限制。`lua_execute` 是通用执行工具，本身不声明只读；本脚本只允许专用调用点发送写死的查询，不接受外部 Lua 源码，不修改 CE 全局函数、目标内存、断点或运行状态。它也不会将 `lua_execute` 加入通用只读工具白名单。
+
+兼容查询要求已启用 `Mcp:EnableUnsafeLua`；当前现场已经启用，无需重载插件。禁用时会以 `capability_disabled` 退出 2，不会替用户更改配置。成功响应必须为 `ok=true`、`hostEffect=completed` 且无丢弃数据；Lua 运行失败或效果无法确认退出 3。
+
+采集前后兼容查询的指令地址和栈指针必须与寄存器响应一致，栈接口的 stackPointer 也要匹配；会话指纹和资源计数照常核对。报告标记 `statusSource=lua_execute_fixed_query`，并保留 `originalStatus`、`luaResponse` 原始证据，不伪造 `reportedBroken`。
 
 ## 故障处理
 
@@ -93,3 +110,5 @@ git diff --check
 离线测试使用假客户端和临时目录，不连接 CE，也不读取项目现有 Output 报告。
 
 真实验收须由用户手动准备断点：运行默认命令后，核对标题地址与 Raw JSON 的 RIP/EIP 一致，位宽对应的 SP/BP/IP 寄存器存在、`includesExtraRegisters=true`、`scannedSlots<=128`，并检查前后指纹与 `residueCheck.state=unchanged`。随后人工确认 CE 仍停在原指令、断点未增删、目标内存未被修改。记录 Gateway 版本、目标 PID、输出文件及实际执行命令；离线测试通过不代表已完成这项人工验收。
+
+2026-10-01 实测：现有 `2.0.0-beta.2` DLL 未重编译或重载，上述 CMD 无参数命令退出 0，生成 `Output/streg_7FF777CED5C9.md`。目标为 victoria3（PID 43884），返回 43 项寄存器、扫描 128 个栈槽、1 个启发式候选。首尾停止地址和栈指针一致，resourceCount/jobCount 均为 0→0，residueCheck 为 unchanged。全量 51 项离线测试及 py_compile 通过；自动核对不等于对目标全部内存做差分验证。

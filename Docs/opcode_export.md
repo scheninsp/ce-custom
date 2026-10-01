@@ -6,6 +6,12 @@
 
     python Scripts/run_opcode_export.py
 
+也可以直接指定一个十六进制地址和前后指令条数，例如：
+
+    python Scripts\\run_opcode_export.py 7FF777CED5C9 100
+
+单地址模式会先由 CE 解码目标指令，以当前机器码作为锚点，再导出前后各指定条数；地址和条数必须同时提供。
+
 CE 未附加 victoria3，或已附加其他程序时，脚本以退出码 2 停止。
 目标地址与原始机器码固化在 Scripts/run_opcode_export.py 的 TARGETS 列表（9 对，来源为 Docs/testdata-2026-10-1-10-58.md）。
 游戏重启后地址失效：重新采集报告并手动更新 TARGETS；脚本不读取也不解析报告文件。
@@ -25,7 +31,7 @@ CE 未附加 victoria3，或已附加其他程序时，脚本以退出码 2 停�
 - manifest.json：实例、目标 PID、选择代次、条数、CE 资源计数基线、收尾核对结果（residueCheck）和错误。
 - gateway.stderr.log：本次 Gateway 的诊断输出。
 
-成功文件包含前 100 条、目标指令、后 100 条，共 201 条。
+批量模式文件包含前 100 条、目标指令、后 100 条，共 201 条；单地址模式的条数由命令行参数决定。
 目标标记为 TARGET，Offset 从 -100 到 +100。
 CE 前置边界属于估计；结果通过连续性和目标机器码检查，
 并不证明实际执行路径，也不是暂停进程得到的原子快照。

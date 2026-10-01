@@ -60,13 +60,15 @@ def validate_anchor(target: Target, payload: dict) -> None:
         raise ValueError("source bytes mismatch; refresh the source report")
 
 
-def validate_window(target: Target, payload: dict) -> list[dict]:
-    """校验 201 条连续指令窗口；参数为目标和 CE 响应，返回指令列表。"""
+def validate_window(target: Target, payload: dict, before: int = 100,
+                    after: int = 100) -> list[dict]:
+    """校验目标居中的连续指令窗口；参数为目标、响应及前后条数，返回指令列表。"""
     if hex_address(payload["address"]) != target.address:
         raise ValueError("response address mismatch")
     rows = payload["instructions"]
-    if not isinstance(rows, list) or len(rows) != 201:
-        raise ValueError("expected exactly 201 instructions")
+    expected_count = before + after + 1
+    if not isinstance(rows, list) or len(rows) != expected_count:
+        raise ValueError(f"expected exactly {expected_count} instructions")
     positions, previous_end = [], None
     for index, row in enumerate(rows):
         address, size = checked_instruction(row)
@@ -75,9 +77,9 @@ def validate_window(target: Target, payload: dict) -> list[dict]:
         previous_end = address + size
         if address == int(target.address, 16):
             positions.append(index)
-    if positions != [100]:
-        raise ValueError("target must occur exactly once at index 100")
-    if hex_bytes(rows[100]["bytes"]) != target.expected_bytes:
+    if positions != [before]:
+        raise ValueError(f"target must occur exactly once at index {before}")
+    if hex_bytes(rows[before]["bytes"]) != target.expected_bytes:
         raise ValueError("target bytes changed or source report is stale")
     return rows
 
@@ -96,22 +98,24 @@ def render_target(target: Target, record: dict, rows: list[dict], metadata: dict
         f"- CE instance: {metadata['instanceId']}",
         f"- Target PID: {metadata['processId']}",
         f"- Captured at: {record['capturedAt']}",
-        "- Requested: 100 before + target + 100 after",
+        f"- Requested: {metadata.get('before', 100)} before + target + {metadata.get('after', 100)} after",
         "- Boundary method: CE estimated predecessors; continuity checked on success",
         "- Capture mode: live reads, not an atomic process snapshot",
         "- Expected target bytes: " + target.expected_bytes, "",
     ]
     if record["status"] != "success":
         return "\n".join(lines + ["## Failure", "", md(record["error"]), ""])
-    if len(rows) != 201:
+    before = metadata.get("before", 100)
+    after = metadata.get("after", 100)
+    if len(rows) != before + after + 1:
         raise ValueError("refusing to render an incomplete successful window")
     lines += ["## Instructions", "",
               "| Offset | Address | CE address | Bytes | Opcode | Extra | Marker |",
               "| ---: | --- | --- | --- | --- | --- | --- |"]
     for index, row in enumerate(rows):
         byte_text = " ".join(f"{b:02X}" for b in bytes.fromhex(row["bytes"]))
-        marker = "TARGET" if index == 100 else ""
-        values = [index - 100, row["address"], row["addressText"],
+        marker = "TARGET" if index == before else ""
+        values = [index - before, row["address"], row["addressText"],
                   byte_text, row["opcode"], row["extra"], marker]
         lines.append("| " + " | ".join(md(value) for value in values) + " |")
     return "\n".join(lines) + "\n"

@@ -16,6 +16,32 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_GATEWAY = ROOT / "McpExternals/CheatEngine.Mcp-2.0.0-beta.2-win-x64/CheatEngine.Mcp.Gateway.exe"
 DEFAULT_OUTPUT = ROOT / "Output"
 STACK_DEPTH = 128
+# 固定兼容查询只读当前调试上下文；不接受外部源码，也不修改 CE 全局函数。
+STATUS_COMPAT_SOURCE = """
+local attached = debug_isDebugging()
+assert(type(attached) == 'boolean', 'Invalid attached state')
+local context = attached and debug_getCurrentContextTable(false) or nil
+local broken = type(context) == 'table'
+local is64Bit = targetIs64Bit()
+assert(type(is64Bit) == 'boolean', 'Invalid target architecture')
+local active = nil
+if attached then
+    local interfaces = {[1]='windows', [2]='veh', [3]='kernel'}
+    active = interfaces[debug_getCurrentDebuggerInterface()]
+    assert(active ~= nil, 'Unsupported debugger interface')
+end
+local result = {stateValid=true, attached=attached, broken=broken, activeInterface=active, is64Bit=is64Bit}
+if broken then
+    local ip = context[is64Bit and 'RIP' or 'EIP']
+    local sp = context[is64Bit and 'RSP' or 'ESP']
+    assert(math.type(ip) == 'integer' and ip ~= 0, 'Invalid stopped instruction pointer')
+    assert(math.type(sp) == 'integer', 'Invalid stopped stack pointer')
+    result.instructionPointer = string.format('%X',ip)
+    result.stackPointer = string.format('%X',sp)
+end
+return result
+"""
+STATUS_COMPAT_CHUNK = "streg_readonly_status_compat"
 READ_ONLY_TOOLS = frozenset({
     "instance_list", "runtime_get_info", "runtime_get_overview",
     "debugger_get_status", "debugger_get_context", "debugger_get_stack_trace",
@@ -108,7 +134,7 @@ def read_tool(client, name, instance_id=None, *, collecting=False, **extra):
 
 
 def validate_catalog(client):
-    """启动时校验工具目录与必要参数；参数为客户端，成功时无返回值。"""
+    """校验工具目录；参数为客户端，返回固定 Lua 兼容查询是否可用。"""
     try:
         catalog = client.tools()
         if not isinstance(catalog, dict) or not READ_ONLY_TOOLS <= catalog.keys():
@@ -123,6 +149,10 @@ def validate_catalog(client):
                 required.add("depth")
             if not required <= properties.keys():
                 raise CaptureError(f"tool input schema changed: {name}")
+        lua = catalog.get("lua_execute", {})
+        schema = lua.get("inputSchema", {}) if isinstance(lua, dict) else {}
+        properties = schema.get("properties", {}) if isinstance(schema, dict) else {}
+        return isinstance(properties, dict) and {"instanceId", "source", "chunkName"} <= properties.keys()
     except (KeyError, TypeError, AttributeError) as exc:
         raise CaptureError("invalid tool catalog or input schema") from exc
 
@@ -179,6 +209,8 @@ def validate_runtime(client, instance_id) -> dict:
 
 def require_stopped(status: dict) -> None:
     """检查可读取的停止现场；参数为状态响应，成功时无返回值。"""
+    if isinstance(status.get("error"), str) and status["error"]:
+        raise CaptureError("debugger host error: " + ascii(status["error"]))
     for key in ("stateValid", "attached", "broken"):
         if field(status, key, bool) is not True:
             raise CaptureError(f"debugger must be stopped: {key}=false; check CE manually")
@@ -187,6 +219,56 @@ def require_stopped(status: dict) -> None:
             raise CaptureError(f"invalid debugger status field: {key}")
     if status.get("error"):
         raise CaptureError("debugger host error: " + ascii(status["error"]))
+
+
+def read_status(client, instance_id, *, collecting=False, compat_available=False):
+    """读取停止状态并处理已知 CE 返回类型缺陷；参数为客户端、实例及阶段和能力标志，返回状态。"""
+    original = read_tool(client, "debugger_get_status", instance_id, collecting=collecting)
+    error = original.get("error")
+    known_error = isinstance(error, str) and re.fullmatch(
+        r"CheatEngine\.Mcp/debugger_get_status:[0-9]+: debug_isBroken did not return a boolean debugger state", error
+    )
+    if original.get("stateValid") is not False or not known_error:
+        return original
+    if not compat_available:
+        raise CaptureError("debug_isBroken is incompatible and lua_execute status fallback is unavailable")
+    if client.broken:
+        raise TransportError("MCP connection is unusable")
+    # 通用 Lua 工具不属于只读白名单；此处单独限制为固定、无参数插值的查询。
+    try:
+        payload = client.call("lua_execute", {
+            "instanceId": instance_id, "source": STATUS_COMPAT_SOURCE, "chunkName": STATUS_COMPAT_CHUNK,
+        })
+    except ToolError as exc:
+        raise tool_failure(exc, "lua_execute(status compatibility query)", collecting) from exc
+    if not isinstance(payload, dict) or payload.get("ok") is not True or payload.get("hostEffect") != "completed":
+        raise CaptureError("WARN: status compatibility query failed or host effect unconfirmed: " + ascii(str(payload)), 3)
+    if field(payload, "droppedOpaqueCount", int) != 0:
+        raise CaptureError("status compatibility query returned opaque data")
+    values = field(payload, "returnValues", list)
+    if len(values) != 1 or not isinstance(values[0], dict):
+        raise CaptureError("status compatibility query must return exactly one object")
+    status = dict(values[0])
+    for key in ("stateValid", "attached", "broken", "is64Bit"):
+        field(status, key, bool)
+    if status["broken"]:
+        normalize_address(field(status, "instructionPointer", str))
+        normalize_address(field(status, "stackPointer", str))
+    status.update(statusSource="lua_execute_fixed_query", originalStatus=original, luaResponse=payload)
+    print("INFO: Using fixed read-only Lua status query for the debug_isBroken compatibility issue.", file=sys.stderr)
+    return status
+
+
+def check_status_context(status, context, address):
+    """核对兼容状态与寄存器现场；参数为状态、上下文及地址，一致时无返回值。"""
+    if status.get("statusSource") != "lua_execute_fixed_query":
+        return
+    stack_register = "RSP" if context["is64Bit"] else "ESP"
+    stack_pointer = normalize_address(field(context["registers"], stack_register, str))
+    if (status["is64Bit"] != context["is64Bit"]
+            or normalize_address(status["instructionPointer"]) != address
+            or normalize_address(status["stackPointer"]) != stack_pointer):
+        raise CaptureError("stopped instruction or stack pointer changed during capture", 3)
 
 
 def validate_context(context, pointer_size):
@@ -225,19 +307,26 @@ def validate_stacktrace(stacktrace, pointer_size):
 
 def capture_snapshot(client, instance_id, runtime) -> dict:
     """采集停止现场并复核会话；参数为客户端、实例与运行基线，返回完整快照。"""
-    status = read_tool(client, "debugger_get_status", instance_id)
+    compat = runtime.get("statusCompatAvailable", False)
+    status = read_status(client, instance_id, compat_available=compat)
     require_stopped(status)
     captured_at = now()
     context = read_tool(client, "debugger_get_context", instance_id, collecting=True, includeExtraRegisters=True)
     pointer_size = runtime["fingerprint"]["pointerSize"]
     address = validate_context(context, pointer_size)
+    check_status_context(status, context, address)
     stacktrace = read_tool(client, "debugger_get_stack_trace", instance_id, collecting=True, depth=STACK_DEPTH)
     validate_stacktrace(stacktrace, pointer_size)
-    final_status = read_tool(client, "debugger_get_status", instance_id, collecting=True)
+    final_status = read_status(client, instance_id, collecting=True, compat_available=compat)
     try:
         require_stopped(final_status)
     except CaptureError as exc:
         raise CaptureError("stopped context lost during capture: " + str(exc), 3) from exc
+    check_status_context(final_status, context, address)
+    if any(item.get("statusSource") == "lua_execute_fixed_query" for item in (status, final_status)):
+        stack_register = "RSP" if context["is64Bit"] else "ESP"
+        if normalize_address(stacktrace["stackPointer"]) != normalize_address(context["registers"][stack_register]):
+            raise CaptureError("stacktrace stack pointer changed during capture", 3)
     try:
         final_overview = read_tool(client, "runtime_get_overview", instance_id, collecting=True)
     except (CaptureError, TransportError, json.JSONDecodeError) as exc:
@@ -282,6 +371,8 @@ def render_report(snapshot) -> str:
         f"- Process: {safe_cell(process.get('processName') or 'unavailable')} (PID {process['processId']})",
         f"- Pointer width: {process['pointerSize']} bytes ({process['pointerSize'] * 8} bits)",
         f"- Active debugger interface: {safe_cell(status.get('activeInterface') or 'unavailable')}",
+        f"- Status source: {safe_cell(status.get('statusSource', 'debugger_get_status'))}",
+        f"- Final status source: {safe_cell(snapshot['finalStatus'].get('statusSource', 'debugger_get_status'))}",
         "- Status: stopped", "- includeExtraRegisters=true", "- Stack depth: 128 slots",
         "- residueCheck: unchanged", "", "## Registers", "",
         "All returned registers are preserved; unavailable FP/XMM registers are not inferred.",
@@ -302,7 +393,8 @@ def render_report(snapshot) -> str:
     if not stack["frames"]:
         lines += ["", "No heuristic candidate frames were returned."]
     lines += ["", "## Capture Contract", "",
-              "Captured from the current stopped context using read-only tools. Keep CE stopped throughout capture.",
+              "Captured using read-only debugger queries, with a fixed Lua query for the known status compatibility issue when needed.",
+              "Keep CE stopped throughout capture. Original status errors and compatibility query results are preserved below.",
               "The address is the current RIP/EIP, which may differ from a registered breakpoint address.",
               "Stacktrace frames are heuristic candidates, not a symbolicated or confirmed call chain.",
               "Call instructions are optional candidate information; verify against the breakpoint scene and disassembly.",
@@ -331,9 +423,10 @@ def main(argv=None) -> int:
         args.output.mkdir(parents=True, exist_ok=True)
         client = McpClient([str(args.gateway.resolve())], args.timeout, args.output / "streg_gateway.stderr.log")
         client.start()
-        validate_catalog(client)
+        compat_available = validate_catalog(client)
         instance_id = select_instance(client, args.instance_id)
         runtime = validate_runtime(client, instance_id)
+        runtime["statusCompatAvailable"] = compat_available
         snapshot = capture_snapshot(client, instance_id, runtime)
         report = args.output / f"streg_{snapshot['address']}.md"
         atomic_text(report, render_report(snapshot))

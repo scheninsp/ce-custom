@@ -1,4 +1,7 @@
 """通过 MCP 从 Cheat Engine 导出 Victoria 3 指令窗口并生成报告。"""
+# exp.
+# cd D:\cebuild\ce-custom
+# python Scripts\run_opcode_export.py 7FF777CED5C9 100
 
 import argparse
 import json
@@ -171,7 +174,9 @@ def save_progress(output, metadata, records, status):
     document = {
         **metadata, "status": status, "updatedAt": now(),
         "successCount": success, "failedCount": len(records) - success,
-        "processedCount": len(records), "instructionCount": success * 201,
+        "processedCount": len(records),
+        "instructionCount": sum(record.get("instructionCount", 0)
+                                 for record in records if record["status"] == "success"),
         "results": records,
     }
     atomic_text(output / "manifest.json", json.dumps(document, ensure_ascii=False, indent=2) + "\n")
@@ -192,6 +197,8 @@ def save_progress(output, metadata, records, status):
 
 def run_exports(client, instance_id, baseline, targets, output, metadata):
     """逐个导出目标指令窗口；参数为客户端、会话信息、目标、输出目录和元数据，返回退出码。"""
+    before = metadata.get("before", 100)
+    after = metadata.get("after", 100)
     records, aborted = [], None
     for target in targets:
         rows = []
@@ -205,14 +212,21 @@ def run_exports(client, instance_id, baseline, targets, output, metadata):
                 raise SessionChanged("not attempted after abort: " + aborted)
             check_session(client, instance_id, baseline)
             arguments = {"instanceId": instance_id, "address": target.address}
-            validate_anchor(target, client.call("code_decode", arguments))
+            anchor = client.call("code_decode", arguments)
+            if target.expected_bytes:
+                validate_anchor(target, anchor)
+            else:
+                target.expected_bytes = hex_bytes(anchor["instruction"]["bytes"])
             payload = client.call("code_disassemble", {
-                **arguments, "before": 100, "count": 101,
+                **arguments, "before": before, "count": after + 1,
             })
-            rows = validate_window(target, payload)
-            validate_anchor(target, client.call("code_decode", arguments))
+            rows = validate_window(target, payload, before, after)
+            final_anchor = client.call("code_decode", arguments)
+            if target.expected_bytes:
+                validate_anchor(target, final_anchor)
             check_session(client, instance_id, baseline)
-            record.update(status="success", beforeCount=100, afterCount=100, instructionCount=201)
+            record.update(status="success", beforeCount=before, afterCount=after,
+                          instructionCount=before + after + 1)
         except (TransportError, SessionChanged) as exc:
             if aborted is None:
                 aborted = str(exc)
@@ -246,6 +260,9 @@ def positive_int(text):
 def main(argv=None):
     """执行命令行导出流程；参数为可选参数列表，返回进程退出码。"""
     parser = argparse.ArgumentParser(description="Export CE opcode windows through MCP")
+    parser.add_argument("address", nargs="?", help="hexadecimal address; omit for the fixed batch")
+    parser.add_argument("lines", nargs="?", type=positive_int,
+                        help="number of instructions before and after the address")
     parser.add_argument("--output", type=Path, default=ROOT / "Output/opcodes")
     parser.add_argument("--gateway", type=Path, default=DEFAULT_GATEWAY)
     parser.add_argument("--instance-id")
@@ -255,7 +272,14 @@ def main(argv=None):
     code, reason = 0, None
     try:
         # 先校验固化列表格式；失败时不创建运行目录、不接触 CE。
-        targets = load_targets()
+        if (args.address is None) != (args.lines is None):
+            raise ValueError("address and lines must be provided together")
+        if args.address is None:
+            targets = load_targets()
+            before = after = 100
+        else:
+            targets = [Target(hex_address(args.address), "")]
+            before = after = args.lines
         gateway = args.gateway.resolve()
         if not gateway.is_file():
             raise ValueError("gateway executable does not exist")
@@ -264,7 +288,7 @@ def main(argv=None):
         output.mkdir(parents=True, exist_ok=False)
         metadata = {
             "runId": run_id, "startedAt": now(), "expectedCount": len(targets),
-            "before": 100, "after": 100,
+            "before": before, "after": after,
         }
         save_progress(output, metadata, [], "starting")
         # 先保存客户端对象再启动：启动阶段失败或中断时，finally 仍能回收本次 Gateway。

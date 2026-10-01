@@ -53,6 +53,11 @@ class FakeMcp:
                                   "callInstruction": "call rax", "isHeuristic": True}]}
         self.final_status = None
         self.final_overview = None
+        self.compat_response = {"ok": True, "hostEffect": "completed", "droppedOpaqueCount": 0,
+                                "returnValues": [{"stateValid": True, "attached": True, "broken": True,
+                                                  "activeInterface": "windows", "is64Bit": True,
+                                                  "instructionPointer": "7FF012345678", "stackPointer": "1000"}]}
+        self.final_compat_response = None
 
     def event(self, name):
         """注入指定调用故障；参数为事件名，无返回值。"""
@@ -76,7 +81,10 @@ class FakeMcp:
 
     def call(self, name, arguments):
         """模拟只读业务工具；参数为工具名和参数，返回响应副本。"""
-        if name not in capture.READ_ONLY_TOOLS:
+        if name == "lua_execute":
+            assert arguments == {"instanceId": "ce-test", "source": capture.STATUS_COMPAT_SOURCE,
+                                 "chunkName": capture.STATUS_COMPAT_CHUNK}
+        elif name not in capture.READ_ONLY_TOOLS:
             raise AssertionError("unexpected mutating tool: " + name)
         self.calls.append((name, dict(arguments)))
         self.event(name)
@@ -84,7 +92,10 @@ class FakeMcp:
             "instance_list": self.listing, "runtime_get_info": self.info,
             "runtime_get_overview": self.overview, "debugger_get_status": self.status,
             "debugger_get_context": self.context, "debugger_get_stack_trace": self.stack,
+            "lua_execute": self.compat_response,
         }
+        if name == "lua_execute" and self.counts[name] == 2 and self.final_compat_response is not None:
+            return copy.deepcopy(self.final_compat_response)
         if name == "runtime_get_overview" and self.counts[name] == 2 and self.final_overview is not None:
             return copy.deepcopy(self.final_overview)
         if name == "debugger_get_status" and self.counts[name] == 2 and self.final_status is not None:
@@ -122,8 +133,80 @@ class CaptureTests(unittest.TestCase):
         self.assertEqual(result, code, diagnostic)
         self.assertTrue(fake.closed)
         self.assertEqual(list(self.output.glob("streg_*.md")), [])
-        self.assertTrue({name for name, _ in fake.calls} <= capture.READ_ONLY_TOOLS | {"tools/list"})
+        self.assertTrue({name for name, _ in fake.calls} <= capture.READ_ONLY_TOOLS | {"tools/list", "lua_execute"})
         return diagnostic
+
+    def compat_fake(self):
+        """构造已知状态缺陷与可用 Lua 目录；无参数，返回假客户端。"""
+        fake = FakeMcp()
+        fake.status = {"stateValid": False, "attached": False, "broken": False,
+                       "error": "CheatEngine.Mcp/debugger_get_status:4: debug_isBroken did not return a boolean debugger state"}
+        fake.catalog["lua_execute"] = {"inputSchema": {"properties": {"instanceId": {}, "source": {}, "chunkName": {}}}}
+        return fake
+
+    def test_compatibility_query_success_preserves_evidence(self):
+        """验证兼容采集保留原始失败及查询证据；无参数和返回值。"""
+        fake = self.compat_fake()
+        code, diagnostic, _ = self.execute(fake)
+        self.assertEqual(code, 0, diagnostic)
+        self.assertTrue(fake.closed)
+        self.assertEqual(fake.counts["lua_execute"], 2)
+        report = next(self.output.glob("*.md")).read_text(encoding="utf-8")
+        raw = json.loads(report.split("```json\n")[1].split("\n```")[0])
+        self.assertEqual(raw["status"]["originalStatus"], fake.status)
+        self.assertEqual(raw["status"]["luaResponse"], fake.compat_response)
+        self.assertNotIn("reportedBroken", raw["status"])
+        self.assertEqual(raw["finalStatus"]["instructionPointer"], raw["address"])
+        self.assertNotIn("debug_isBroken", capture.STATUS_COMPAT_SOURCE)
+        with self.assertRaises(capture.CaptureError):
+            capture.read_tool(fake, "lua_execute", "ce-test")
+
+    def test_compatibility_is_limited_to_known_error(self):
+        """验证非特定错误和缺失能力不会绕过前置检查；无参数和返回值。"""
+        for error in ("host error", "debug_isBroken did not return a boolean debugger state", None):
+            fake = self.compat_fake()
+            fake.status["error"] = error
+            self.assert_failure(fake, 2)
+            self.assertNotIn("lua_execute", fake.counts)
+        fake = self.compat_fake()
+        del fake.catalog["lua_execute"]
+        self.assertIn("unavailable", self.assert_failure(fake, 2))
+        self.assertNotIn("lua_execute", fake.counts)
+        fake = self.compat_fake()
+        fake.failures[("lua_execute", 1)] = ToolError({"kind": "capability_disabled", "hostEffect": "not_started"})
+        self.assert_failure(fake, 2)
+
+    def test_compatibility_malformed_and_failed_responses(self):
+        """验证 Lua 执行失败、效果未知和结构错误；无参数和返回值。"""
+        for key, value, code in [("ok", False, 3), ("hostEffect", "unknown", 3),
+                                 ("hostEffect", "started", 3), ("droppedOpaqueCount", 1, 2),
+                                 ("returnValues", [], 2), ("returnValues", [True], 2),
+                                 ("returnValues", [{"stateValid": True}], 2)]:
+            with self.subTest(key=key, value=value):
+                fake = self.compat_fake()
+                fake.compat_response[key] = value
+                self.assert_failure(fake, code)
+        for occurrence in (1, 2):
+            fake = self.compat_fake()
+            fake.failures[("lua_execute", occurrence)] = KeyboardInterrupt()
+            self.assert_failure(fake, 130)
+
+    def test_compatibility_context_changes_are_rejected(self):
+        """验证前后停止丢失或指令栈指针变化拒绝报告；无参数和返回值。"""
+        for final in (False, True):
+            for key, value in [("instructionPointer", "1234"), ("stackPointer", "2000"),
+                               ("is64Bit", False), ("broken", False)]:
+                fake = self.compat_fake()
+                result = copy.deepcopy(fake.compat_response)
+                result["returnValues"][0][key] = value
+                if final:
+                    fake.final_compat_response = result
+                else:
+                    fake.compat_response = result
+                self.assert_failure(fake, 2 if key == "broken" and not final else 3)
+        fake = self.compat_fake()
+        fake.stack["stackPointer"] = "2000"
+        self.assert_failure(fake, 3)
 
     def test_success_contract_and_raw_snapshot(self):
         """验证六十四位报告与调用参数顺序；无参数和返回值。"""
