@@ -1,0 +1,315 @@
+{
+  "entry": "7FF777D1BED0",
+  "start": "7FF777D1BED0",
+  "end": "7FF777D1BF50",
+  "truncated": false,
+  "instructionCount": 28,
+  "blocks": [
+    {
+      "start": "7FF777D1BED0",
+      "end": "7FF777D1BEEE",
+      "size": 30,
+      "instructionCount": 8,
+      "terminator": "conditional",
+      "successors": [
+        "7FF777D1BF06",
+        "7FF777D1BEEE"
+      ],
+      "hasIndirectSuccessor": false,
+      "instructions": [
+        {
+          "address": "7FF777D1BED0",
+          "addressText": "7FF777D1BED0",
+          "opcode": "mov [rsp+10],rbx",
+          "extra": "",
+          "text": "mov [rsp+10],rbx",
+          "bytes": "48895C2410",
+          "size": 5
+        },
+        {
+          "address": "7FF777D1BED5",
+          "addressText": "7FF777D1BED5",
+          "opcode": "mov [rsp+18],rsi",
+          "extra": "",
+          "text": "mov [rsp+18],rsi",
+          "bytes": "4889742418",
+          "size": 5
+        },
+        {
+          "address": "7FF777D1BEDA",
+          "addressText": "7FF777D1BEDA",
+          "opcode": "push rdi",
+          "extra": "",
+          "text": "push rdi",
+          "bytes": "57",
+          "size": 1
+        },
+        {
+          "address": "7FF777D1BEDB",
+          "addressText": "7FF777D1BEDB",
+          "opcode": "sub rsp,40",
+          "extra": "",
+          "text": "sub rsp,40",
+          "bytes": "4883EC40",
+          "size": 4
+        },
+        {
+          "address": "7FF777D1BEDF",
+          "addressText": "7FF777D1BEDF",
+          "opcode": "cmp dword ptr [7FF77BBCF540],00",
+          "extra": "",
+          "text": "cmp dword ptr [7FF77BBCF540],00",
+          "bytes": "833D5A36EB0300",
+          "size": 7
+        },
+        {
+          "address": "7FF777D1BEE6",
+          "addressText": "7FF777D1BEE6",
+          "opcode": "mov rdi,rdx",
+          "extra": "",
+          "text": "mov rdi,rdx",
+          "bytes": "488BFA",
+          "size": 3
+        },
+        {
+          "address": "7FF777D1BEE9",
+          "addressText": "7FF777D1BEE9",
+          "opcode": "mov rsi,rcx",
+          "extra": "",
+          "text": "mov rsi,rcx",
+          "bytes": "488BF1",
+          "size": 3
+        },
+        {
+          "address": "7FF777D1BEEC",
+          "addressText": "7FF777D1BEEC",
+          "opcode": "jne 7FF777D1BF06",
+          "extra": "",
+          "text": "jne 7FF777D1BF06",
+          "bytes": "7518",
+          "size": 2
+        }
+      ]
+    },
+    {
+      "start": "7FF777D1BEEE",
+      "end": "7FF777D1BF06",
+      "size": 24,
+      "instructionCount": 4,
+      "terminator": "fallthrough",
+      "successors": [
+        "7FF777D1BF06"
+      ],
+      "hasIndirectSuccessor": false,
+      "instructions": [
+        {
+          "address": "7FF777D1BEEE",
+          "addressText": "7FF777D1BEEE",
+          "opcode": "lea rax,[7FF77C3E1E86]",
+          "extra": "[00000000]",
+          "text": "lea rax,[7FF77C3E1E86] [00000000]",
+          "bytes": "488D05915F6C04",
+          "size": 7
+        },
+        {
+          "address": "7FF777D1BEF5",
+          "addressText": "7FF777D1BEF5",
+          "opcode": "lea rcx,[7FF77AECBBD0]",
+          "extra": "[\"NGameState::GameStateAccess._Value != EGameStateAccess::Uninitialized\"]",
+          "text": "lea rcx,[7FF77AECBBD0] [\"NGameState::GameStateAccess._Value != EGameStateAccess::Uninitialized\"]",
+          "bytes": "488D0DD4FC1A03",
+          "size": 7
+        },
+        {
+          "address": "7FF777D1BEFC",
+          "addressText": "7FF777D1BEFC",
+          "opcode": "mov [rsp+28],rax",
+          "extra": "",
+          "text": "mov [rsp+28],rax",
+          "bytes": "4889442428",
+          "size": 5
+        },
+        {
+          "address": "7FF777D1BF01",
+          "addressText": "7FF777D1BF01",
+          "opcode": "call 7FF77A5927C0",
+          "extra": "",
+          "text": "call 7FF77A5927C0",
+          "bytes": "E8BA688702",
+          "size": 5
+        }
+      ]
+    },
+    {
+      "start": "7FF777D1BF06",
+      "end": "7FF777D1BF50",
+      "size": 74,
+      "instructionCount": 16,
+      "terminator": "return",
+      "successors": [],
+      "hasIndirectSuccessor": false,
+      "instructions": [
+        {
+          "address": "7FF777D1BF06",
+          "addressText": "7FF777D1BF06",
+          "opcode": "mov rax,[7FF77C3A8A50]",
+          "extra": "[5A151800]",
+          "text": "mov rax,[7FF77C3A8A50] [5A151800]",
+          "bytes": "488B0543CB6804",
+          "size": 7
+        },
+        {
+          "address": "7FF777D1BF0D",
+          "addressText": "7FF777D1BF0D",
+          "opcode": "lea rcx,[rsi+00001DF0]",
+          "extra": "",
+          "text": "lea rcx,[rsi+00001DF0]",
+          "bytes": "488D8EF01D0000",
+          "size": 7
+        },
+        {
+          "address": "7FF777D1BF14",
+          "addressText": "7FF777D1BF14",
+          "opcode": "lea r9,[rsp+50]",
+          "extra": "",
+          "text": "lea r9,[rsp+50]",
+          "bytes": "4C8D4C2450",
+          "size": 5
+        },
+        {
+          "address": "7FF777D1BF19",
+          "addressText": "7FF777D1BF19",
+          "opcode": "lea rdx,[rsp+30]",
+          "extra": "",
+          "text": "lea rdx,[rsp+30]",
+          "bytes": "488D542430",
+          "size": 5
+        },
+        {
+          "address": "7FF777D1BF1E",
+          "addressText": "7FF777D1BF1E",
+          "opcode": "mov r8,[rax+00000608]",
+          "extra": "",
+          "text": "mov r8,[rax+00000608]",
+          "bytes": "4C8B8008060000",
+          "size": 7
+        },
+        {
+          "address": "7FF777D1BF25",
+          "addressText": "7FF777D1BF25",
+          "opcode": "mov rbx,[r8+08]",
+          "extra": "",
+          "text": "mov rbx,[r8+08]",
+          "bytes": "498B5808",
+          "size": 4
+        },
+        {
+          "address": "7FF777D1BF29",
+          "addressText": "7FF777D1BF29",
+          "opcode": "mov [rsp+50],rdi",
+          "extra": "",
+          "text": "mov [rsp+50],rdi",
+          "bytes": "48897C2450",
+          "size": 5
+        },
+        {
+          "address": "7FF777D1BF2E",
+          "addressText": "7FF777D1BF2E",
+          "opcode": "mov r8d,[rdi+14]",
+          "extra": "",
+          "text": "mov r8d,[rdi+14]",
+          "bytes": "448B4714",
+          "size": 4
+        },
+        {
+          "address": "7FF777D1BF32",
+          "addressText": "7FF777D1BF32",
+          "opcode": "call 7FF777D34740",
+          "extra": "",
+          "text": "call 7FF777D34740",
+          "bytes": "E809880100",
+          "size": 5
+        },
+        {
+          "address": "7FF777D1BF37",
+          "addressText": "7FF777D1BF37",
+          "opcode": "mov rax,[rsp+30]",
+          "extra": "",
+          "text": "mov rax,[rsp+30]",
+          "bytes": "488B442430",
+          "size": 5
+        },
+        {
+          "address": "7FF777D1BF3C",
+          "addressText": "7FF777D1BF3C",
+          "opcode": "mov rsi,[rsp+60]",
+          "extra": "",
+          "text": "mov rsi,[rsp+60]",
+          "bytes": "488B742460",
+          "size": 5
+        },
+        {
+          "address": "7FF777D1BF41",
+          "addressText": "7FF777D1BF41",
+          "opcode": "mov [rax+10],rbx",
+          "extra": "",
+          "text": "mov [rax+10],rbx",
+          "bytes": "48895810",
+          "size": 4
+        },
+        {
+          "address": "7FF777D1BF45",
+          "addressText": "7FF777D1BF45",
+          "opcode": "mov rbx,[rsp+58]",
+          "extra": "",
+          "text": "mov rbx,[rsp+58]",
+          "bytes": "488B5C2458",
+          "size": 5
+        },
+        {
+          "address": "7FF777D1BF4A",
+          "addressText": "7FF777D1BF4A",
+          "opcode": "add rsp,40",
+          "extra": "",
+          "text": "add rsp,40",
+          "bytes": "4883C440",
+          "size": 4
+        },
+        {
+          "address": "7FF777D1BF4E",
+          "addressText": "7FF777D1BF4E",
+          "opcode": "pop rdi",
+          "extra": "",
+          "text": "pop rdi",
+          "bytes": "5F",
+          "size": 1
+        },
+        {
+          "address": "7FF777D1BF4F",
+          "addressText": "7FF777D1BF4F",
+          "opcode": "ret ",
+          "extra": "",
+          "text": "ret ",
+          "bytes": "C3",
+          "size": 1
+        }
+      ]
+    }
+  ],
+  "calls": [
+    {
+      "from": "7FF777D1BF01",
+      "indirect": false,
+      "text": "call 7FF77A5927C0",
+      "target": "7FF77A5927C0",
+      "symbol": "victoria3.exe+3AA27C0"
+    },
+    {
+      "from": "7FF777D1BF32",
+      "indirect": false,
+      "text": "call 7FF777D34740",
+      "target": "7FF777D34740",
+      "symbol": "victoria3.exe+1244740"
+    }
+  ]
+}

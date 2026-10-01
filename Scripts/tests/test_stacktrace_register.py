@@ -53,6 +53,8 @@ class FakeMcp:
                                   "callInstruction": "call rax", "isHeuristic": True}]}
         self.final_status = None
         self.final_overview = None
+        self.final_context = None
+        self.native_response = None
         self.compat_response = {"ok": True, "hostEffect": "completed", "droppedOpaqueCount": 0,
                                 "returnValues": [{"stateValid": True, "attached": True, "broken": True,
                                                   "activeInterface": "windows", "is64Bit": True,
@@ -82,20 +84,28 @@ class FakeMcp:
     def call(self, name, arguments):
         """模拟只读业务工具；参数为工具名和参数，返回响应副本。"""
         if name == "lua_execute":
-            assert arguments == {"instanceId": "ce-test", "source": capture.STATUS_COMPAT_SOURCE,
-                                 "chunkName": capture.STATUS_COMPAT_CHUNK}
+            native = arguments.get("chunkName") == capture.NATIVE_STACK_CHUNK
+            assert arguments == {"instanceId": "ce-test",
+                                 "source": capture.NATIVE_STACK_SOURCE if native else capture.STATUS_COMPAT_SOURCE,
+                                 "chunkName": capture.NATIVE_STACK_CHUNK if native else capture.STATUS_COMPAT_CHUNK}
         elif name not in capture.READ_ONLY_TOOLS:
             raise AssertionError("unexpected mutating tool: " + name)
         self.calls.append((name, dict(arguments)))
         self.event(name)
+        if name == "lua_execute":
+            self.event(arguments["chunkName"])
+            if native:
+                return copy.deepcopy(self.native_response)
         payloads = {
             "instance_list": self.listing, "runtime_get_info": self.info,
             "runtime_get_overview": self.overview, "debugger_get_status": self.status,
             "debugger_get_context": self.context, "debugger_get_stack_trace": self.stack,
             "lua_execute": self.compat_response,
         }
-        if name == "lua_execute" and self.counts[name] == 2 and self.final_compat_response is not None:
+        if name == "lua_execute" and self.counts[capture.STATUS_COMPAT_CHUNK] == 2 and self.final_compat_response is not None:
             return copy.deepcopy(self.final_compat_response)
+        if name == "debugger_get_context" and self.counts[name] == 2 and self.final_context is not None:
+            return copy.deepcopy(self.final_context)
         if name == "runtime_get_overview" and self.counts[name] == 2 and self.final_overview is not None:
             return copy.deepcopy(self.final_overview)
         if name == "debugger_get_status" and self.counts[name] == 2 and self.final_status is not None:
@@ -117,19 +127,20 @@ class CaptureTests(unittest.TestCase):
         self.gateway.touch()
         self.output = self.root / "reports"
 
-    def execute(self, fake=None, extra=(), output=None):
-        """在临时目录运行完整入口；参数为假客户端、附加参数和输出路径，返回退出码与输出。"""
+    def execute(self, fake=None, extra=(), output=None, stack_mode="heuristic"):
+        """在临时目录运行入口；参数为假客户端、附加参数、输出路径和模式，返回退出码与输出。"""
         fake = fake or FakeMcp()
         stream = io.StringIO()
         with patch.object(capture, "McpClient", return_value=fake) as constructor, \
                 patch.object(capture, "now", return_value="2026-10-01T08:00:00+00:00"), \
                 contextlib.redirect_stdout(stream), contextlib.redirect_stderr(stream):
-            code = capture.main(["--gateway", str(self.gateway), "--output", str(output or self.output), *extra])
+            mode_args = [] if stack_mode is None else ["--stack-mode", stack_mode]
+            code = capture.main(["--gateway", str(self.gateway), "--output", str(output or self.output), *mode_args, *extra])
         return code, stream.getvalue(), constructor
 
-    def assert_failure(self, fake, code, extra=()):
-        """断言失败未生成报告且网关关闭；参数为假客户端、预期退出码及参数，返回诊断文本。"""
-        result, diagnostic, _ = self.execute(fake, extra)
+    def assert_failure(self, fake, code, extra=(), stack_mode="heuristic"):
+        """断言失败未生成报告且网关关闭；参数为假客户端、预期码、附加参数和模式，返回诊断。"""
+        result, diagnostic, _ = self.execute(fake, extra, stack_mode=stack_mode)
         self.assertEqual(result, code, diagnostic)
         self.assertTrue(fake.closed)
         self.assertEqual(list(self.output.glob("streg_*.md")), [])
@@ -143,6 +154,171 @@ class CaptureTests(unittest.TestCase):
                        "error": "CheatEngine.Mcp/debugger_get_status:4: debug_isBroken did not return a boolean debugger state"}
         fake.catalog["lua_execute"] = {"inputSchema": {"properties": {"instanceId": {}, "source": {}, "chunkName": {}}}}
         return fake
+
+    def native_fake(self, count=17, wide=True):
+        """构造原生栈及 Lua 响应；参数为帧数和六十四位标志，返回独立假客户端。"""
+        fake = FakeMcp()
+        fake.catalog["lua_execute"] = {"inputSchema": {"properties": {"instanceId": {}, "source": {}, "chunkName": {}}}}
+        if not wide:
+            fake.overview["process"]["pointerSize"] = 4
+            fake.context = {"is64Bit": False, "includesExtraRegisters": True,
+                            "registers": {"EIP": "401000", "ESP": "1000", "EBP": "0"}}
+        fake.context["registers"]["THREADID"] = "1234"
+        regs = fake.context["registers"]
+        ip, sp, bp = ("RIP", "RSP", "RBP") if wide else ("EIP", "ESP", "EBP")
+        base = int(regs[ip], 16)
+        frames = [{"pc": f"test.exe+{0x1000 + index * 256:X}", "pcAddress": f"{base + index * 256:X}",
+                   "stackAddress": f"{0x1000 + index * 2048:X}", "frameAddress": f"{0x1700 + index * 2048:X}",
+                   "returnSymbol": f"test.exe+{0x1000 + (index + 1) * 256:X}",
+                   "returnAddress": f"{base + (index + 1) * 256:X}", "parameters": "00000001,00000000,..."}
+                  for index in range(count)]
+        if frames:
+            frames[-1].update(returnAddress="0", returnSymbol="00000000")
+        fake.native_response = {"ok": True, "hostEffect": "completed", "droppedOpaqueCount": 0,
+                                "returnValues": [{"source": "ce_stacktrace_window", "pointerSize": 8 if wide else 4,
+                                                  "instructionPointer": regs[ip], "stackPointer": regs[sp],
+                                                  "framePointer": regs[bp], "threadId": regs["THREADID"],
+                                                  "frameCount": count, "frames": frames,
+                                                  "termination": "zero_return", "temporaryWindow": True}]}
+        return fake
+
+    def test_default_native_complete_trace(self):
+        """验证默认原生模式导出全部十七帧及五列并复核上下文；无参数和返回值。"""
+        fake = self.native_fake()
+        del fake.catalog["debugger_get_stack_trace"]
+        code, diagnostic, _ = self.execute(fake, stack_mode=None)
+        self.assertEqual(code, 0, diagnostic)
+        self.assertTrue(fake.closed)
+        report = next(self.output.glob("*.md")).read_text(encoding="utf-8")
+        raw = json.loads(report.split("```json\n", 1)[1].split("\n```", 1)[0])
+        self.assertEqual(raw["stacktrace"], fake.native_response["returnValues"][0])
+        self.assertIn("| Index | PC | Stack | Frame | Return | Parameters |", report)
+        self.assertIn("Frames exported: 17", report)
+        self.assertIn("| 16 | test.exe+2000", report)
+        self.assertNotIn("Scanned slots:", report)
+        self.assertNotIn("debugger_get_stack_trace", fake.counts)
+        self.assertEqual([name for name, _ in fake.calls], [
+            "tools/list", "instance_list", "runtime_get_info", "runtime_get_overview",
+            "debugger_get_status", "debugger_get_context", "lua_execute",
+            "debugger_get_status", "debugger_get_context", "runtime_get_overview",
+        ])
+
+    def test_native_more_than_128_frames_and_32_bit(self):
+        """验证原生模式不受旧扫描深度限制且兼容三十二位及零帧指针；无参数和返回值。"""
+        for wide in (True, False):
+            fake = self.native_fake(count=129, wide=wide)
+            code, diagnostic, _ = self.execute(fake, stack_mode="native")
+            self.assertEqual(code, 0, diagnostic)
+            address = "7FF012345678" if wide else "401000"
+            report = (self.output / f"streg_{address}.md").read_text(encoding="utf-8")
+            self.assertIn("Frames exported: 129", report)
+            self.assertIn("| 128 | test.exe+9000", report)
+
+    def test_native_unwind_stopped_warning(self):
+        """验证非零返回终止不会冒充完整调用链；无参数和返回值。"""
+        fake = self.native_fake()
+        stack = fake.native_response["returnValues"][0]
+        stack["frames"][-1].update(returnAddress="123456", returnSymbol="123456")
+        stack["termination"] = "unwind_stopped"
+        code, diagnostic, _ = self.execute(fake, stack_mode="native")
+        self.assertEqual(code, 0, diagnostic)
+        self.assertIn("WARN: CE native unwinding stopped", diagnostic)
+        report = next(self.output.glob("*.md")).read_text(encoding="utf-8")
+        self.assertIn("the call chain may be incomplete", report)
+
+    def test_native_missing_lua_does_not_fallback(self):
+        """验证原生模式缺少 Lua 时拒绝并且不隐式退回扫描；无参数和返回值。"""
+        fake = FakeMcp()
+        self.assertIn("requires lua_execute", self.assert_failure(fake, 2, stack_mode=None))
+        self.assertNotIn("instance_list", fake.counts)
+        self.assertNotIn("debugger_get_stack_trace", fake.counts)
+        for key in ("instanceId", "source", "chunkName"):
+            fake = self.native_fake()
+            del fake.catalog["lua_execute"]["inputSchema"]["properties"][key]
+            self.assert_failure(fake, 2, stack_mode="native")
+
+    def test_native_malformed_lua_responses(self):
+        """验证原生 Lua 响应失败、丢弃内容和返回对象数量；无参数和返回值。"""
+        for key, value, code in [("ok", False, 3), ("hostEffect", "unknown", 3),
+                                 ("droppedOpaqueCount", 1, 2), ("returnValues", [], 2),
+                                 ("returnValues", [True], 2), ("returnValues", [{}, {}], 2)]:
+            with self.subTest(key=key):
+                fake = self.native_fake()
+                fake.native_response[key] = value
+                self.assert_failure(fake, code, stack_mode="native")
+                self.assertNotIn("debugger_get_stack_trace", fake.counts)
+
+    def test_native_malformed_frames_and_context(self):
+        """验证帧结构、地址范围、计数上限和上下文漂移；无参数和返回值。"""
+        cases = [("source", "heuristic", 2), ("pointerSize", 4, 2), ("frameCount", 16, 2),
+                 ("frameCount", 2049, 2), ("frames", [], 2), ("frames", [{}], 2),
+                 ("temporaryWindow", 1, 2), ("termination", "unwind_stopped", 2)]
+        cases += [(key, "123", 3) for key in ("instructionPointer", "stackPointer", "framePointer", "threadId")]
+        for key, value, code in cases:
+            with self.subTest(key=key):
+                fake = self.native_fake()
+                fake.native_response["returnValues"][0][key] = value
+                self.assert_failure(fake, code, stack_mode="native")
+        for key in ("pc", "pcAddress", "stackAddress", "frameAddress", "returnSymbol", "returnAddress", "parameters"):
+            fake = self.native_fake()
+            del fake.native_response["returnValues"][0]["frames"][0][key]
+            self.assert_failure(fake, 2, stack_mode="native")
+        for key, value, code in [("pcAddress", "1234", 3), ("stackAddress", "2000", 3),
+                                 ("returnAddress", "10000000000000000", 2), ("frameAddress", "xyz", 2),
+                                 ("pcAddress", "0", 2)]:
+            fake = self.native_fake()
+            fake.native_response["returnValues"][0]["frames"][0][key] = value
+            self.assert_failure(fake, code, stack_mode="native")
+        fake = self.native_fake(wide=False)
+        fake.native_response["returnValues"][0]["frames"][0]["returnAddress"] = "100000000"
+        self.assert_failure(fake, 2, stack_mode="native")
+
+    def test_native_final_context_and_status_compatibility(self):
+        """验证原生采集后的线程身份复核及状态兼容查询可共存；无参数和返回值。"""
+        for register in ("RIP", "RSP", "RBP", "THREADID"):
+            fake = self.native_fake()
+            fake.final_context = copy.deepcopy(fake.context)
+            fake.final_context["registers"][register] = "123"
+            self.assert_failure(fake, 3, stack_mode="native")
+        fake = self.native_fake()
+        fake.status = self.compat_fake().status
+        code, diagnostic, _ = self.execute(fake, stack_mode="native")
+        self.assertEqual(code, 0, diagnostic)
+        self.assertEqual(fake.counts[capture.STATUS_COMPAT_CHUNK], 2)
+        self.assertEqual(fake.counts[capture.NATIVE_STACK_CHUNK], 1)
+
+    def test_native_failures_preserve_existing_report(self):
+        """验证查询失败、中断或漂移不会覆盖旧报告且网关关闭；无参数和返回值。"""
+        self.assertEqual(self.execute(self.native_fake(), stack_mode="native")[0], 0)
+        report = next(self.output.glob("*.md"))
+        previous = report.read_bytes()
+        for failure, expected in [(TransportError("connection lost"), 3), (KeyboardInterrupt(), 130),
+                                  (ToolError({"kind": "capability_disabled", "hostEffect": "not_started"}), 2)]:
+            fake = self.native_fake()
+            fake.failures[(capture.NATIVE_STACK_CHUNK, 1)] = failure
+            code, diagnostic, _ = self.execute(fake, stack_mode="native")
+            self.assertEqual(code, expected, diagnostic)
+            self.assertTrue(fake.closed)
+            self.assertEqual(report.read_bytes(), previous)
+            self.assertNotIn("debugger_get_stack_trace", fake.counts)
+
+    def test_native_report_filter_and_escaping(self):
+        """验证原生显示文本转义以及四类字段递归过滤且不改变源数据；无参数和返回值。"""
+        fake = self.native_fake()
+        stack = fake.native_response["returnValues"][0]
+        stack["frames"][0]["pc"] = "test|<script>\n`"
+        for key in ("evidence", "capabilities", "hostVersion", "platform"):
+            fake.info[key] = [{key: "noisy"}]
+            stack["frames"][0][key] = "noisy"
+        original = copy.deepcopy(stack)
+        self.assertEqual(self.execute(fake, stack_mode="native")[0], 0)
+        report = next(self.output.glob("*.md")).read_text(encoding="utf-8")
+        raw = json.loads(report.split("```json\n", 1)[1].split("\n```", 1)[0])
+        self.assertEqual(raw["stacktrace"]["frames"][0]["pc"], "test|<script>\n`")
+        self.assertIn(capture.safe_cell(stack["frames"][0]["pc"]), report)
+        self.assertNotIn("noisy", report)
+        self.assertEqual(stack, original)
+        self.assertEqual(capture.filter_report_snapshot(stack)["frames"][0], raw["stacktrace"]["frames"][0])
 
     def test_compatibility_query_success_preserves_evidence(self):
         """验证兼容采集保留原始失败及查询证据；无参数和返回值。"""

@@ -1,4 +1,4 @@
-"""只读采集 CE 手动断点现场的寄存器与启发式栈候选，并原子生成 Markdown 报告。"""
+"""采集 CE 手动断点现场的寄存器与原生堆栈，不修改目标状态，并原子生成 Markdown 报告。"""
 # exp.
 # cd D:\cebuild\ce-custom
 # python Scripts\get_stacktrace_register_at_breakpoint.py
@@ -19,6 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_GATEWAY = ROOT / "McpExternals/CheatEngine.Mcp-2.0.0-beta.2-win-x64/CheatEngine.Mcp.Gateway.exe"
 DEFAULT_OUTPUT = ROOT / "Output"
 STACK_DEPTH = 128
+MAX_NATIVE_FRAMES = 2048
 # 固定兼容查询只读当前调试上下文；不接受外部源码，也不修改 CE 全局函数。
 STATUS_COMPAT_SOURCE = """
 local attached = debug_isDebugging()
@@ -45,6 +46,96 @@ end
 return result
 """
 STATUS_COMPAT_CHUNK = "streg_readonly_status_compat"
+# 固定查询借用 CE 原生窗口的栈展开；仅刷新界面，临时创建的窗口在失败时也会关闭。
+NATIVE_STACK_SOURCE = """
+assert(debug_isDebugging(), 'Debugger is not attached')
+assert(targetIsX86(), 'Native stack tracing requires an x86 or x64 target')
+local context = debug_getCurrentContextTable(false)
+assert(type(context) == 'table', 'Debugger has no stopped context')
+local wide = targetIs64Bit()
+assert(type(wide) == 'boolean', 'Invalid target architecture')
+local ip, sp, bp = wide and 'RIP' or 'EIP', wide and 'RSP' or 'ESP', wide and 'RBP' or 'EBP'
+for _, key in ipairs({ip, sp, bp, 'THREADID'}) do
+    assert(math.type(context[key]) == 'integer', 'Missing stopped register: ' .. key)
+end
+
+-- 定位唯一原生堆栈窗口；无参数，返回窗口对象或 nil。
+local function findTrace()
+    local result = nil
+    for i = 0, getFormCount() - 1 do
+        local form = getForm(i)
+        if form.ClassName == 'TfrmStacktrace' then
+            assert(result == nil, 'Multiple native StackTrace windows are open')
+            result = form
+        end
+    end
+    return result
+end
+
+-- 将界面符号解析为十六进制地址；参数为界面文本，返回地址字符串。
+local function resolveAddress(text)
+    local value = getAddressSafe(text)
+    assert(math.type(value) == 'integer', 'Cannot resolve native stack address: ' .. text)
+    return string.format('%X', value)
+end
+
+local trace = findTrace()
+local created = trace == nil
+-- 刷新并复制原生表格；无参数，返回带上下文身份的堆栈对象。
+local ok, result = pcall(function()
+    if trace == nil then
+        local menu = getMemoryViewForm().findComponentByName('Stacktrace1')
+        assert(menu ~= nil, 'Native StackTrace menu is unavailable')
+        menu.doClick()
+        trace = findTrace()
+    end
+    assert(trace ~= nil, 'Native StackTrace window is unavailable')
+    local refresh = trace.findComponentByName('Refresh1')
+    local view = trace.findComponentByName('ListView1')
+    assert(refresh ~= nil and view ~= nil, 'Native StackTrace controls are unavailable')
+    refresh.doClick()
+    assert(view.Columns.Count == 5, 'Unexpected native StackTrace columns')
+    local count = view.Items.Count
+    assert(count > 0, 'Native StackTrace returned no frames')
+    assert(count <= 2048, 'Native StackTrace exceeds the export limit of 2048 frames')
+    local frames = {}
+    for i = 0, count - 1 do
+        local item = view.Items[i]
+        assert(item.SubItems.Count == 4, 'Unexpected native StackTrace row')
+        frames[#frames + 1] = {
+            pc = item.Caption, pcAddress = resolveAddress(item.Caption),
+            stackAddress = item.SubItems[0], frameAddress = item.SubItems[1],
+            returnSymbol = item.SubItems[2], returnAddress = resolveAddress(item.SubItems[2]),
+            parameters = item.SubItems[3]
+        }
+    end
+    local final = debug_getCurrentContextTable(false)
+    assert(type(final) == 'table', 'Stopped context lost during native stack capture')
+    for _, key in ipairs({ip, sp, bp, 'THREADID'}) do
+        assert(context[key] == final[key], 'Stopped register changed during native stack capture: ' .. key)
+    end
+    return {
+        source = 'ce_stacktrace_window', pointerSize = wide and 8 or 4,
+        instructionPointer = string.format('%X', context[ip]),
+        stackPointer = string.format('%X', context[sp]),
+        framePointer = string.format('%X', context[bp]),
+        threadId = string.format('%X', context.THREADID),
+        frameCount = count, frames = frames, temporaryWindow = created,
+        termination = frames[count].returnAddress == '0' and 'zero_return' or 'unwind_stopped'
+    }
+end)
+if created then
+    -- 关闭本次创建的窗口；无参数和返回值，已有窗口不受清理影响。
+    local cleaned, cleanupError = pcall(function()
+        local owned = trace or findTrace()
+        if owned ~= nil then owned.close() end
+    end)
+    assert(cleaned, 'Native StackTrace window cleanup failed: ' .. tostring(cleanupError))
+end
+assert(ok, result)
+return result
+"""
+NATIVE_STACK_CHUNK = "streg_native_stacktrace"
 READ_ONLY_TOOLS = frozenset({
     "instance_list", "runtime_get_info", "runtime_get_overview",
     "debugger_get_status", "debugger_get_context", "debugger_get_stack_trace",
@@ -136,13 +227,14 @@ def read_tool(client, name, instance_id=None, *, collecting=False, **extra):
     return result
 
 
-def validate_catalog(client):
-    """校验工具目录；参数为客户端，返回固定 Lua 兼容查询是否可用。"""
+def validate_catalog(client, stack_mode="native"):
+    """按采集模式校验工具目录；参数为客户端和堆栈模式，返回固定 Lua 查询是否可用。"""
     try:
         catalog = client.tools()
-        if not isinstance(catalog, dict) or not READ_ONLY_TOOLS <= catalog.keys():
+        required_tools = READ_ONLY_TOOLS if stack_mode == "heuristic" else READ_ONLY_TOOLS - {"debugger_get_stack_trace"}
+        if not isinstance(catalog, dict) or not required_tools <= catalog.keys():
             raise CaptureError("required read-only tools are missing")
-        for name in READ_ONLY_TOOLS:
+        for name in required_tools:
             schema = field(catalog[name], "inputSchema", dict)
             properties = field(schema, "properties", dict)
             required = set() if name == "instance_list" else {"instanceId"}
@@ -155,7 +247,10 @@ def validate_catalog(client):
         lua = catalog.get("lua_execute", {})
         schema = lua.get("inputSchema", {}) if isinstance(lua, dict) else {}
         properties = schema.get("properties", {}) if isinstance(schema, dict) else {}
-        return isinstance(properties, dict) and {"instanceId", "source", "chunkName"} <= properties.keys()
+        lua_available = isinstance(properties, dict) and {"instanceId", "source", "chunkName"} <= properties.keys()
+        if stack_mode == "native" and not lua_available:
+            raise CaptureError("native stack capture requires lua_execute; use --stack-mode heuristic only for limited candidates")
+        return lua_available
     except (KeyError, TypeError, AttributeError) as exc:
         raise CaptureError("invalid tool catalog or input schema") from exc
 
@@ -308,6 +403,83 @@ def validate_stacktrace(stacktrace, pointer_size):
                 field(frame, key, expected)
 
 
+def native_address(value, pointer_size, *, allow_zero=False):
+    """校验原生帧地址及位宽；参数为十六进制文本、指针字节数和允许零标志，返回整数。"""
+    if not isinstance(value, str) or not re.fullmatch(r"(?:0[xX])?[0-9a-fA-F]{1,16}", value):
+        raise CaptureError("invalid native stack hexadecimal address")
+    number = int(value, 16)
+    if not (0 if allow_zero else 1) <= number < 2 ** (pointer_size * 8):
+        raise CaptureError("native stack address outside target pointer range")
+    return number
+
+
+def validate_native_stacktrace(stacktrace, context):
+    """校验原生堆栈完整行及现场身份；参数为堆栈和寄存器上下文，成功时无返回值。"""
+    wide = field(context, "is64Bit", bool)
+    pointer_size = 8 if wide else 4
+    if field(stacktrace, "source", str) != "ce_stacktrace_window":
+        raise CaptureError("invalid native stack source")
+    if field(stacktrace, "pointerSize", int) != pointer_size:
+        raise CaptureError("native stack pointer size disagrees with target")
+    field(stacktrace, "temporaryWindow", bool)
+    registers = field(context, "registers", dict)
+    for key, register, allow_zero in (
+        ("instructionPointer", "RIP" if wide else "EIP", False),
+        ("stackPointer", "RSP" if wide else "ESP", False),
+        ("framePointer", "RBP" if wide else "EBP", True),
+        ("threadId", "THREADID", False),
+    ):
+        actual = native_address(field(stacktrace, key, str), pointer_size, allow_zero=allow_zero)
+        expected = native_address(field(registers, register, str), pointer_size, allow_zero=allow_zero)
+        if actual != expected:
+            raise CaptureError("native stack stopped context changed: " + register, 3)
+    frames = field(stacktrace, "frames", list)
+    count = field(stacktrace, "frameCount", int)
+    if not 1 <= count <= MAX_NATIVE_FRAMES or count != len(frames):
+        raise CaptureError("invalid native stack frame count")
+    for frame in frames:
+        for key in ("pc", "returnSymbol", "parameters"):
+            field(frame, key, str)
+        for key in ("pcAddress", "stackAddress", "frameAddress", "returnAddress"):
+            native_address(field(frame, key, str), pointer_size,
+                           allow_zero=key in {"frameAddress", "returnAddress"})
+    if (native_address(frames[0]["pcAddress"], pointer_size)
+            != native_address(stacktrace["instructionPointer"], pointer_size)
+            or native_address(frames[0]["stackAddress"], pointer_size)
+            != native_address(stacktrace["stackPointer"], pointer_size)):
+        raise CaptureError("native StackTrace window does not match the stopped context", 3)
+    termination = "zero_return" if int(frames[-1]["returnAddress"], 16) == 0 else "unwind_stopped"
+    if field(stacktrace, "termination", str) != termination:
+        raise CaptureError("native stack termination disagrees with final return address")
+
+
+def read_native_stacktrace(client, instance_id, context):
+    """执行固定原生堆栈查询；参数为客户端、已发现实例和上下文，返回已校验堆栈。"""
+    if not isinstance(instance_id, str) or not instance_id:
+        raise CaptureError("native stack query requires a discovered instanceId")
+    if client.broken:
+        raise TransportError("MCP connection is unusable")
+    try:
+        payload = client.call("lua_execute", {
+            "instanceId": instance_id, "source": NATIVE_STACK_SOURCE, "chunkName": NATIVE_STACK_CHUNK,
+        })
+    except ToolError as exc:
+        raise tool_failure(exc, "lua_execute(native stack query)", True) from exc
+    if not isinstance(payload, dict) or payload.get("ok") is not True or payload.get("hostEffect") != "completed":
+        raise CaptureError("WARN: native stack query failed or host effect unconfirmed: " + ascii(str(payload)), 3)
+    if field(payload, "droppedOpaqueCount", int) != 0:
+        raise CaptureError("native stack query returned opaque data")
+    values = field(payload, "returnValues", list)
+    if len(values) != 1 or not isinstance(values[0], dict):
+        raise CaptureError("native stack query must return exactly one object")
+    stacktrace = values[0]
+    validate_native_stacktrace(stacktrace, context)
+    if stacktrace["termination"] != "zero_return":
+        print("WARN: CE native unwinding stopped at a nonzero return address; the call chain may be incomplete.",
+              file=sys.stderr)
+    return stacktrace
+
+
 def capture_snapshot(client, instance_id, runtime) -> dict:
     """采集停止现场并复核会话；参数为客户端、实例与运行基线，返回完整快照。"""
     compat = runtime.get("statusCompatAvailable", False)
@@ -318,14 +490,25 @@ def capture_snapshot(client, instance_id, runtime) -> dict:
     pointer_size = runtime["fingerprint"]["pointerSize"]
     address = validate_context(context, pointer_size)
     check_status_context(status, context, address)
-    stacktrace = read_tool(client, "debugger_get_stack_trace", instance_id, collecting=True, depth=STACK_DEPTH)
-    validate_stacktrace(stacktrace, pointer_size)
+    native = runtime.get("stackMode", "native") == "native"
+    if native:
+        stacktrace = read_native_stacktrace(client, instance_id, context)
+    else:
+        stacktrace = read_tool(client, "debugger_get_stack_trace", instance_id, collecting=True, depth=STACK_DEPTH)
+        validate_stacktrace(stacktrace, pointer_size)
     final_status = read_status(client, instance_id, collecting=True, compat_available=compat)
     try:
         require_stopped(final_status)
     except CaptureError as exc:
         raise CaptureError("stopped context lost during capture: " + str(exc), 3) from exc
     check_status_context(final_status, context, address)
+    if native:
+        final_context = read_tool(client, "debugger_get_context", instance_id, collecting=True, includeExtraRegisters=True)
+        try:
+            validate_context(final_context, pointer_size)
+            validate_native_stacktrace(stacktrace, final_context)
+        except CaptureError as exc:
+            raise CaptureError("final stopped context check failed: " + str(exc), 3) from exc
     if any(item.get("statusSource") == "lua_execute_fixed_query" for item in (status, final_status)):
         stack_register = "RSP" if context["is64Bit"] else "ESP"
         if normalize_address(stacktrace["stackPointer"]) != normalize_address(context["registers"][stack_register]):
@@ -377,9 +560,14 @@ def filter_report_snapshot(value):
 
 
 def render_report(snapshot) -> str:
-    """渲染寄存器与栈候选报告；参数为已校验快照，返回 UTF-8 文件所需的 LF 文本。"""
+    """渲染寄存器与所选模式的堆栈报告；参数为已校验快照，返回 UTF-8 文件所需的 LF 文本。"""
     process, status = snapshot["process"], snapshot["status"]
     context, stack = snapshot["context"], snapshot["stacktrace"]
+    native = stack.get("source") == "ce_stacktrace_window"
+    stack_metadata = (["- Stack source: CE View > StackTrace (StackWalk64)",
+                       f"- Stack frames: {stack['frameCount']}",
+                       f"- Unwind termination: {stack['termination']}"] if native
+                      else ["- Stack source: MCP heuristic scan", "- Stack depth: 128 slots"])
     lines = [
         f"# Stacktrace and Registers at Breakpoint {snapshot['address']}", "",
         f"- Captured at: {safe_cell(snapshot['capturedAt'])}",
@@ -389,7 +577,7 @@ def render_report(snapshot) -> str:
         f"- Active debugger interface: {safe_cell(status.get('activeInterface') or 'unavailable')}",
         f"- Status source: {safe_cell(status.get('statusSource', 'debugger_get_status'))}",
         f"- Final status source: {safe_cell(snapshot['finalStatus'].get('statusSource', 'debugger_get_status'))}",
-        "- Status: stopped", "- includeExtraRegisters=true", "- Stack depth: 128 slots",
+        "- Status: stopped", "- includeExtraRegisters=true", *stack_metadata,
         "- residueCheck: unchanged", "", "## Registers", "",
         "All returned registers are preserved; unavailable FP/XMM registers are not inferred.",
         "FP/XMM byte sequences are in memory order, little-endian (least significant byte first).", "",
@@ -397,23 +585,44 @@ def render_report(snapshot) -> str:
     ]
     for name, value in sorted(context["registers"].items()):
         lines.append(f"| {safe_cell(name)} | {safe_cell(value)} |")
-    lines += ["", "## Stacktrace", "", f"Stack pointer: {safe_cell(stack['stackPointer'])}",
-              f"Scanned slots: {stack['scannedSlots']} (maximum 128).", "",
-              "| Index | Stack slot address | Return address | Call instruction | isHeuristic |",
-              "| ---: | --- | --- | --- | --- |"]
-    for index, frame in enumerate(stack["frames"]):
-        values = [index, frame["stackAddress"], frame["returnAddress"],
-                  frame.get("callInstruction", "unavailable"),
-                  str(frame["isHeuristic"]).lower() if "isHeuristic" in frame else "unavailable"]
-        lines.append("| " + " | ".join(safe_cell(value) for value in values) + " |")
-    if not stack["frames"]:
-        lines += ["", "No heuristic candidate frames were returned."]
+    lines += ["", "## Stacktrace", "", f"Stack pointer: {safe_cell(stack['stackPointer'])}"]
+    if native:
+        lines += [f"Frames exported: {stack['frameCount']} (all rows returned by CE; no 128-slot scan).",
+                  "Parameters are CE's displayed summaries, not decoded x64 function arguments."]
+        if stack["termination"] == "zero_return":
+            lines += ["The final frame has a zero return address."]
+        else:
+            lines += ["WARNING: CE unwinding stopped at a nonzero return address; the call chain may be incomplete."]
+        lines += ["", "| Index | PC | Stack | Frame | Return | Parameters |",
+                  "| ---: | --- | --- | --- | --- | --- |"]
+        for index, frame in enumerate(stack["frames"]):
+            values = [index, frame["pc"], frame["stackAddress"], frame["frameAddress"],
+                      frame["returnSymbol"], frame["parameters"]]
+            lines.append("| " + " | ".join(safe_cell(value) for value in values) + " |")
+    else:
+        lines += [f"Scanned slots: {stack['scannedSlots']} (maximum 128).", "",
+                  "| Index | Stack slot address | Return address | Call instruction | isHeuristic |",
+                  "| ---: | --- | --- | --- | --- |"]
+        for index, frame in enumerate(stack["frames"]):
+            values = [index, frame["stackAddress"], frame["returnAddress"],
+                      frame.get("callInstruction", "unavailable"),
+                      str(frame["isHeuristic"]).lower() if "isHeuristic" in frame else "unavailable"]
+            lines.append("| " + " | ".join(safe_cell(value) for value in values) + " |")
+        if not stack["frames"]:
+            lines += ["", "No heuristic candidate frames were returned."]
+    stack_contract = ([
+        "The native StackTrace window is refreshed; a window opened by this query is closed after copying.",
+        "Every row returned by CE is exported. Unwind results depend on CE, target unwind metadata and readable memory.",
+        "PC/SP/BP/thread identity is checked against the stopped context before and after capture.",
+    ] if native else [
+        "Stacktrace frames are heuristic candidates, not a symbolicated or confirmed call chain.",
+        "Call instructions are optional candidate information; verify against the breakpoint scene and disassembly.",
+    ])
     lines += ["", "## Capture Contract", "",
-              "Captured using read-only debugger queries, with a fixed Lua query for the known status compatibility issue when needed.",
+              "Captured using debugger reads and fixed Lua queries; native stack mode also refreshes CE's StackTrace UI.",
               "Keep CE stopped throughout capture. Original status errors and compatibility query results are preserved below.",
               "The address is the current RIP/EIP, which may differ from a registered breakpoint address.",
-              "Stacktrace frames are heuristic candidates, not a symbolicated or confirmed call chain.",
-              "Call instructions are optional candidate information; verify against the breakpoint scene and disassembly.",
+              *stack_contract,
               "Before/after stopped-state and session checks cannot detect a resume/re-break between calls.",
               "No attach, breakpoint changes, continue, or target memory writes are performed.",
               "", "## Raw MCP Snapshot", ""]
@@ -427,11 +636,13 @@ def main(argv=None) -> int:
     client = None
     code = 0
     try:
-        parser = argparse.ArgumentParser(description="Read registers and heuristic stacktrace from a manually stopped CE target.")
+        parser = argparse.ArgumentParser(description="Read registers and CE native stacktrace from a manually stopped target.")
         parser.add_argument("--gateway", type=Path, default=DEFAULT_GATEWAY)
         parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT,
                             help="output directory; only one capture may use a directory at a time")
         parser.add_argument("--instance-id")
+        parser.add_argument("--stack-mode", choices=("native", "heuristic"), default="native",
+                            help="native: CE StackTrace window (default); heuristic: limited 128-slot MCP scan")
         parser.add_argument("--timeout", type=positive_timeout, default=30)
         args = parser.parse_args(argv)
         if not args.gateway.is_file():
@@ -439,10 +650,11 @@ def main(argv=None) -> int:
         args.output.mkdir(parents=True, exist_ok=True)
         client = McpClient([str(args.gateway.resolve())], args.timeout, args.output / "streg_gateway.stderr.log")
         client.start()
-        compat_available = validate_catalog(client)
+        compat_available = validate_catalog(client, args.stack_mode)
         instance_id = select_instance(client, args.instance_id)
         runtime = validate_runtime(client, instance_id)
         runtime["statusCompatAvailable"] = compat_available
+        runtime["stackMode"] = args.stack_mode
         snapshot = capture_snapshot(client, instance_id, runtime)
         report = args.output / f"streg_{snapshot['address']}.md"
         atomic_text(report, render_report(snapshot))
