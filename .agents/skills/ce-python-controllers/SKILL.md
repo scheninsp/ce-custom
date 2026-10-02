@@ -17,3 +17,7 @@ python Scripts\get_stacktrace_register_at_breakpoint.py
 python Scripts\ce_run_step_over.py
 结果默认保存到项目根目录下的 `Output/step_capture.md`。
 如果不需要采集文件，则使用：`python Scripts/ce_run_step_over.py --no-output`。
+
+# 3.执行单步 Step Into
+python Scripts\ce_run_step_into.py
+

@@ -26,3 +26,7 @@ Docs文件夹允许在文档中复制伪代码函数的内容，但是必须在 
 
 ## 执行前检查
 每个新 session 开启时，先检查当前会话提供的工具里没有可执行 PowerShell 或读取工作区文件的接口。如果没有那么中止本次 session。
+
+## 工具使用
+- 终端命令使用 PowerShell 语法；不要向 PowerShell 传递 Bash heredoc（例如 `<<'PATCH'`）。
+- 文件修改通过专用 `apply_patch` 工具完成，不要把 `apply_patch` 补丁包装成 Bash 命令。
