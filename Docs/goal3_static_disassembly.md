@@ -354,6 +354,8 @@ function RemoveOneTradeUnit(goods, direction, quantity, coefficient, tables):
 
 ### 6.1 `+7B81E0`：执行一个任务的上下文阶段
 
+对应伪代码来源：[`FakeCode/trade_candidate_functions.md`](../FakeCode/trade_candidate_functions.md#executeticktask)。
+
 [反汇编](../Output/goal3_static_20261002/function_7FF7772A81E0.md)，279 条指令。引用 `gamestatetick.cpp:1246`、`:1278`、`Prepare`、`Context %d`。主要是回调、区间和上下文管理，未见商品评分公式。
 
 ```text

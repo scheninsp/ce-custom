@@ -10,6 +10,8 @@
 
 ## 当前可确定的伪代码
 
+规范来源：[`FakeCode/trade_advantage_functions.md`](../../FakeCode/trade_advantage_functions.md#readorcomputedirectionaltradeadvantage)。
+
 ```cpp
 // 功能：读取指定州、商品和贸易方向的绝对贸易优势；缓存不存在时计算并返回。
 // 入参：state 为州对象，goods 为商品对象，direction 为进口/出口方向；
@@ -452,3 +454,97 @@ computed = max(computed, 100000)
 - UI relative advantage 的归一化和正负显示公式。
 
 因此，这两个业务名称和上面的公式已经比原始占位名更接近真实含义，但仍应标记为“高可信语义推测”，不能当作完整源代码还原。
+
+## 进一步校正：两者不是两个并列的最终数值
+
+结合已采集的真实调用顺序，需要对前面的命名作一个重要修正：`stateGoodsDirection` 和 `marketTradeFraction` 更可能不是两个已经分别返回的、可直接相加的业务字段，而是同一个数值表达式上下文中的**不同阶段结果**。
+
+`+D16160` 的调用约定是：
+
+```text
+rcx = 市场/州相关对象
+rdx = 调用者提供的临时对象
+r8  = 商品对象
+r9b = 方向
+```
+
+入口先把这些参数保存到栈上，随后执行 `+2C7550`、`+D16080`、`+D18B90` 等调用，并在返回前把定点结果写入由 `rdx` 指向的对象。也就是说，调用者中的：
+
+```cpp
+int64 stateGoodsDirection = BuildStateGoodsDirectionValue(...); // +D16160
+int64 marketTradeFraction = BuildMarketTradeFraction(...);      // +D18B90
+```
+
+是为了说明数据流而写的分析变量；真实机器码并没有显示两个独立的 C++ 返回值。`+D18B90` 是 `+D16160` 内部使用的辅助构造/评估步骤之一，不能证明它向 `+11FBDA0` 单独返回一个名为 `marketTradeFraction` 的值。
+
+### 更可信的业务解释
+
+#### `stateGoodsDirection`
+
+仍可保留“州/市场、商品、方向相关的绝对优势候选”这一解释，但应理解为 `+D16160` 写入临时上下文后的**综合定点中间状态**，可能包含：
+
+- 州对象通过 `[state+0x18B0]` 关联到的市场/修正容器；
+- 商品对象中的商品 ID 和商品相关数值；
+- 方向 0/1 对应的进口/出口入口；
+- 从上下文取出的定点边界、比例和市场值。
+
+当前没有足够证据把它收窄成“州生产量”或“州贸易中心等级”。
+
+#### `marketTradeFraction`
+
+`TRADE_FRACTION`、`ADVANTAGE_ENTRY_IMPORT_SUFFIX` 和 `ADVANTAGE_ENTRY_EXPORT_SUFFIX` 说明 `+D18B90` 会构造一个与贸易方向和贸易比例有关的 value entry。更稳妥的说法是：它提供**优势计算表达式所需的市场贸易比例输入**，而不是已经确定的“该州占全球贸易的最终份额”。
+
+尤其要注意：`+D18B90` 末尾把结果写入其自身栈帧中的 `[rbp+0x58]`，随后构造数值对象并返回；没有证据显示这个槽位直接就是 UI 的 relative trade advantage。
+
+### 更准确的算法模型
+
+根据 `+D16160`、`+D18B90` 和 `+EB2350` 的数据流，当前最保守的模型是：
+
+```cpp
+// 功能：构造方向贸易优势表达式并输出定点绝对优势候选。
+// 入参：stateOrMarket、goods、direction；返回：写入输出/缓存的定点结果。
+int64 BuildDirectionalAdvantage(StateOrMarket* stateOrMarket,
+                                Goods* goods,
+                                uint8 direction)
+{
+    TempContext t;
+    InitTempContext(&t, 0);                         // +EB1A10
+    WrapNumericContext(&t);                         // +D16080
+
+    // +D16160：把州/市场、商品、方向放入一个值计算上下文。
+    // +D18B90：在该上下文内解析 import/export advantage entry 和 TRADE_FRACTION。
+    PopulateStateGoodsDirectionContext(stateOrMarket, goods, direction, &t);
+    PopulateMarketTradeFractionContext(stateOrMarket, &t);
+
+    // +EB2350：对上下文中的两个端点/槽位进行定点插值或组合。
+    int64 value = EvaluateFixedPointExpression(&t);
+    return max(value, 100000);
+}
+```
+
+对应的数学形态仍可以写成：
+
+```text
+value = Evaluate(
+    state/market inputs,
+    goods input,
+    direction-specific advantage entry,
+    TRADE_FRACTION,
+    fixed-point scale = 100000
+)
+value = max(value, 100000)
+```
+
+目前不能把它严格化成：
+
+```text
+stateGoodsDirection + marketTradeFraction
+```
+
+也不能确认是：
+
+```text
+stateGoodsDirection * marketTradeFraction / 100000
+```
+
+因为 `+EB2350` 的两个输入端点来自临时对象和 value entry 的内部槽位，单靠调用者侧寄存器无法唯一确定它们分别对应哪个业务字段。已确认的是定点比例、方向入口、贸易比例属性和最终正值下限；未确认的是每个槽位的业务字段映射以及所有修正项的加法/乘法顺序。
