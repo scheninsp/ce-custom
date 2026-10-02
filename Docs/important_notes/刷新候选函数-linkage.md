@@ -21,7 +21,7 @@ BuildMarketTradeFraction
 功能：从州关联市场对象读取贸易份额相关输入，并生成定点修正值。
 
 绝对贸易优势会被用来计算相对贸易优势，然后决定商品进口价格。
-来源于开发日志和wiki猜测（Docs\trade_center_model1.md）
+来源于开发日志和wiki猜测（Docs\vic3_doc_copy\trade_center_model1.md）
 
 # Refresh ->UpdateCandidateShortage (UpdateCandidatePartA，+11FBA60)
 // 功能：计算候选商品的短缺指标，仅对进口商品返回非0值

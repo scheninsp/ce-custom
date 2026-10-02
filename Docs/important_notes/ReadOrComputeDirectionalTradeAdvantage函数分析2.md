@@ -2,7 +2,7 @@
 
 ## 1. 分析范围与命名说明
 
-本文结合 `Docs/trade_center_model1.md` 的贸易中心模型，重新解释 `victoria3.exe+11FBDA0` 中被语义命名为 `ReadOrComputeDirectionalTradeAdvantage` / `ComputeDirectionalAdvantage` 的路径。
+本文结合 `Docs/vic3_doc_copy/trade_center_model1.md` 的贸易中心模型，重新解释 `victoria3.exe+11FBDA0` 中被语义命名为 `ReadOrComputeDirectionalTradeAdvantage` / `ComputeDirectionalAdvantage` 的路径。
 
 需要区分三个层次：
 
@@ -16,7 +16,7 @@
 
 ### 2.1 单位绝对贸易优势
 
-根据 `Docs/trade_center_model1.md`，单个贸易中心、某商品、某方向的基础优势为：
+根据 `Docs/vic3_doc_copy/trade_center_model1.md`，单个贸易中心、某商品、某方向的基础优势为：
 
 ```text
 TA_base = 100
