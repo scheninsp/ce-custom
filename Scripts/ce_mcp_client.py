@@ -4,6 +4,7 @@ import json
 import os
 import queue
 import subprocess
+import sys
 import threading
 import time
 from pathlib import Path
@@ -23,13 +24,14 @@ class ToolError(RuntimeError):
 
 
 class McpClient:
-    def __init__(self, argv: list[str], timeout: float, log_path: Path):
+    def __init__(self, argv: list[str], timeout: float, log_path: Path | None):
         """初始化 MCP 客户端；参数为网关命令、超时秒数和 stderr 日志路径，无返回值。"""
         if timeout <= 0:
             raise ValueError("timeout must be positive")
         self.argv, self.timeout, self.log_path = argv, timeout, log_path
         self.process = None
         self.log = None
+        self.log_owned = False
         self.reader = None
         self.messages = queue.Queue()
         self.request_id = 0
@@ -37,7 +39,11 @@ class McpClient:
 
     def start(self):
         """启动网关并完成 MCP 握手；无参数，返回已启动的客户端实例。"""
-        self.log = self.log_path.open("w", encoding="utf-8")
+        if self.log_path is None:
+            self.log = sys.stderr
+        else:
+            self.log = self.log_path.open("w", encoding="utf-8")
+            self.log_owned = True
         try:
             self.process = subprocess.Popen(
                 self.argv, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
@@ -177,6 +183,7 @@ class McpClient:
             if self.process.stdout:
                 self.process.stdout.close()
             self.process = None
-        if self.log is not None:
+        if self.log is not None and self.log_owned:
             self.log.close()
             self.log = None
+            self.log_owned = False

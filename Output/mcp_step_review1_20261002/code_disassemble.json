@@ -1,0 +1,23 @@
+{
+  "address": "7FF777CED5C9",
+  "instructions": [
+    {
+      "address": "7FF777CED5C9",
+      "addressText": "7FF777CED5C9",
+      "opcode": "mov eax,[r14+00001D58]",
+      "extra": "",
+      "text": "mov eax,[r14+00001D58]",
+      "bytes": "418B86581D0000",
+      "size": 7
+    },
+    {
+      "address": "7FF777CED5D0",
+      "addressText": "7FF777CED5D0",
+      "opcode": "mov [rsp+50],eax",
+      "extra": "",
+      "text": "mov [rsp+50],eax",
+      "bytes": "89442450",
+      "size": 4
+    }
+  ]
+}

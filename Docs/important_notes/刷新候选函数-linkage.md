@@ -30,14 +30,21 @@ BuildMarketTradeFraction
 
 
 # Refresh ->UpdateCandidateShortage (UpdateCandidatePartA，+11FBA60)
-// 功能：计算候选商品的短缺指标，并写入候选对象的 c+30。该指标只用于方向 0。
+// 功能：计算候选商品的短缺指标，仅对进口商品返回非0值
+有效供给低于需求的一半时，返回短缺评分>0。短缺评分在0~0.5之间，越大的值代表短缺程度越强。
+shortage_unclamped = 1 - (supply/demand) / 0.5
+shortage = clamp(shortage_unclamped, 0, 0.5)
 
 # Refresh ->UpdateCandidateRevenue (UpdateCandidatePartB,+11FC080)
 // 功能：按增加或减少模式准备收益计算上下文，计算单位净收益和基础收益。
-
+计算单位净收益 `p`
+还会返回本次调整量的基础收益 `R = q × p`
+这份伪代码没有展开价差和单位净收益的内部公式。
 
 # Refresh ->CalculateDesirability (+11FC320)
 // 功能：检查候选数量限制，并合成最终意愿评分。
+本市场方向量超过外部反方向可承接量的两倍时，候选直接无效
+
 
 
 # Refresh 中调整量的计算已得到数据验证

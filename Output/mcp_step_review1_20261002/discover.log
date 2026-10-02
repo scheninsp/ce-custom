@@ -1,0 +1,148 @@
+test_eof (test_ce_mcp_client.ClientTests.test_eof)
+验证网关提前退出时报告传输错误；无参数和返回值。 ... ok
+test_handshake_pagination_and_results (test_ce_mcp_client.ClientTests.test_handshake_pagination_and_results)
+验证握手、工具分页及结构化和文本结果解析；无参数和返回值。 ... ok
+test_timeout_invalidates_connection (test_ce_mcp_client.ClientTests.test_timeout_invalidates_connection)
+验证请求超时会使客户端连接失效；无参数和返回值。 ... ok
+test_tool_failure (test_ce_mcp_client.ClientTests.test_tool_failure)
+验证工具错误会转换为 ToolError 且连接仍可复用；无参数和返回值。 ... ok
+test_wrong_id (test_ce_mcp_client.ClientTests.test_wrong_id)
+验证响应 ID 不匹配时报告传输错误；无参数和返回值。 ... ok
+test_final_overview_failure_is_unavailable_and_exit_3 (test_opcode_export.ExportTests.test_final_overview_failure_is_unavailable_and_exit_3)
+验证最终概览失败会标记不可确认并返回 3；无参数和返回值。 ... ok
+test_fixed_target_list_matches_report (test_opcode_export.ExportTests.test_fixed_target_list_matches_report)
+验证固化目标列表与预期报告一致；无参数和返回值。 ... ok
+test_interrupt_during_start_reclaims_gateway (test_opcode_export.ExportTests.test_interrupt_during_start_reclaims_gateway)
+验证启动握手中断时会回收网关进程；无参数和返回值。 ... ERROR: export stopped: 'interrupted by user'
+ok
+test_interrupt_skips_check_without_extra_rpc (test_opcode_export.ExportTests.test_interrupt_skips_check_without_extra_rpc)
+验证用户中断会跳过额外资源请求；无参数和返回值。 ... ERROR: export stopped: 'interrupted by user'
+ok
+test_invalid_fixed_list_rejected_before_ce (test_opcode_export.ExportTests.test_invalid_fixed_list_rejected_before_ce)
+验证非法目标列表在连接 CE 前被拒绝；无参数和返回值。 ... ok
+test_manual_attach_is_required (test_opcode_export.ExportTests.test_manual_attach_is_required)
+验证脚本要求用户手动附加目标进程；无参数和返回值。 ... ok
+test_missing_baseline_records_skipped (test_opcode_export.ExportTests.test_missing_baseline_records_skipped)
+验证未建立资源基线时记录跳过；无参数和返回值。 ... ERROR: export stopped: 'victoria3.exe is not attached in CE; attach it manually in Cheat Engine first'
+ok
+test_multiple_instances_require_selection (test_opcode_export.ExportTests.test_multiple_instances_require_selection)
+验证多个实例时必须显式选择；无参数和返回值。 ... ok
+test_one_bad_address_does_not_block_next (test_opcode_export.ExportTests.test_one_bad_address_does_not_block_next)
+验证单个地址失败不会阻止后续地址；无参数和返回值。 ... ok
+test_other_target_is_not_switched (test_opcode_export.ExportTests.test_other_target_is_not_switched)
+验证脚本不会切换到其他进程；无参数和返回值。 ... ok
+test_resource_change_reports_changed_state (test_opcode_export.ExportTests.test_resource_change_reports_changed_state)
+验证资源计数变化会被记录；无参数和返回值。 ... ok
+test_resource_change_warns_and_still_exits_0 (test_opcode_export.ExportTests.test_resource_change_warns_and_still_exits_0)
+验证资源变化输出警告但保持成功退出；无参数和返回值。 ... ok
+test_stale_bytes_skip_window_call (test_opcode_export.ExportTests.test_stale_bytes_skip_window_call)
+验证锚点机器码过期时跳过窗口读取；无参数和返回值。 ... ok
+test_success (test_opcode_export.ExportTests.test_success)
+验证成功导出生成完整清单和报告；无参数和返回值。 ... ok
+test_success_calls_stay_read_only (test_opcode_export.ExportTests.test_success_calls_stay_read_only)
+验证成功流程只调用只读工具；无参数和返回值。 ... ok
+test_success_records_unchanged_residue (test_opcode_export.ExportTests.test_success_records_unchanged_residue)
+验证成功流程记录资源未变化；无参数和返回值。 ... ok
+test_transport_and_session_abort_remaining_reads (test_opcode_export.ExportTests.test_transport_and_session_abort_remaining_reads)
+验证传输或会话变化会中止剩余读取；无参数和返回值。 ... ok
+test_transport_failure_records_skipped (test_opcode_export.ExportTests.test_transport_failure_records_skipped)
+验证传输失败会记录跳过资源核对；无参数和返回值。 ... ok
+test_write_failure_still_checks_residue (test_opcode_export.ExportTests.test_write_failure_still_checks_residue)
+验证写入失败时仍执行资源核对；无参数和返回值。 ... ERROR: export stopped: 'denied'
+ok
+test_anchor_validation (test_opcode_report.WindowTests.test_anchor_validation)
+验证锚点地址、长度和机器码校验；无参数和返回值。 ... ok
+test_atomic_write_failure_keeps_old_file (test_opcode_report.WindowTests.test_atomic_write_failure_keeps_old_file)
+验证原子写入失败时保留旧文件并清理临时文件；无参数和返回值。 ... ok
+test_bad_windows (test_opcode_report.WindowTests.test_bad_windows)
+验证缺失、断裂和重复目标窗口会被拒绝；无参数和返回值。 ... ok
+test_valid_window (test_opcode_report.WindowTests.test_valid_window)
+验证合法指令窗口可以通过校验；无参数和返回值。 ... ok
+test_32_bit_and_optional_fields (test_stacktrace_register.CaptureTests.test_32_bit_and_optional_fields)
+验证三十二位现场及可选字段缺省；无参数和返回值。 ... ok
+test_address_validation (test_stacktrace_register.CaptureTests.test_address_validation)
+验证文件名地址安全边界；无参数和返回值。 ... ok
+test_catalog_drift (test_stacktrace_register.CaptureTests.test_catalog_drift)
+验证目录与参数漂移在发现前失败；无参数和返回值。 ... ok
+test_compatibility_context_changes_are_rejected (test_stacktrace_register.CaptureTests.test_compatibility_context_changes_are_rejected)
+验证前后停止丢失或指令栈指针变化拒绝报告；无参数和返回值。 ... ok
+test_compatibility_is_limited_to_known_error (test_stacktrace_register.CaptureTests.test_compatibility_is_limited_to_known_error)
+验证非特定错误和缺失能力不会绕过前置检查；无参数和返回值。 ... ok
+test_compatibility_malformed_and_failed_responses (test_stacktrace_register.CaptureTests.test_compatibility_malformed_and_failed_responses)
+验证 Lua 执行失败、效果未知和结构错误；无参数和返回值。 ... ok
+test_compatibility_query_success_preserves_evidence (test_stacktrace_register.CaptureTests.test_compatibility_query_success_preserves_evidence)
+验证兼容采集保留原始失败及查询证据；无参数和返回值。 ... ok
+test_context_structure_failures (test_stacktrace_register.CaptureTests.test_context_structure_failures)
+覆盖上下文字段缺失、错误类型及位宽不符；无参数和返回值。 ... ok
+test_default_native_complete_trace (test_stacktrace_register.CaptureTests.test_default_native_complete_trace)
+验证默认原生模式导出全部十七帧及五列并复核上下文；无参数和返回值。 ... ok
+test_discovery_failures_and_explicit_selection (test_stacktrace_register.CaptureTests.test_discovery_failures_and_explicit_selection)
+覆盖实例发现及精确选择；无参数和返回值。 ... ok
+test_empty_frames (test_stacktrace_register.CaptureTests.test_empty_frames)
+验证空栈候选仍生成扫描数量说明；无参数和返回值。 ... ok
+test_final_overview_transport_is_unavailable (test_stacktrace_register.CaptureTests.test_final_overview_transport_is_unavailable)
+验证末次概览传输失败记录无法核对；无参数和返回值。 ... ok
+test_final_stopped_and_session_checks (test_stacktrace_register.CaptureTests.test_final_stopped_and_session_checks)
+验证末次状态、会话指纹与计数变化拒绝报告；无参数和返回值。 ... ok
+test_invalid_cli_and_local_io (test_stacktrace_register.CaptureTests.test_invalid_cli_and_local_io)
+验证参数和路径错误不启动网关；无参数和返回值。 ... ok
+test_keyboard_interrupt_lifecycle (test_stacktrace_register.CaptureTests.test_keyboard_interrupt_lifecycle)
+验证初始化、采集和写文件前后中断；无参数和返回值。 ... ok
+test_markdown_sanitization_and_raw_preservation (test_stacktrace_register.CaptureTests.test_markdown_sanitization_and_raw_preservation)
+验证恶意表格文本清洗且原始 JSON 可还原；无参数和返回值。 ... ok
+test_native_failures_preserve_existing_report (test_stacktrace_register.CaptureTests.test_native_failures_preserve_existing_report)
+验证查询失败、中断或漂移不会覆盖旧报告且网关关闭；无参数和返回值。 ... ok
+test_native_final_context_and_status_compatibility (test_stacktrace_register.CaptureTests.test_native_final_context_and_status_compatibility)
+验证原生采集后的线程身份复核及状态兼容查询可共存；无参数和返回值。 ... ok
+test_native_malformed_frames_and_context (test_stacktrace_register.CaptureTests.test_native_malformed_frames_and_context)
+验证帧结构、地址范围、计数上限和上下文漂移；无参数和返回值。 ... ok
+test_native_malformed_lua_responses (test_stacktrace_register.CaptureTests.test_native_malformed_lua_responses)
+验证原生 Lua 响应失败、丢弃内容和返回对象数量；无参数和返回值。 ... ok
+test_native_missing_lua_does_not_fallback (test_stacktrace_register.CaptureTests.test_native_missing_lua_does_not_fallback)
+验证原生模式缺少 Lua 时拒绝并且不隐式退回扫描；无参数和返回值。 ... ok
+test_native_more_than_128_frames_and_32_bit (test_stacktrace_register.CaptureTests.test_native_more_than_128_frames_and_32_bit)
+验证原生模式不受旧扫描深度限制且兼容三十二位及零帧指针；无参数和返回值。 ... ok
+test_native_report_filter_and_escaping (test_stacktrace_register.CaptureTests.test_native_report_filter_and_escaping)
+验证原生显示文本转义以及四类字段递归过滤且不改变源数据；无参数和返回值。 ... ok
+test_native_unwind_stopped_warning (test_stacktrace_register.CaptureTests.test_native_unwind_stopped_warning)
+验证非零返回终止不会冒充完整调用链；无参数和返回值。 ... ok
+test_preconditions_stop_before_context (test_stacktrace_register.CaptureTests.test_preconditions_stop_before_context)
+验证未附加或未停止时不采集上下文；无参数和返回值。 ... ok
+test_repeat_atomic_replacement_and_failed_replacement (test_stacktrace_register.CaptureTests.test_repeat_atomic_replacement_and_failed_replacement)
+验证重复采集完整覆盖且替换失败保留旧文件；无参数和返回值。 ... ok
+test_shared_output_requires_serial_runs (test_stacktrace_register.CaptureTests.test_shared_output_requires_serial_runs)
+验证两个采集入口共享日志并明确禁止并发；无参数和返回值。 ... ok
+test_stack_structure_failures (test_stacktrace_register.CaptureTests.test_stack_structure_failures)
+覆盖栈必填字段、可选类型和扫描深度边界；无参数和返回值。 ... ok
+test_success_contract_and_raw_snapshot (test_stacktrace_register.CaptureTests.test_success_contract_and_raw_snapshot)
+验证六十四位报告与调用参数顺序；无参数和返回值。 ... ok
+test_tool_error_kinds_and_host_effects (test_stacktrace_register.CaptureTests.test_tool_error_kinds_and_host_effects)
+验证全部工具错误分类及只读主机效果；无参数和返回值。 ... ok
+test_transport_and_json_failure_cleanup (test_stacktrace_register.CaptureTests.test_transport_and_json_failure_cleanup)
+验证传输及 JSON 解码错误退出并清理；无参数和返回值。 ... ok
+test_unusable_connection_and_allowlist_guard (test_stacktrace_register.CaptureTests.test_unusable_connection_and_allowlist_guard)
+验证失效连接及无实例工具调用被拦截；无参数和返回值。 ... ok
+
+----------------------------------------------------------------------
+Ran 60 tests in 4.265s
+
+OK
+INFO: 1064 success
+INFO: output directory 'C:\\Users\\infin\\AppData\\Local\\Temp\\tmp2gjfsh2p\\out\\20261002T140552294585Z_44fda402'
+INFO: 1064 failed
+INFO: 2064 success
+WARN: CE resourceCount/jobCount changed during export
+INFO: 1064 failed
+INFO: 2064 success
+INFO: 1064 success
+INFO: 2064 success
+INFO: 1064 success
+INFO: 2064 success
+INFO: 1064 success
+INFO: output directory 'C:\\Users\\infin\\AppData\\Local\\Temp\\tmpmiodcr98\\out\\20261002T140552649031Z_79e99443'
+INFO: 1064 failed
+INFO: 2064 failed
+INFO: 1064 failed
+INFO: 2064 failed
+INFO: 1064 failed
+INFO: output directory 'C:\\Users\\infin\\AppData\\Local\\Temp\\tmp1k9sfdly\\out\\20261002T140552773992Z_5e9d2daa'

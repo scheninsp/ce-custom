@@ -1,0 +1,9 @@
+{
+  "stateValid": false,
+  "attached": false,
+  "canBreak": false,
+  "broken": false,
+  "reportedBroken": false,
+  "stepping": false,
+  "error": "CheatEngine.Mcp/debugger_get_status:4: debug_isBroken did not return a boolean debugger state"
+}

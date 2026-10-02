@@ -1,0 +1,18 @@
+{
+  "breakpoints": [
+    {
+      "address": "3A484D9F8B8",
+      "owned": false
+    },
+    {
+      "address": "3A484D9F8BC",
+      "owned": false
+    },
+    {
+      "address": "7FF777CED5C9",
+      "owned": false
+    }
+  ],
+  "total": 3,
+  "truncated": false
+}
