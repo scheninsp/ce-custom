@@ -1,0 +1,321 @@
+{
+  "debugger_continue": {
+    "name": "debugger_continue",
+    "title": "Continue debugger",
+    "description": "Continues the current stopped debugger context. The target remains stopped when no broken context exists.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "instanceId": {
+          "type": "string",
+          "description": "Instance id from instance_list."
+        }
+      },
+      "required": [
+        "instanceId"
+      ]
+    },
+    "outputSchema": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "description": "run, into or over.",
+          "type": "string"
+        },
+        "continued": {
+          "description": "Whether Cheat Engine accepted the continuation request.",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "mode",
+        "continued"
+      ]
+    },
+    "annotations": {
+      "title": "Continue debugger",
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false,
+      "readOnlyHint": false
+    },
+    "_meta": {
+      "cheatengine/dispatchClass": "short"
+    }
+  },
+  "debugger_get_context": {
+    "name": "debugger_get_context",
+    "title": "Get debugger context",
+    "description": "Copies normalised registers from the current stopped context; integer registers are uppercase hexadecimal without 0x. Include extra registers only when FPU or XMM values matter: Cheat Engine then supplies FP0-FP7 (10 bytes each) and XMM0-XMM15 (16 bytes each; XMM0-XMM7 on 32-bit targets) as byte arrays, returned as space-separated hexadecimal bytes in memory order, least significant byte first.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "instanceId": {
+          "type": "string",
+          "description": "Instance id from instance_list."
+        },
+        "includeExtraRegisters": {
+          "description": "Include the FPU (FP0-FP7) and XMM registers where Cheat Engine exposes them, as space-separated hexadecimal bytes.",
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [
+        "instanceId"
+      ]
+    },
+    "outputSchema": {
+      "type": "object",
+      "properties": {
+        "is64Bit": {
+          "description": "Whether the target is 64-bit according to Cheat Engine.",
+          "type": "boolean"
+        },
+        "registers": {
+          "description": "Uppercase register names mapped to text: integer registers as uppercase hexadecimal without 0x; byte-array registers such as FP0-FP7 and XMM0-XMM15 as space-separated hexadecimal bytes in memory order, least significant byte first; any other value as bounded text.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "includesExtraRegisters": {
+          "description": "Whether FPU and XMM registers were requested; they appear in registers only where Cheat Engine supplied them.",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "is64Bit",
+        "registers",
+        "includesExtraRegisters"
+      ]
+    },
+    "annotations": {
+      "title": "Get debugger context",
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false,
+      "readOnlyHint": true
+    },
+    "_meta": {
+      "cheatengine/dispatchClass": "short"
+    }
+  },
+  "debugger_get_stack_trace": {
+    "name": "debugger_get_stack_trace",
+    "title": "Get heuristic stack trace",
+    "description": "Scans at most 128 stack slots of the current stopped context for values after a call instruction. Every frame is heuristic: verify candidates with code_disassemble before treating them as callers.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "instanceId": {
+          "type": "string",
+          "description": "Instance id from instance_list."
+        },
+        "depth": {
+          "description": "The stack slots to inspect, from 1 through 128.",
+          "type": "integer",
+          "default": 32
+        }
+      },
+      "required": [
+        "instanceId"
+      ]
+    },
+    "outputSchema": {
+      "type": "object",
+      "properties": {
+        "stackPointer": {
+          "description": "The stack pointer read from the broken context, uppercase hexadecimal without 0x.",
+          "type": "string"
+        },
+        "pointerSize": {
+          "description": "The pointer width used to scan stack slots.",
+          "type": "integer"
+        },
+        "frames": {
+          "description": "Candidate call-return frames in stack order.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "stackAddress": {
+                "description": "The address of the stack slot containing the candidate, uppercase hexadecimal without 0x.",
+                "type": "string"
+              },
+              "returnAddress": {
+                "description": "The candidate return address, uppercase hexadecimal without 0x.",
+                "type": "string"
+              },
+              "callInstruction": {
+                "description": "The instruction immediately before returnAddress when Cheat Engine could disassemble one.",
+                "type": "string"
+              },
+              "isHeuristic": {
+                "description": "Always true: stale stack values and non-call code pointers can produce false frames.",
+                "type": "boolean",
+                "default": true
+              }
+            },
+            "required": [
+              "stackAddress",
+              "returnAddress"
+            ]
+          }
+        },
+        "scannedSlots": {
+          "description": "The number of stack slots examined.",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "stackPointer",
+        "pointerSize",
+        "frames",
+        "scannedSlots"
+      ]
+    },
+    "annotations": {
+      "title": "Get heuristic stack trace",
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false,
+      "readOnlyHint": true
+    },
+    "_meta": {
+      "cheatengine/dispatchClass": "host_scan"
+    }
+  },
+  "debugger_get_status": {
+    "name": "debugger_get_status",
+    "title": "Get debugger status",
+    "description": "Reads Cheat Engine's debugger state. broken is proven by obtaining the context and is more reliable than reportedBroken alone. Poll after debugger_break_thread because a break request is asynchronous.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "instanceId": {
+          "type": "string",
+          "description": "Instance id from instance_list."
+        }
+      },
+      "required": [
+        "instanceId"
+      ]
+    },
+    "outputSchema": {
+      "type": "object",
+      "properties": {
+        "stateValid": {
+          "description": "Whether Cheat Engine returned a complete debugger-state snapshot.",
+          "type": "boolean"
+        },
+        "attached": {
+          "description": "Whether a debugger is attached.",
+          "type": "boolean"
+        },
+        "canBreak": {
+          "description": "Whether Cheat Engine currently permits a break request.",
+          "type": "boolean"
+        },
+        "broken": {
+          "description": "Whether debug_getContext proved that a broken context is available.",
+          "type": "boolean"
+        },
+        "reportedBroken": {
+          "description": "The separate state reported by debug_isBroken.",
+          "type": "boolean"
+        },
+        "stepping": {
+          "description": "Whether Cheat Engine reports that it is single stepping.",
+          "type": "boolean"
+        },
+        "activeInterface": {
+          "description": "The active debugger interface when attached.",
+          "type": "string",
+          "enum": [
+            "default",
+            "windows",
+            "veh",
+            "kernel"
+          ],
+          "default": null
+        },
+        "error": {
+          "description": "A bounded host message when the state could not be read.",
+          "type": "string",
+          "default": null
+        }
+      },
+      "required": [
+        "stateValid",
+        "attached",
+        "canBreak",
+        "broken",
+        "reportedBroken",
+        "stepping"
+      ]
+    },
+    "annotations": {
+      "title": "Get debugger status",
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false,
+      "readOnlyHint": true
+    },
+    "_meta": {
+      "cheatengine/dispatchClass": "short"
+    }
+  },
+  "debugger_step": {
+    "name": "debugger_step",
+    "title": "Step debugger",
+    "description": "Steps into or over one instruction from the current stopped context.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "instanceId": {
+          "type": "string",
+          "description": "Instance id from instance_list."
+        },
+        "mode": {
+          "description": "into follows a call; over runs a call to its return.",
+          "type": "string",
+          "enum": [
+            "into",
+            "over"
+          ],
+          "default": "into"
+        }
+      },
+      "required": [
+        "instanceId"
+      ]
+    },
+    "outputSchema": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "description": "run, into or over.",
+          "type": "string"
+        },
+        "continued": {
+          "description": "Whether Cheat Engine accepted the continuation request.",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "mode",
+        "continued"
+      ]
+    },
+    "annotations": {
+      "title": "Step debugger",
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false,
+      "readOnlyHint": false
+    },
+    "_meta": {
+      "cheatengine/dispatchClass": "short"
+    }
+  }
+}

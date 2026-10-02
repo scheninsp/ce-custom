@@ -1,0 +1,106 @@
+{
+  "before_context": {
+    "is64Bit": true,
+    "registers": {
+      "R8": "A",
+      "R9": "0",
+      "RBP": "8C5DE8DD30",
+      "R12": "0",
+      "RSI": "3A5FF822B30",
+      "EFLAGS": "202",
+      "RAX": "7E",
+      "RCX": "FFFFFFEB88C07100",
+      "RBX": "3A57395A770",
+      "RDX": "FFFFFFFFFFF29668",
+      "RSP": "8C5DE8D870",
+      "R14": "3A484D9DB60",
+      "R10": "36F",
+      "R15": "7FF77AF75198",
+      "THREADID": "60D0",
+      "R11": "B504F333",
+      "RDI": "3A5FF822A80",
+      "R13": "8C5DE8DC90",
+      "RIP": "7FF777CED5C9"
+    },
+    "includesExtraRegisters": false
+  },
+  "before_breakpoints": {
+    "breakpoints": [
+      {
+        "address": "3A484D9F8B8",
+        "owned": false
+      },
+      {
+        "address": "3A484D9F8BC",
+        "owned": false
+      },
+      {
+        "address": "7FF777CED5C9",
+        "owned": false
+      }
+    ],
+    "total": 3,
+    "truncated": false
+  },
+  "fields": {
+    "failed": 0,
+    "items": [
+      {
+        "address": "3A484D9F8B8",
+        "value": "126"
+      },
+      {
+        "address": "3A484D9F8BC",
+        "value": "126"
+      },
+      {
+        "address": "3A484D9F8B8",
+        "value": "7E 00 00 00 7E 00 00 00 00 00 00 00 00 00 00 00"
+      }
+    ]
+  },
+  "after_context": {
+    "is64Bit": true,
+    "registers": {
+      "R8": "A",
+      "R9": "0",
+      "RBP": "8C5DE8DD30",
+      "R12": "0",
+      "RSI": "3A5FF822B30",
+      "EFLAGS": "202",
+      "RAX": "7E",
+      "RCX": "FFFFFFEB88C07100",
+      "RBX": "3A57395A770",
+      "RDX": "FFFFFFFFFFF29668",
+      "RSP": "8C5DE8D870",
+      "R14": "3A484D9DB60",
+      "R10": "36F",
+      "R15": "7FF77AF75198",
+      "THREADID": "60D0",
+      "R11": "B504F333",
+      "RDI": "3A5FF822A80",
+      "R13": "8C5DE8DC90",
+      "RIP": "7FF777CED5C9"
+    },
+    "includesExtraRegisters": false
+  },
+  "after_breakpoints": {
+    "breakpoints": [
+      {
+        "address": "3A484D9F8B8",
+        "owned": false
+      },
+      {
+        "address": "3A484D9F8BC",
+        "owned": false
+      },
+      {
+        "address": "7FF777CED5C9",
+        "owned": false
+      }
+    ],
+    "total": 3,
+    "truncated": false
+  },
+  "unchanged": true
+}

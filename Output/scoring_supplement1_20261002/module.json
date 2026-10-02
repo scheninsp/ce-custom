@@ -1,0 +1,13 @@
+{
+  "processId": 43884,
+  "total": 1,
+  "modules": [
+    {
+      "name": "victoria3.exe",
+      "base": "7FF776AF0000",
+      "size": 97832960,
+      "is64Bit": true,
+      "path": "D:\\Games\\Victoria3\\Victoria 3\\binaries\\victoria3.exe"
+    }
+  ]
+}

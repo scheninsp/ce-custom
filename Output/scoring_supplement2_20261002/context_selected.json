@@ -1,0 +1,11 @@
+[
+  {
+    "address": "7FF777E0D64B",
+    "addressText": "7FF777E0D64B",
+    "opcode": "call 7FF777CED370",
+    "extra": "",
+    "text": "call 7FF777CED370",
+    "bytes": "E820FDEDFF",
+    "size": 5
+  }
+]

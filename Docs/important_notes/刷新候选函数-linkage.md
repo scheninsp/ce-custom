@@ -38,3 +38,15 @@ BuildMarketTradeFraction
 
 # Refresh ->CalculateDesirability (+11FC320)
 // 功能：检查候选数量限制，并合成最终意愿评分。
+
+
+# Refresh 中调整量的计算已得到数据验证
+验证数据在 `Docs\important_notes\刷新候选函数进出口数量输出分析.md` L161。
+算法：
+每 1 单位贸易容量承载的商品量 = traded_quantity
+贸易中心生产方式带来的修正 = modifier_raw（需转换定点数）
+q_raw = FixedMultiply(base_raw, 100000 + modifier_raw)
+q_raw = max(q_raw, MINIMUM_GOODS_TRADED_QUANTITY)
+MINIMUM_GOODS_TRADED_QUANTITY = 0.5 * 100000 = 50000 （定点数）
+
+累计商品变化 = Σ每次成功增加的 q_i - Σ每次成功减少的 q_i
