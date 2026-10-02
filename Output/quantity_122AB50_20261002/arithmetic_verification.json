@@ -1,0 +1,82 @@
+{
+  "scale": 100000,
+  "threshold": 3037000499,
+  "doubleThreshold": 6074000998,
+  "thresholdSquare": 9223372030926249001,
+  "magicDivisionCases": 10015,
+  "multiplicationCases": 20000,
+  "samples": [
+    {
+      "baseRaw": 1000000,
+      "modifierRaw": 50000,
+      "factorRaw": 150000,
+      "branch": "fast",
+      "productRaw": 1500000,
+      "minimumRaw": 50000,
+      "resultRaw": 1500000
+    },
+    {
+      "baseRaw": 500000,
+      "modifierRaw": 50000,
+      "factorRaw": 150000,
+      "branch": "fast",
+      "productRaw": 750000,
+      "minimumRaw": 50000,
+      "resultRaw": 750000
+    },
+    {
+      "baseRaw": 1000000,
+      "modifierRaw": -100000,
+      "factorRaw": 0,
+      "branch": "fast",
+      "productRaw": 0,
+      "minimumRaw": 50000,
+      "resultRaw": 50000
+    },
+    {
+      "baseRaw": 1000000,
+      "modifierRaw": -150000,
+      "factorRaw": -50000,
+      "branch": "fast",
+      "productRaw": -500000,
+      "minimumRaw": 50000,
+      "resultRaw": 50000
+    },
+    {
+      "baseRaw": 3037000500,
+      "modifierRaw": 150000,
+      "factorRaw": 250000,
+      "branch": "slow",
+      "productRaw": 7592501250,
+      "minimumRaw": 50000,
+      "resultRaw": 7592501250
+    },
+    {
+      "baseRaw": -3037000500,
+      "modifierRaw": 150000,
+      "factorRaw": 250000,
+      "branch": "slow",
+      "productRaw": -7592501250,
+      "minimumRaw": 50000,
+      "resultRaw": 50000
+    },
+    {
+      "baseRaw": 100001,
+      "modifierRaw": 100001,
+      "factorRaw": 200001,
+      "branch": "fast",
+      "productRaw": 200003,
+      "minimumRaw": 0,
+      "resultRaw": 200003
+    },
+    {
+      "baseRaw": -100001,
+      "modifierRaw": 100001,
+      "factorRaw": 200001,
+      "branch": "fast",
+      "productRaw": -200003,
+      "minimumRaw": 0,
+      "resultRaw": 0
+    }
+  ]
+}

@@ -1,3 +1,18 @@
 {
-    "pendant.notifications.customHookEvents": []
+    "pendant.notifications.customHookEvents": [],
+    // ===== 原生WrapTabs + 原生紧凑Tab高度【重点】=====
+    "workbench.editor.wrapTabs": true,
+    "window.density.editorTabHeight": "compact",
+    "workbench.editor.tabSizing": "shrink",
+    "workbench.editor.pinnedTabSizing": "compact",
+    "workbench.editor.labelFormat": "short",
+    "workbench.editor.titleScrollbarVisibility": "hidden",
+    "breadcrumbs.enabled": false,
+    "window.menuBarVisibility": "compact",
+
+    "editor.lineHeight": 16,
+    "editor.fontSize": 12,
+
+    // 【可选】底部状态栏隐藏
+    "workbench.statusBar.visible": true
 }

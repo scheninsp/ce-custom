@@ -1,0 +1,47 @@
+{
+  "runId": "20261002T084615533156Z_1886121e",
+  "startedAt": "2026-10-02T08:46:15.534161+00:00",
+  "expectedCount": 1,
+  "before": 120,
+  "after": 120,
+  "instanceId": "ce-72480-42f4ba0154dd4fbd8087223e0f808fda",
+  "ceResourcesBefore": {
+    "resourceCount": 0,
+    "jobCount": 0
+  },
+  "runtimeEpoch": 1,
+  "processId": 43884,
+  "selectionEpoch": 0,
+  "pointerSize": 8,
+  "status": "complete",
+  "updatedAt": "2026-10-02T08:46:16.291898+00:00",
+  "successCount": 1,
+  "failedCount": 0,
+  "processedCount": 1,
+  "instructionCount": 241,
+  "results": [
+    {
+      "address": "7FF777D18B90",
+      "expected_bytes": "",
+      "file": "opcode_7FF777D18B90.md",
+      "status": "success",
+      "capturedAt": "2026-10-02T08:46:16.247305+00:00",
+      "beforeCount": 120,
+      "afterCount": 120,
+      "instructionCount": 241
+    }
+  ],
+  "residueCheck": {
+    "state": "unchanged",
+    "before": {
+      "resourceCount": 0,
+      "jobCount": 0
+    },
+    "after": {
+      "resourceCount": 0,
+      "jobCount": 0
+    },
+    "checkedAt": "2026-10-02T08:46:16.265623+00:00",
+    "reason": null
+  }
+}
