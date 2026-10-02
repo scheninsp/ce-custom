@@ -1,0 +1,659 @@
+{
+  "base": "7FF776AF0000",
+  "start": "1225F70",
+  "end": "122607D",
+  "unwind": "4DED190",
+  "liveDiskMatch": true,
+  "instructions": [
+    {
+      "address": "7FF777D15F70",
+      "addressText": "7FF777D15F70",
+      "opcode": "mov [rsp+08],rbx",
+      "extra": "",
+      "text": "mov [rsp+08],rbx",
+      "bytes": "48895C2408",
+      "size": 5,
+      "rva": "1225F70"
+    },
+    {
+      "address": "7FF777D15F75",
+      "addressText": "7FF777D15F75",
+      "opcode": "mov [rsp+18],rbp",
+      "extra": "",
+      "text": "mov [rsp+18],rbp",
+      "bytes": "48896C2418",
+      "size": 5,
+      "rva": "1225F75"
+    },
+    {
+      "address": "7FF777D15F7A",
+      "addressText": "7FF777D15F7A",
+      "opcode": "push rsi",
+      "extra": "",
+      "text": "push rsi",
+      "bytes": "56",
+      "size": 1,
+      "rva": "1225F7A"
+    },
+    {
+      "address": "7FF777D15F7B",
+      "addressText": "7FF777D15F7B",
+      "opcode": "push rdi",
+      "extra": "",
+      "text": "push rdi",
+      "bytes": "57",
+      "size": 1,
+      "rva": "1225F7B"
+    },
+    {
+      "address": "7FF777D15F7C",
+      "addressText": "7FF777D15F7C",
+      "opcode": "push r14",
+      "extra": "",
+      "text": "push r14",
+      "bytes": "4156",
+      "size": 2,
+      "rva": "1225F7C"
+    },
+    {
+      "address": "7FF777D15F7E",
+      "addressText": "7FF777D15F7E",
+      "opcode": "sub rsp,70",
+      "extra": "",
+      "text": "sub rsp,70",
+      "bytes": "4883EC70",
+      "size": 4,
+      "rva": "1225F7E"
+    },
+    {
+      "address": "7FF777D15F82",
+      "addressText": "7FF777D15F82",
+      "opcode": "movzx ebx,r9b",
+      "extra": "",
+      "text": "movzx ebx,r9b",
+      "bytes": "410FB6D9",
+      "size": 4,
+      "rva": "1225F82"
+    },
+    {
+      "address": "7FF777D15F86",
+      "addressText": "7FF777D15F86",
+      "opcode": "mov rdi,r8",
+      "extra": "",
+      "text": "mov rdi,r8",
+      "bytes": "498BF8",
+      "size": 3,
+      "rva": "1225F86"
+    },
+    {
+      "address": "7FF777D15F89",
+      "addressText": "7FF777D15F89",
+      "opcode": "mov r14,rdx",
+      "extra": "",
+      "text": "mov r14,rdx",
+      "bytes": "4C8BF2",
+      "size": 3,
+      "rva": "1225F89"
+    },
+    {
+      "address": "7FF777D15F8C",
+      "addressText": "7FF777D15F8C",
+      "opcode": "mov rsi,rcx",
+      "extra": "",
+      "text": "mov rsi,rcx",
+      "bytes": "488BF1",
+      "size": 3,
+      "rva": "1225F8C"
+    },
+    {
+      "address": "7FF777D15F8F",
+      "addressText": "7FF777D15F8F",
+      "opcode": "mov rbp,[rsp+000000B0]",
+      "extra": "",
+      "text": "mov rbp,[rsp+000000B0]",
+      "bytes": "488BAC24B0000000",
+      "size": 8,
+      "rva": "1225F8F"
+    },
+    {
+      "address": "7FF777D15F97",
+      "addressText": "7FF777D15F97",
+      "opcode": "test rbp,rbp",
+      "extra": "",
+      "text": "test rbp,rbp",
+      "bytes": "4885ED",
+      "size": 3,
+      "rva": "1225F97"
+    },
+    {
+      "address": "7FF777D15F9A",
+      "addressText": "7FF777D15F9A",
+      "opcode": "setne dl",
+      "extra": "",
+      "text": "setne dl",
+      "bytes": "0F95C2",
+      "size": 3,
+      "rva": "1225F9A"
+    },
+    {
+      "address": "7FF777D15F9D",
+      "addressText": "7FF777D15F9D",
+      "opcode": "lea rcx,[rsp+30]",
+      "extra": "",
+      "text": "lea rcx,[rsp+30]",
+      "bytes": "488D4C2430",
+      "size": 5,
+      "rva": "1225F9D"
+    },
+    {
+      "address": "7FF777D15FA2",
+      "addressText": "7FF777D15FA2",
+      "opcode": "call 7FF777EB1A10",
+      "extra": "",
+      "text": "call 7FF777EB1A10",
+      "bytes": "E869BA1900",
+      "size": 5,
+      "rva": "1225FA2"
+    },
+    {
+      "address": "7FF777D15FA7",
+      "addressText": "7FF777D15FA7",
+      "opcode": "nop ",
+      "extra": "",
+      "text": "nop ",
+      "bytes": "90",
+      "size": 1,
+      "rva": "1225FA7"
+    },
+    {
+      "address": "7FF777D15FA8",
+      "addressText": "7FF777D15FA8",
+      "opcode": "lea rdx,[rsp+30]",
+      "extra": "",
+      "text": "lea rdx,[rsp+30]",
+      "bytes": "488D542430",
+      "size": 5,
+      "rva": "1225FA8"
+    },
+    {
+      "address": "7FF777D15FAD",
+      "addressText": "7FF777D15FAD",
+      "opcode": "call 7FF777D16080",
+      "extra": "",
+      "text": "call 7FF777D16080",
+      "bytes": "E8CE000000",
+      "size": 5,
+      "rva": "1225FAD"
+    },
+    {
+      "address": "7FF777D15FB2",
+      "addressText": "7FF777D15FB2",
+      "opcode": "movzx r9d,bl",
+      "extra": "",
+      "text": "movzx r9d,bl",
+      "bytes": "440FB6CB",
+      "size": 4,
+      "rva": "1225FB2"
+    },
+    {
+      "address": "7FF777D15FB6",
+      "addressText": "7FF777D15FB6",
+      "opcode": "mov r8,rdi",
+      "extra": "",
+      "text": "mov r8,rdi",
+      "bytes": "4C8BC7",
+      "size": 3,
+      "rva": "1225FB6"
+    },
+    {
+      "address": "7FF777D15FB9",
+      "addressText": "7FF777D15FB9",
+      "opcode": "lea rdx,[rsp+30]",
+      "extra": "",
+      "text": "lea rdx,[rsp+30]",
+      "bytes": "488D542430",
+      "size": 5,
+      "rva": "1225FB9"
+    },
+    {
+      "address": "7FF777D15FBE",
+      "addressText": "7FF777D15FBE",
+      "opcode": "mov rcx,rsi",
+      "extra": "",
+      "text": "mov rcx,rsi",
+      "bytes": "488BCE",
+      "size": 3,
+      "rva": "1225FBE"
+    },
+    {
+      "address": "7FF777D15FC1",
+      "addressText": "7FF777D15FC1",
+      "opcode": "call 7FF777D16160",
+      "extra": "",
+      "text": "call 7FF777D16160",
+      "bytes": "E89A010000",
+      "size": 5,
+      "rva": "1225FC1"
+    },
+    {
+      "address": "7FF777D15FC6",
+      "addressText": "7FF777D15FC6",
+      "opcode": "lea rdx,[rsp+30]",
+      "extra": "",
+      "text": "lea rdx,[rsp+30]",
+      "bytes": "488D542430",
+      "size": 5,
+      "rva": "1225FC6"
+    },
+    {
+      "address": "7FF777D15FCB",
+      "addressText": "7FF777D15FCB",
+      "opcode": "mov rcx,rsi",
+      "extra": "",
+      "text": "mov rcx,rsi",
+      "bytes": "488BCE",
+      "size": 3,
+      "rva": "1225FCB"
+    },
+    {
+      "address": "7FF777D15FCE",
+      "addressText": "7FF777D15FCE",
+      "opcode": "call 7FF777D18B90",
+      "extra": "",
+      "text": "call 7FF777D18B90",
+      "bytes": "E8BD2B0000",
+      "size": 5,
+      "rva": "1225FCE"
+    },
+    {
+      "address": "7FF777D15FD3",
+      "addressText": "7FF777D15FD3",
+      "opcode": "test rbp,rbp",
+      "extra": "",
+      "text": "test rbp,rbp",
+      "bytes": "4885ED",
+      "size": 3,
+      "rva": "1225FD3"
+    },
+    {
+      "address": "7FF777D15FD6",
+      "addressText": "7FF777D15FD6",
+      "opcode": "je 7FF777D16021",
+      "extra": "",
+      "text": "je 7FF777D16021",
+      "bytes": "7449",
+      "size": 2,
+      "rva": "1225FD6"
+    },
+    {
+      "address": "7FF777D15FD8",
+      "addressText": "7FF777D15FD8",
+      "opcode": "lea rax,[7FF77AEAA390]",
+      "extra": "[0000000A]",
+      "text": "lea rax,[7FF77AEAA390] [0000000A]",
+      "bytes": "488D05B1431903",
+      "size": 7,
+      "rva": "1225FD8"
+    },
+    {
+      "address": "7FF777D15FDF",
+      "addressText": "7FF777D15FDF",
+      "opcode": "mov [rsp+20],rax",
+      "extra": "",
+      "text": "mov [rsp+20],rax",
+      "bytes": "4889442420",
+      "size": 5,
+      "rva": "1225FDF"
+    },
+    {
+      "address": "7FF777D15FE4",
+      "addressText": "7FF777D15FE4",
+      "opcode": "mov [rsp+28],00000001",
+      "extra": "",
+      "text": "mov [rsp+28],00000001",
+      "bytes": "C744242801000000",
+      "size": 8,
+      "rva": "1225FE4"
+    },
+    {
+      "address": "7FF777D15FEC",
+      "addressText": "7FF777D15FEC",
+      "opcode": "mov byte ptr [rsp+2C],00",
+      "extra": "",
+      "text": "mov byte ptr [rsp+2C],00",
+      "bytes": "C644242C00",
+      "size": 5,
+      "rva": "1225FEC"
+    },
+    {
+      "address": "7FF777D15FF1",
+      "addressText": "7FF777D15FF1",
+      "opcode": "lea rdx,[rsp+20]",
+      "extra": "",
+      "text": "lea rdx,[rsp+20]",
+      "bytes": "488D542420",
+      "size": 5,
+      "rva": "1225FF1"
+    },
+    {
+      "address": "7FF777D15FF6",
+      "addressText": "7FF777D15FF6",
+      "opcode": "mov rcx,rbp",
+      "extra": "",
+      "text": "mov rcx,rbp",
+      "bytes": "488BCD",
+      "size": 3,
+      "rva": "1225FF6"
+    },
+    {
+      "address": "7FF777D15FF9",
+      "addressText": "7FF777D15FF9",
+      "opcode": "call 7FF77A5A49B0",
+      "extra": "",
+      "text": "call 7FF77A5A49B0",
+      "bytes": "E8B2E98802",
+      "size": 5,
+      "rva": "1225FF9"
+    },
+    {
+      "address": "7FF777D15FFE",
+      "addressText": "7FF777D15FFE",
+      "opcode": "lea rcx,[rsp+30]",
+      "extra": "",
+      "text": "lea rcx,[rsp+30]",
+      "bytes": "488D4C2430",
+      "size": 5,
+      "rva": "1225FFE"
+    },
+    {
+      "address": "7FF777D16003",
+      "addressText": "7FF777D16003",
+      "opcode": "call 7FF777EB25C0",
+      "extra": "",
+      "text": "call 7FF777EB25C0",
+      "bytes": "E8B8C51900",
+      "size": 5,
+      "rva": "1226003"
+    },
+    {
+      "address": "7FF777D16008",
+      "addressText": "7FF777D16008",
+      "opcode": "mov r8,[rax+10]",
+      "extra": "",
+      "text": "mov r8,[rax+10]",
+      "bytes": "4C8B4010",
+      "size": 4,
+      "rva": "1226008"
+    },
+    {
+      "address": "7FF777D1600C",
+      "addressText": "7FF777D1600C",
+      "opcode": "cmp qword ptr [rax+18],0F",
+      "extra": "",
+      "text": "cmp qword ptr [rax+18],0F",
+      "bytes": "488378180F",
+      "size": 5,
+      "rva": "122600C"
+    },
+    {
+      "address": "7FF777D16011",
+      "addressText": "7FF777D16011",
+      "opcode": "jna 7FF777D16016",
+      "extra": "",
+      "text": "jna 7FF777D16016",
+      "bytes": "7603",
+      "size": 2,
+      "rva": "1226011"
+    },
+    {
+      "address": "7FF777D16013",
+      "addressText": "7FF777D16013",
+      "opcode": "mov rax,[rax]",
+      "extra": "",
+      "text": "mov rax,[rax]",
+      "bytes": "488B00",
+      "size": 3,
+      "rva": "1226013"
+    },
+    {
+      "address": "7FF777D16016",
+      "addressText": "7FF777D16016",
+      "opcode": "mov rdx,rax",
+      "extra": "",
+      "text": "mov rdx,rax",
+      "bytes": "488BD0",
+      "size": 3,
+      "rva": "1226016"
+    },
+    {
+      "address": "7FF777D16019",
+      "addressText": "7FF777D16019",
+      "opcode": "mov rcx,rbp",
+      "extra": "",
+      "text": "mov rcx,rbp",
+      "bytes": "488BCD",
+      "size": 3,
+      "rva": "1226019"
+    },
+    {
+      "address": "7FF777D1601C",
+      "addressText": "7FF777D1601C",
+      "opcode": "call 7FF779423EF0",
+      "extra": "",
+      "text": "call 7FF779423EF0",
+      "bytes": "E8CFDE7001",
+      "size": 5,
+      "rva": "122601C"
+    },
+    {
+      "address": "7FF777D16021",
+      "addressText": "7FF777D16021",
+      "opcode": "lea rdx,[rsp+00000098]",
+      "extra": "",
+      "text": "lea rdx,[rsp+00000098]",
+      "bytes": "488D942498000000",
+      "size": 8,
+      "rva": "1226021"
+    },
+    {
+      "address": "7FF777D16029",
+      "addressText": "7FF777D16029",
+      "opcode": "lea rcx,[rsp+30]",
+      "extra": "",
+      "text": "lea rcx,[rsp+30]",
+      "bytes": "488D4C2430",
+      "size": 5,
+      "rva": "1226029"
+    },
+    {
+      "address": "7FF777D1602E",
+      "addressText": "7FF777D1602E",
+      "opcode": "call 7FF777EB2350",
+      "extra": "",
+      "text": "call 7FF777EB2350",
+      "bytes": "E81DC31900",
+      "size": 5,
+      "rva": "122602E"
+    },
+    {
+      "address": "7FF777D16033",
+      "addressText": "7FF777D16033",
+      "opcode": "mov rcx,rax",
+      "extra": "",
+      "text": "mov rcx,rax",
+      "bytes": "488BC8",
+      "size": 3,
+      "rva": "1226033"
+    },
+    {
+      "address": "7FF777D16036",
+      "addressText": "7FF777D16036",
+      "opcode": "mov qword ptr [rsp+000000B0],000186A0",
+      "extra": "",
+      "text": "mov qword ptr [rsp+000000B0],000186A0",
+      "bytes": "48C78424B0000000A0860100",
+      "size": 12,
+      "rva": "1226036"
+    },
+    {
+      "address": "7FF777D16042",
+      "addressText": "7FF777D16042",
+      "opcode": "lea rax,[rsp+000000B0]",
+      "extra": "",
+      "text": "lea rax,[rsp+000000B0]",
+      "bytes": "488D8424B0000000",
+      "size": 8,
+      "rva": "1226042"
+    },
+    {
+      "address": "7FF777D1604A",
+      "addressText": "7FF777D1604A",
+      "opcode": "cmp qword ptr [rcx],000186A0",
+      "extra": "",
+      "text": "cmp qword ptr [rcx],000186A0",
+      "bytes": "488139A0860100",
+      "size": 7,
+      "rva": "122604A"
+    },
+    {
+      "address": "7FF777D16051",
+      "addressText": "7FF777D16051",
+      "opcode": "cmovg rax,rcx",
+      "extra": "",
+      "text": "cmovg rax,rcx",
+      "bytes": "480F4FC1",
+      "size": 4,
+      "rva": "1226051"
+    },
+    {
+      "address": "7FF777D16055",
+      "addressText": "7FF777D16055",
+      "opcode": "mov rax,[rax]",
+      "extra": "",
+      "text": "mov rax,[rax]",
+      "bytes": "488B00",
+      "size": 3,
+      "rva": "1226055"
+    },
+    {
+      "address": "7FF777D16058",
+      "addressText": "7FF777D16058",
+      "opcode": "mov [r14],rax",
+      "extra": "",
+      "text": "mov [r14],rax",
+      "bytes": "498906",
+      "size": 3,
+      "rva": "1226058"
+    },
+    {
+      "address": "7FF777D1605B",
+      "addressText": "7FF777D1605B",
+      "opcode": "lea rcx,[rsp+68]",
+      "extra": "",
+      "text": "lea rcx,[rsp+68]",
+      "bytes": "488D4C2468",
+      "size": 5,
+      "rva": "122605B"
+    },
+    {
+      "address": "7FF777D16060",
+      "addressText": "7FF777D16060",
+      "opcode": "call 7FF777738D10",
+      "extra": "",
+      "text": "call 7FF777738D10",
+      "bytes": "E8AB2CA2FF",
+      "size": 5,
+      "rva": "1226060"
+    },
+    {
+      "address": "7FF777D16065",
+      "addressText": "7FF777D16065",
+      "opcode": "mov rax,r14",
+      "extra": "",
+      "text": "mov rax,r14",
+      "bytes": "498BC6",
+      "size": 3,
+      "rva": "1226065"
+    },
+    {
+      "address": "7FF777D16068",
+      "addressText": "7FF777D16068",
+      "opcode": "lea r11,[rsp+70]",
+      "extra": "",
+      "text": "lea r11,[rsp+70]",
+      "bytes": "4C8D5C2470",
+      "size": 5,
+      "rva": "1226068"
+    },
+    {
+      "address": "7FF777D1606D",
+      "addressText": "7FF777D1606D",
+      "opcode": "mov rbx,[r11+20]",
+      "extra": "",
+      "text": "mov rbx,[r11+20]",
+      "bytes": "498B5B20",
+      "size": 4,
+      "rva": "122606D"
+    },
+    {
+      "address": "7FF777D16071",
+      "addressText": "7FF777D16071",
+      "opcode": "mov rbp,[r11+30]",
+      "extra": "",
+      "text": "mov rbp,[r11+30]",
+      "bytes": "498B6B30",
+      "size": 4,
+      "rva": "1226071"
+    },
+    {
+      "address": "7FF777D16075",
+      "addressText": "7FF777D16075",
+      "opcode": "mov rsp,r11",
+      "extra": "",
+      "text": "mov rsp,r11",
+      "bytes": "498BE3",
+      "size": 3,
+      "rva": "1226075"
+    },
+    {
+      "address": "7FF777D16078",
+      "addressText": "7FF777D16078",
+      "opcode": "pop r14",
+      "extra": "",
+      "text": "pop r14",
+      "bytes": "415E",
+      "size": 2,
+      "rva": "1226078"
+    },
+    {
+      "address": "7FF777D1607A",
+      "addressText": "7FF777D1607A",
+      "opcode": "pop rdi",
+      "extra": "",
+      "text": "pop rdi",
+      "bytes": "5F",
+      "size": 1,
+      "rva": "122607A"
+    },
+    {
+      "address": "7FF777D1607B",
+      "addressText": "7FF777D1607B",
+      "opcode": "pop rsi",
+      "extra": "",
+      "text": "pop rsi",
+      "bytes": "5E",
+      "size": 1,
+      "rva": "122607B"
+    },
+    {
+      "address": "7FF777D1607C",
+      "addressText": "7FF777D1607C",
+      "opcode": "ret ",
+      "extra": "",
+      "text": "ret ",
+      "bytes": "C3",
+      "size": 1,
+      "rva": "122607C"
+    }
+  ]
+}

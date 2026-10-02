@@ -1,0 +1,12 @@
+{
+  "instruction": {
+    "address": "7FF777CEBDA0",
+    "addressText": "7FF777CEBDA0",
+    "opcode": "mov [rsp+10],rbx",
+    "extra": "",
+    "text": "mov [rsp+10],rbx",
+    "bytes": "48895C2410",
+    "size": 5
+  },
+  "length": 5
+}

@@ -163,6 +163,13 @@ int64 ComputeDirectionalAdvantage(state, goods, direction)
 }
 ```
 
+BuildDirectionalTradeContext
+ComputeAbsoluteTradeAdvantage
+两个被伪代码解释二合一
+->
+ComputeDirectionalAdvantage
+
+
 ### 目前不能确认的部分
 
 - 这些目标函数的独立函数入口、完整 opcode 和返回结构尚未采集，因此不能把它们分别命名为已完成反汇编的 `BuildDirectionalTradeContext` 与 `ComputeAbsoluteTradeAdvantage`。

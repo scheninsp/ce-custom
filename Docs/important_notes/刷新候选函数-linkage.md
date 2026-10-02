@@ -10,24 +10,18 @@
 读取指定州、商品和贸易方向的绝对贸易优势
 ->
 BuildDirectionalTradeContext
+功能：按方向和商品构造贸易优势计算上下文
++
 ComputeAbsoluteTradeAdvantage
-
-BuildDirectionalTradeContext
-ComputeAbsoluteTradeAdvantage
-两个被伪代码解释二合一
-->
-ComputeDirectionalAdvantage
-功能：按方向和商品构造贸易优势计算上下文，并调用内部优势计算器。
-
-
-ComputeAbsoluteTradeAdvantage
-功能：构造州/市场/商品/方向上下文，并把定点优势中间值写入方向商品缓存。
+功能：把定点优势中间值写入方向商品缓存。
 ->
 BuildStateGoodsDirectionValue
 功能：从州/市场、商品和方向构造绝对优势候选值。
 BuildMarketTradeFraction
 功能：从州关联市场对象读取贸易份额相关输入，并生成定点修正值。
 
+绝对贸易优势会被用来计算相对贸易优势，然后决定商品进口价格。
+来源于开发日志和wiki猜测（Docs\trade_center_model1.md）
 
 # Refresh ->UpdateCandidateShortage (UpdateCandidatePartA，+11FBA60)
 // 功能：计算候选商品的短缺指标，仅对进口商品返回非0值

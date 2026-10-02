@@ -1,0 +1,439 @@
+{
+  "base": "7FF776AF0000",
+  "start": "24AB610",
+  "end": "24AB6D0",
+  "unwind": "4DB04E0",
+  "liveDiskMatch": true,
+  "instructions": [
+    {
+      "address": "7FF778F9B610",
+      "addressText": "7FF778F9B610",
+      "opcode": "mov [rsp+08],rbx",
+      "extra": "",
+      "text": "mov [rsp+08],rbx",
+      "bytes": "48895C2408",
+      "size": 5,
+      "rva": "24AB610"
+    },
+    {
+      "address": "7FF778F9B615",
+      "addressText": "7FF778F9B615",
+      "opcode": "push rdi",
+      "extra": "",
+      "text": "push rdi",
+      "bytes": "57",
+      "size": 1,
+      "rva": "24AB615"
+    },
+    {
+      "address": "7FF778F9B616",
+      "addressText": "7FF778F9B616",
+      "opcode": "sub rsp,60",
+      "extra": "",
+      "text": "sub rsp,60",
+      "bytes": "4883EC60",
+      "size": 4,
+      "rva": "24AB616"
+    },
+    {
+      "address": "7FF778F9B61A",
+      "addressText": "7FF778F9B61A",
+      "opcode": "mov rbx,rdx",
+      "extra": "",
+      "text": "mov rbx,rdx",
+      "bytes": "488BDA",
+      "size": 3,
+      "rva": "24AB61A"
+    },
+    {
+      "address": "7FF778F9B61D",
+      "addressText": "7FF778F9B61D",
+      "opcode": "mov rdx,[r8]",
+      "extra": "",
+      "text": "mov rdx,[r8]",
+      "bytes": "498B10",
+      "size": 3,
+      "rva": "24AB61D"
+    },
+    {
+      "address": "7FF778F9B620",
+      "addressText": "7FF778F9B620",
+      "opcode": "lea rcx,[rsp+50]",
+      "extra": "",
+      "text": "lea rcx,[rsp+50]",
+      "bytes": "488D4C2450",
+      "size": 5,
+      "rva": "24AB620"
+    },
+    {
+      "address": "7FF778F9B625",
+      "addressText": "7FF778F9B625",
+      "opcode": "call 7FF77924D510",
+      "extra": "",
+      "text": "call 7FF77924D510",
+      "bytes": "E8E61E2B00",
+      "size": 5,
+      "rva": "24AB625"
+    },
+    {
+      "address": "7FF778F9B62A",
+      "addressText": "7FF778F9B62A",
+      "opcode": "mov eax,[rsp+50]",
+      "extra": "",
+      "text": "mov eax,[rsp+50]",
+      "bytes": "8B442450",
+      "size": 4,
+      "rva": "24AB62A"
+    },
+    {
+      "address": "7FF778F9B62E",
+      "addressText": "7FF778F9B62E",
+      "opcode": "mov [rsp+78],eax",
+      "extra": "",
+      "text": "mov [rsp+78],eax",
+      "bytes": "89442478",
+      "size": 4,
+      "rva": "24AB62E"
+    },
+    {
+      "address": "7FF778F9B632",
+      "addressText": "7FF778F9B632",
+      "opcode": "lea rcx,[rsp+78]",
+      "extra": "",
+      "text": "lea rcx,[rsp+78]",
+      "bytes": "488D4C2478",
+      "size": 5,
+      "rva": "24AB632"
+    },
+    {
+      "address": "7FF778F9B637",
+      "addressText": "7FF778F9B637",
+      "opcode": "call 7FF7772B96A0",
+      "extra": "",
+      "text": "call 7FF7772B96A0",
+      "bytes": "E864E031FE",
+      "size": 5,
+      "rva": "24AB637"
+    },
+    {
+      "address": "7FF778F9B63C",
+      "addressText": "7FF778F9B63C",
+      "opcode": "mov rdi,rax",
+      "extra": "",
+      "text": "mov rdi,rax",
+      "bytes": "488BF8",
+      "size": 3,
+      "rva": "24AB63C"
+    },
+    {
+      "address": "7FF778F9B63F",
+      "addressText": "7FF778F9B63F",
+      "opcode": "cmp dword ptr [7FF77BBCF540],00",
+      "extra": "",
+      "text": "cmp dword ptr [7FF77BBCF540],00",
+      "bytes": "833DFA3EC30200",
+      "size": 7,
+      "rva": "24AB63F"
+    },
+    {
+      "address": "7FF778F9B646",
+      "addressText": "7FF778F9B646",
+      "opcode": "jne 7FF778F9B660",
+      "extra": "",
+      "text": "jne 7FF778F9B660",
+      "bytes": "7518",
+      "size": 2,
+      "rva": "24AB646"
+    },
+    {
+      "address": "7FF778F9B648",
+      "addressText": "7FF778F9B648",
+      "opcode": "lea rax,[7FF77C3E1E86]",
+      "extra": "[00000000]",
+      "text": "lea rax,[7FF77C3E1E86] [00000000]",
+      "bytes": "488D0537684403",
+      "size": 7,
+      "rva": "24AB648"
+    },
+    {
+      "address": "7FF778F9B64F",
+      "addressText": "7FF778F9B64F",
+      "opcode": "mov [rsp+28],rax",
+      "extra": "",
+      "text": "mov [rsp+28],rax",
+      "bytes": "4889442428",
+      "size": 5,
+      "rva": "24AB64F"
+    },
+    {
+      "address": "7FF778F9B654",
+      "addressText": "7FF778F9B654",
+      "opcode": "lea rcx,[7FF77AECBBD0]",
+      "extra": "[\"NGameState::GameStateAccess._Value != EGameStateAccess::Uninitialized\"]",
+      "text": "lea rcx,[7FF77AECBBD0] [\"NGameState::GameStateAccess._Value != EGameStateAccess::Uninitialized\"]",
+      "bytes": "488D0D7505F301",
+      "size": 7,
+      "rva": "24AB654"
+    },
+    {
+      "address": "7FF778F9B65B",
+      "addressText": "7FF778F9B65B",
+      "opcode": "call 7FF77A5927C0",
+      "extra": "",
+      "text": "call 7FF77A5927C0",
+      "bytes": "E860715F01",
+      "size": 5,
+      "rva": "24AB65B"
+    },
+    {
+      "address": "7FF778F9B660",
+      "addressText": "7FF778F9B660",
+      "opcode": "mov rcx,[7FF77C3A8A50]",
+      "extra": "[5A151800]",
+      "text": "mov rcx,[7FF77C3A8A50] [5A151800]",
+      "bytes": "488B0DE9D34003",
+      "size": 7,
+      "rva": "24AB660"
+    },
+    {
+      "address": "7FF778F9B667",
+      "addressText": "7FF778F9B667",
+      "opcode": "mov rdx,[rcx+00000608]",
+      "extra": "",
+      "text": "mov rdx,[rcx+00000608]",
+      "bytes": "488B9108060000",
+      "size": 7,
+      "rva": "24AB667"
+    },
+    {
+      "address": "7FF778F9B66E",
+      "addressText": "7FF778F9B66E",
+      "opcode": "mov rcx,[rdx+00000120]",
+      "extra": "",
+      "text": "mov rcx,[rdx+00000120]",
+      "bytes": "488B8A20010000",
+      "size": 7,
+      "rva": "24AB66E"
+    },
+    {
+      "address": "7FF778F9B675",
+      "addressText": "7FF778F9B675",
+      "opcode": "add rcx,00000508",
+      "extra": "",
+      "text": "add rcx,00000508",
+      "bytes": "4881C108050000",
+      "size": 7,
+      "rva": "24AB675"
+    },
+    {
+      "address": "7FF778F9B67C",
+      "addressText": "7FF778F9B67C",
+      "opcode": "xor eax,eax",
+      "extra": "",
+      "text": "xor eax,eax",
+      "bytes": "33C0",
+      "size": 2,
+      "rva": "24AB67C"
+    },
+    {
+      "address": "7FF778F9B67E",
+      "addressText": "7FF778F9B67E",
+      "opcode": "mov [rbx],rax",
+      "extra": "",
+      "text": "mov [rbx],rax",
+      "bytes": "488903",
+      "size": 3,
+      "rva": "24AB67E"
+    },
+    {
+      "address": "7FF778F9B681",
+      "addressText": "7FF778F9B681",
+      "opcode": "mov [rsp+48],rax",
+      "extra": "",
+      "text": "mov [rsp+48],rax",
+      "bytes": "4889442448",
+      "size": 5,
+      "rva": "24AB681"
+    },
+    {
+      "address": "7FF778F9B686",
+      "addressText": "7FF778F9B686",
+      "opcode": "mov [rsp+40],rax",
+      "extra": "",
+      "text": "mov [rsp+40],rax",
+      "bytes": "4889442440",
+      "size": 5,
+      "rva": "24AB686"
+    },
+    {
+      "address": "7FF778F9B68B",
+      "addressText": "7FF778F9B68B",
+      "opcode": "mov [rsp+38],rax",
+      "extra": "",
+      "text": "mov [rsp+38],rax",
+      "bytes": "4889442438",
+      "size": 5,
+      "rva": "24AB68B"
+    },
+    {
+      "address": "7FF778F9B690",
+      "addressText": "7FF778F9B690",
+      "opcode": "mov [rsp+30],rax",
+      "extra": "",
+      "text": "mov [rsp+30],rax",
+      "bytes": "4889442430",
+      "size": 5,
+      "rva": "24AB690"
+    },
+    {
+      "address": "7FF778F9B695",
+      "addressText": "7FF778F9B695",
+      "opcode": "mov [rsp+28],rax",
+      "extra": "",
+      "text": "mov [rsp+28],rax",
+      "bytes": "4889442428",
+      "size": 5,
+      "rva": "24AB695"
+    },
+    {
+      "address": "7FF778F9B69A",
+      "addressText": "7FF778F9B69A",
+      "opcode": "mov rax,[rsp+58]",
+      "extra": "",
+      "text": "mov rax,[rsp+58]",
+      "bytes": "488B442458",
+      "size": 5,
+      "rva": "24AB69A"
+    },
+    {
+      "address": "7FF778F9B69F",
+      "addressText": "7FF778F9B69F",
+      "opcode": "mov [rsp+20],rax",
+      "extra": "",
+      "text": "mov [rsp+20],rax",
+      "bytes": "4889442420",
+      "size": 5,
+      "rva": "24AB69F"
+    },
+    {
+      "address": "7FF778F9B6A4",
+      "addressText": "7FF778F9B6A4",
+      "opcode": "xor r9d,r9d",
+      "extra": "",
+      "text": "xor r9d,r9d",
+      "bytes": "4533C9",
+      "size": 3,
+      "rva": "24AB6A4"
+    },
+    {
+      "address": "7FF778F9B6A7",
+      "addressText": "7FF778F9B6A7",
+      "opcode": "mov r8,rdi",
+      "extra": "",
+      "text": "mov r8,rdi",
+      "bytes": "4C8BC7",
+      "size": 3,
+      "rva": "24AB6A7"
+    },
+    {
+      "address": "7FF778F9B6AA",
+      "addressText": "7FF778F9B6AA",
+      "opcode": "lea rdx,[rsp+78]",
+      "extra": "",
+      "text": "lea rdx,[rsp+78]",
+      "bytes": "488D542478",
+      "size": 5,
+      "rva": "24AB6AA"
+    },
+    {
+      "address": "7FF778F9B6AF",
+      "addressText": "7FF778F9B6AF",
+      "opcode": "call 7FF777E93B10",
+      "extra": "",
+      "text": "call 7FF777E93B10",
+      "bytes": "E85C84EFFE",
+      "size": 5,
+      "rva": "24AB6AF"
+    },
+    {
+      "address": "7FF778F9B6B4",
+      "addressText": "7FF778F9B6B4",
+      "opcode": "mov rax,[rsp+78]",
+      "extra": "",
+      "text": "mov rax,[rsp+78]",
+      "bytes": "488B442478",
+      "size": 5,
+      "rva": "24AB6B4"
+    },
+    {
+      "address": "7FF778F9B6B9",
+      "addressText": "7FF778F9B6B9",
+      "opcode": "add rax,FFFFFFFFFFFE7960",
+      "extra": "",
+      "text": "add rax,FFFFFFFFFFFE7960",
+      "bytes": "48056079FEFF",
+      "size": 6,
+      "rva": "24AB6B9"
+    },
+    {
+      "address": "7FF778F9B6BF",
+      "addressText": "7FF778F9B6BF",
+      "opcode": "mov [rbx],rax",
+      "extra": "",
+      "text": "mov [rbx],rax",
+      "bytes": "488903",
+      "size": 3,
+      "rva": "24AB6BF"
+    },
+    {
+      "address": "7FF778F9B6C2",
+      "addressText": "7FF778F9B6C2",
+      "opcode": "mov rax,rbx",
+      "extra": "",
+      "text": "mov rax,rbx",
+      "bytes": "488BC3",
+      "size": 3,
+      "rva": "24AB6C2"
+    },
+    {
+      "address": "7FF778F9B6C5",
+      "addressText": "7FF778F9B6C5",
+      "opcode": "mov rbx,[rsp+70]",
+      "extra": "",
+      "text": "mov rbx,[rsp+70]",
+      "bytes": "488B5C2470",
+      "size": 5,
+      "rva": "24AB6C5"
+    },
+    {
+      "address": "7FF778F9B6CA",
+      "addressText": "7FF778F9B6CA",
+      "opcode": "add rsp,60",
+      "extra": "",
+      "text": "add rsp,60",
+      "bytes": "4883C460",
+      "size": 4,
+      "rva": "24AB6CA"
+    },
+    {
+      "address": "7FF778F9B6CE",
+      "addressText": "7FF778F9B6CE",
+      "opcode": "pop rdi",
+      "extra": "",
+      "text": "pop rdi",
+      "bytes": "5F",
+      "size": 1,
+      "rva": "24AB6CE"
+    },
+    {
+      "address": "7FF778F9B6CF",
+      "addressText": "7FF778F9B6CF",
+      "opcode": "ret ",
+      "extra": "",
+      "text": "ret ",
+      "bytes": "C3",
+      "size": 1,
+      "rva": "24AB6CF"
+    }
+  ]
+}

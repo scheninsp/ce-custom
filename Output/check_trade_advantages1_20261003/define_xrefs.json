@@ -1,0 +1,157 @@
+[
+  {
+    "address": "9C21FB",
+    "target": "440D160",
+    "function": "9C21A0"
+  },
+  {
+    "address": "9C247C",
+    "target": "5889E10",
+    "function": "9C21A0"
+  },
+  {
+    "address": "9C2576",
+    "target": "5889E10",
+    "function": "9C2540"
+  },
+  {
+    "address": "9C2593",
+    "target": "5889E10",
+    "function": "9C2593"
+  },
+  {
+    "address": "9C25A1",
+    "target": "440D160",
+    "function": "9C25A1"
+  },
+  {
+    "address": "9C25B0",
+    "target": "5889E10",
+    "function": "9C25B0"
+  },
+  {
+    "address": "9C25B7",
+    "target": "440D160",
+    "function": "9C25B7"
+  },
+  {
+    "address": "9C25E0",
+    "target": "5889E10",
+    "function": "9C25D0"
+  },
+  {
+    "address": "9C261D",
+    "target": "5889E10",
+    "function": "9C2600"
+  },
+  {
+    "address": "9C264D",
+    "target": "5889E10",
+    "function": "9C2640"
+  },
+  {
+    "address": "9C26CB",
+    "target": "440D140",
+    "function": "9C2670"
+  },
+  {
+    "address": "9C294C",
+    "target": "5889E08",
+    "function": "9C2670"
+  },
+  {
+    "address": "9C2A46",
+    "target": "5889E08",
+    "function": "9C2A10"
+  },
+  {
+    "address": "9C2A63",
+    "target": "5889E08",
+    "function": "9C2A63"
+  },
+  {
+    "address": "9C2A71",
+    "target": "440D140",
+    "function": "9C2A71"
+  },
+  {
+    "address": "9C2A80",
+    "target": "5889E08",
+    "function": "9C2A80"
+  },
+  {
+    "address": "9C2A87",
+    "target": "440D140",
+    "function": "9C2A87"
+  },
+  {
+    "address": "9C2AB0",
+    "target": "5889E08",
+    "function": "9C2AA0"
+  },
+  {
+    "address": "9C2AED",
+    "target": "5889E08",
+    "function": "9C2AD0"
+  },
+  {
+    "address": "9C2B1D",
+    "target": "5889E08",
+    "function": "9C2B10"
+  },
+  {
+    "address": "9C2E1C",
+    "target": "5889DD0",
+    "function": "9C2B40"
+  },
+  {
+    "address": "9C2F16",
+    "target": "5889DD0",
+    "function": "9C2EE0"
+  },
+  {
+    "address": "9C2F33",
+    "target": "5889DD0",
+    "function": "9C2F33"
+  },
+  {
+    "address": "9C2F50",
+    "target": "5889DD0",
+    "function": "9C2F50"
+  },
+  {
+    "address": "9C2F80",
+    "target": "5889DD0",
+    "function": "9C2F70"
+  },
+  {
+    "address": "9C2FBD",
+    "target": "5889DD0",
+    "function": "9C2FA0"
+  },
+  {
+    "address": "9C2FED",
+    "target": "5889DD0",
+    "function": "9C2FE0"
+  },
+  {
+    "address": "1200889",
+    "target": "5889E08",
+    "function": "12003F0"
+  },
+  {
+    "address": "12260C5",
+    "target": "5889E08",
+    "function": "1226080"
+  },
+  {
+    "address": "12263CA",
+    "target": "5889DD0",
+    "function": "1226160"
+  },
+  {
+    "address": "123F479",
+    "target": "5889E08",
+    "function": "123F3D0"
+  }
+]

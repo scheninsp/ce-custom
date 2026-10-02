@@ -30,3 +30,5 @@ Docs文件夹允许在文档中复制伪代码函数的内容，但是必须在 
 ## 工具使用
 - 终端命令使用 PowerShell 语法；不要向 PowerShell 传递 Bash heredoc（例如 `<<'PATCH'`）。
 - 文件修改通过专用 `apply_patch` 工具完成，不要把 `apply_patch` 补丁包装成 Bash 命令。
+- 如果专用补丁工具不可用或调用失败，可以改用 PowerShell 原生命令或脚本编辑文件；采用 UTF-8 编码。
+
