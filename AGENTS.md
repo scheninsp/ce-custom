@@ -15,6 +15,13 @@ CheatEngine MCP 以编译好的 dll 插件形式嵌入到 CheatEngine 软件中�
 victoria3 游戏路径在 `D:\Games\Victoria3\Victoria 3`。其中的 `D:\Games\Victoria3\Victoria 3\Docs` 包含了一些游戏功能文档。
 `D:\Games\Victoria3\Victoria 3\game\common`是游戏的文件目录，包含了很多功能的文本化描述。
 
+### ghidra反编译结果
+ghidra反编译 victoria3.exe 的项目位于`D:\cebuild\vic3-rev`。
+
+`FakeCode\ghidra_disassembly`：共 333 个 function 文件，是围绕 Refresh (+11FBDA0) 按最多 4 层调用深度整理后的“分析版”伪代码。
+`FakeCode\ghidra_refresh_20261003`：共 1526 个 function 文件，是静态递归得到的完整函数闭包，最大调用深度为 22。
+前者的 333 个文件全部都能在后者找到；后者额外包含 1193 个函数。
+
 ## 代码规范
 python,powershell等脚本代码文件，需要在文件头部使用中文注释说明文件功能。
 每个函数头部都要加上函数功能，以及入参与返回值的中文注释说明。
@@ -32,4 +39,13 @@ Docs文件夹允许在文档中复制伪代码函数的内容，但是必须在 
 - 终端命令使用 PowerShell 语法；不要向 PowerShell 传递 Bash heredoc（例如 `<<'PATCH'`）。
 - 文件修改通过专用 `apply_patch` 工具完成，不要把 `apply_patch` 补丁包装成 Bash 命令。
 - 如果专用补丁工具不可用或调用失败，可以改用 PowerShell 原生命令或脚本编辑文件；采用 UTF-8 编码。
+
+## 调试进程启动记录
+2026.10.3 18:32 第一次 victoria3.exe 进程结束
+所有第一次进程执行期间产生的文档和记录都被放入各个文件夹下的"2026-10-3-process1"子文件夹。
+
+## Ghidra 反编译资料入口
+`Refresh`（`victoria3.exe+11FBDA0`）的定位与分析见 [Docs/ghidra_refresh_20261003.md](Docs/ghidra_refresh_20261003.md)。
+完整静态递归导出、按 RVA 的函数文件和调用索引见 [FakeCode/ghidra_refresh_20261003/README.md](FakeCode/ghidra_refresh_20261003/README.md)。
+先读入口中的证据边界；间接调用和带警告代码不能视为已全部恢复。
 

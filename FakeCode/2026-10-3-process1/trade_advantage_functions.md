@@ -1,5 +1,9 @@
 # 贸易优势伪代码
 
+2026-10-03 Ghidra 核对：`Refresh` 对应静态地址 `0x1411FBDA0`，完整原始反编译及递归调用树见
+[导出入口](../ghidra_refresh_20261003/README.md)。下列前三个骨架已修正旧 RVA、缓存门槛及断言路径；
+其他语义骨架仍需结合原始反编译阅读，不能当作完整机器码恢复。
+
 ## `Refresh`（`victoria3.exe+11FBDA0`）
 
 ```cpp
@@ -8,15 +12,15 @@
 // 地址：victoria3.exe+11FBDA0。
 void Refresh(Candidate* c, TradeContext* context)
 {
-    State* state = Resolve(c->stateRef);
+    State* state = Resolve(&c->stateRef); // victoria3.exe+7C96A0
     c->quantity = CalculateQuantityPerCapacity(state, c->goods);
     c->advantage = ReadOrComputeDirectionalTradeAdvantage(
         state, c->goods, c->direction);
     if (c->advantage <= 0)
-        return;
+        CallAt<void>(0x7A1610); // 断言报告路径；若调用返回，仍继续下面的刷新。
     UpdateCandidateShortage(c, context);       // +11FBA60
     UpdateCandidateRevenue(c, context);        // +11FC080
-    CalculateDesirability(c, context);          // +11FC320
+    CalculateDesirability(c, context);          // +11FC320，真实指令为尾跳。
 }
 ```
 
@@ -25,7 +29,7 @@ void Refresh(Candidate* c, TradeContext* context)
 ```cpp
 // 功能：读取指定州、商品和贸易方向的绝对贸易优势；缓存不存在时计算并返回。
 // 入参：state 为州对象，goods 为商品对象，direction 为进口/出口方向；
-// 返回：正的绝对贸易优势，使用游戏内部定点整数单位。
+// 返回：缓存值或重新计算后读取的值，使用游戏内部定点整数单位；调用者检查正值。
 // 地址：victoria3.exe+11FBDA0 内联计算链，非独立已确认符号函数。
 int64 ReadOrComputeDirectionalTradeAdvantage(State* state, Goods* goods,
                                              uint8 direction)
@@ -33,7 +37,7 @@ int64 ReadOrComputeDirectionalTradeAdvantage(State* state, Goods* goods,
     DirectionTable* table = SelectDirectionTable(state, direction);
     int32 goodId = ReadGoodsId(goods);
     int64 cached = table->values[goodId];
-    if (cached != 0)
+    if (cached > 0)
         return cached;
     return ComputeAbsoluteTradeAdvantage(state, goods, direction);
 }
@@ -43,21 +47,28 @@ int64 ReadOrComputeDirectionalTradeAdvantage(State* state, Goods* goods,
 
 ```cpp
 // 功能：构造州/市场/商品/方向上下文，并把定点优势中间值写入方向商品缓存。
-// 入参：state/market、goods、direction；返回：缓存中的绝对优势定点值。
+// 入参：state、goods、direction；返回：重新读取的缓存值，不是写缓存函数的返回值。
 // 地址：victoria3.exe+11FBDA0 内联路径；辅助调用地址见行内注释。
 int64 ComputeAbsoluteTradeAdvantage(State* state, Goods* goods, uint8 direction)
 {
-    TempContext t;
-    InitTempContext(&t, 0);                         // +EB1A10
-    WrapNumericContext(&t);                         // +D16080
-    FillGoodsDirectionContext(state, &t, goods, direction); // +D16160
-    BuildMarketTradeFraction(state, &t);            // +D18B90
-    int64 normalized = NormalizeAdvantage(&t);      // +EB2350
-    int64 fixedInput = normalized < 100000 ? 100000 : normalized;
     DirectionTable* table = SelectDirectionTable(state, direction);
-    int64 result = UpdateAdvantageCache(table, goods, fixedInput); // +B17760
-    table->values[ReadGoodsId(goods)] = result;
-    return result;
+    if (direction == 0 || direction == 1) {
+        // 真实调用还解析 state+0x20 的关联对象，不能直接把 state 当成后续首参。
+        void* related = Resolve(reinterpret_cast<byte*>(state) + 0x20); // +7C96A0
+        TempContext t;
+        InitTempContext(&t, 0);                         // +13C1A10
+        // 包装函数实际使用 RDX；其原 RCX 入参未被使用，此处以 nullptr 表示忽略。
+        WrapNumericContext(nullptr, &t);                 // +1226080
+        FillGoodsDirectionContext(related, &t, goods, direction); // +1226160
+        BuildMarketTradeFraction(related, &t);           // +1228B90
+        int64 normalized;
+        NormalizeAdvantage(&t, &normalized);             // +13C2350
+        int64 fixedInput = normalized < 100000 ? 100000 : normalized;
+        CallAt<void>(0xC48D10, reinterpret_cast<byte*>(&t) + 0x38); // 临时成员清理
+        UpdateAdvantageCache(table, goods, fixedInput);   // +1027760，原位写表
+    }
+    // 这是带商品合法性与存在位检查的重新读取记法，非法或不存在时返回零。
+    return ReadDirectionGoodsValue(table, goods);
 }
 ```
 

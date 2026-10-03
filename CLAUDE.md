@@ -15,6 +15,9 @@ CheatEngine MCP 以编译好的 dll 插件形式嵌入到 CheatEngine 软件中�
 victoria3 游戏路径在 `D:\Games\Victoria3\Victoria 3`。其中的 `D:\Games\Victoria3\Victoria 3\Docs` 包含了一些游戏功能文档。
 `D:\Games\Victoria3\Victoria 3\game\common`是游戏的文件目录，包含了很多功能的文本化描述。
 
+### ghidra反编译结果
+ghidra反编译 victoria3.exe 的项目位于`D:\cebuild\vic3-rev`。
+
 ## 代码规范
 python,powershell等脚本代码文件，需要在文件头部使用中文注释说明文件功能。
 每个函数头部都要加上函数功能，以及入参与返回值的中文注释说明。
@@ -30,4 +33,13 @@ Docs文件夹允许在文档中复制伪代码函数的内容，但是必须在 
 
 ## 工具使用
 无特殊说明
+
+## 调试进程启动记录
+2026.10.3 18:32 第一次 victoria3.exe 进程结束
+所有第一次进程执行期间产生的文档和记录都被放入各个文件夹下的"2026-10-3-process1"子文件夹。
+
+## Ghidra 反编译资料入口
+`Refresh`（`victoria3.exe+11FBDA0`）的定位与分析见 [Docs/ghidra_refresh_20261003.md](Docs/ghidra_refresh_20261003.md)。
+完整静态递归导出、按 RVA 的函数文件和调用索引见 [FakeCode/ghidra_refresh_20261003/README.md](FakeCode/ghidra_refresh_20261003/README.md)。
+先读入口中的证据边界；间接调用和带警告代码不能视为已全部恢复。
 

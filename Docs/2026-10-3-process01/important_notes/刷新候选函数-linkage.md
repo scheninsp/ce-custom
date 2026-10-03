@@ -51,17 +51,96 @@ shortage = clamp(shortage_unclamped, 0, 0.5)
 
 Refresh → UpdateCandidatePartB / UpdateCandidateRevenue（+11FC080）→ CalculateDirectionalPriceDifference（+140A6B0） 内部
 
-使用相对贸易优势 RelativeAdvantage 计算修正过的进出口成交价 
+经济层可把结果简写为使用相对贸易优势 `RelativeAdvantage` 修正进出口成交价：
 r = RelativeAdvantage
 M = 1 + 0.25 × r
 出口成交价 P_export = P_world × M
 进口成交价 P_import = P_world / M
 P_world : 当前商品的世界市场价格
 
-修正后的进出口价格
-  → 方向价差 ΔP
-  → 单位净收益 p
-  → 基础收益 R = q × p
+修正后的进出口价格并不是直接由 `P_world` 和 `r` 两个浮点数相乘得到，Ghidra 反编译出的完整定点计算如下。令定点比例
+
+\[
+S=100000,\qquad \operatorname{FM}(x,y)=\operatorname{trunc}\left(\frac{x\,y}{S}\right)
+\]
+
+其中 `FM` 是游戏的 `FixedMultiply`。候选为增加模式（`mode=1`）时，先复制评估表，并按方向把本次数量 `q` 加入两张表；减少模式不预先减去 `q`。对方向 \(d\in\{0,1\}\)，从模拟表读取
+
+\[
+(A,E)=
+\begin{cases}
+(T_0,T_7),&d=0\\
+(T_1,T_6),&d=1
+\end{cases},\qquad T_4=\text{table[4]}[g],\quad T_5=\text{table[5]}[g]
+\]
+
+其中 \(g\) 为商品。`+1408330` 返回本地侧价格 \(L\)，`+13A3280` 根据 \((g,T_4,T_5)\) 返回基准贸易侧价格 \(B\)，`+13A3B10` 返回定点相对比值 \(u\)。随后 `+13A5280` 使用全局价格系数 \(C\)（当前证据为 \(C=25000\)）计算倍率：
+
+\[
+K=S-C
+\]
+\[
+m=
+\begin{cases}
+u-\operatorname{FM}(u-S,K),&u>S\\
+u+\operatorname{FM}(S-u,K),&u\le S
+\end{cases}
+\]
+\[
+M_d=
+\begin{cases}
+\operatorname{trunc}\left(\dfrac{10^{10}}{m}\right),&d=0\land m\ne0\\
+0x00000000FFFFFFFF,&d=0\land m=0\\
+m,&d=1
+\end{cases}
+\]
+
+修正后的贸易侧价格及价格边界钳制为
+
+\[
+P'=\operatorname{clamp}\bigl(\operatorname{FM}(B,M_d),\;P_{\min}(g),\;P_{\max}(g)\bigr)
+\]
+
+其中 `+1726AF0` 和 `+1726A10` 分别读取商品价格下限和上限。方向价差（`+140A6B0`）为
+
+\[
+\Delta P=
+\begin{cases}
+L-P',&d=0\\
+P'-L,&d=1\\
+0,&d\notin\{0,1\}
+\end{cases}
+\]
+
+再由 `+1207860` 计算单位净收益。令商品对象 `goods+0x44` 的有符号值为 \(b_{raw}\)，商品基价定点值为
+
+\[
+b=\begin{cases}S,&b_{raw}\le0\\b_{raw}\,S,&b_{raw}>0\end{cases}
+\]
+
+若有效关税率和补助率（均为定点值）分别为 \(t\) 和 \(s\)，则
+
+\[
+\text{Tariff}=\operatorname{FM}(b,t),\qquad
+\text{Subvention}=\operatorname{FM}(b,s)
+\]
+\[
+p=\Delta P+\text{Subvention}-\text{Tariff}
+\]
+
+最后 `+11FC080` 写回单位净收益和本次容量调整的基础收益：
+
+\[
+c+0x18=p,\qquad R=c+0x10=\operatorname{FM}(q,p)
+\]
+
+因此这里的“方向价差 → 单位净收益 → 基础收益”实际展开为
+
+\[
+(A,E,T_4,T_5)\to(L,B,u)\to m\to M_d\to P'\to\Delta P\to p\to R
+\]
+
+`P_world`、`RelativeAdvantage` 是便于经济解释的名称；机器码实际使用的是 `+13A3280`、`+13A3B10` 返回的定点值，并且还经过价格上下限钳制。
 
 
 # Refresh ->CalculateDesirability (+11FC320)
@@ -69,21 +148,34 @@ P_world : 当前商品的世界市场价格
 参考（`Docs\important_notes\刷新候选函数评分影响因子分析.md`）
 
 本市场方向量超过外部反方向可承接量的两倍时，候选直接无效
+M_opp : 本地市场反方向订单量
+W_opp : 国际市场反方向订单量
+反方向市场份额 = 当前本地市场的反方向数量/世界市场的反方向数量 = M_opp/W_opp
 
 R：基础收益
 
-D ≈ R
-   - 25 × max(有效关税率, 0)
-   + 补助差额评分
-   - 1000 × 反方向市场份额
-   + 300 × 短缺评分 H
+\[
+D=R-25\cdot\max(T,0)+\Delta S-1000\cdot\frac{M_{\text{opp}}}{W_{\text{opp}}}+300H
+\]
+\(H\) 是 UpdateCandidateShortage 计算出的短缺值。
 
-补助差额评分 = 本方向补助率 × 100 - 反方向补助率 × 100
+\[
+\Delta S=100(S_{\text{dir}}-S_{\text{opp}})
+\]
+补助差额评分（Delta S）= 本方向补助率 × 100 - 反方向补助率 × 100
+
+若同时满足：
+- \(\Delta S>0\)
+- 方向为 0
+- 供给不足条件成立：
+  - 增加模式：\(S\le 0\)
+  - 减少模式：\(S\le q\)
+则：
+\[
+\Delta S\leftarrow20\Delta S
+\]
 若差额为正，且方向为 0（需要进口）、则认为候选是供给不足，则补助差额评分再乘 20
 
-反方向市场份额 = 当前本地市场的反方向数量/世界市场的反方向数量
-
-短缺评分在上面函数 UpdateCandidateShortage
 
 
 

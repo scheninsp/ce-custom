@@ -1,0 +1,569 @@
+2026-10-03 21:36:22 INFO  (LoggingInitialization) Using log config file: jar:file:/D:/cebuild/ghidra/ghidra_12.1.4_PUBLIC/Ghidra/Framework/Generic/lib/Generic.jar!/generic.log4j.xml  
+2026-10-03 21:36:22 INFO  (LoggingInitialization) Using log file: D:\cebuild\ce-custom\Output\ghidra_refresh_headless.log  
+2026-10-03 21:36:22 DEBUG (GhidraObjectInputFilter) Including serial input filter: FileSystem/data/client.rmi.serial.filter  
+2026-10-03 21:36:22 INFO  (Preferences) Loading user preferences: C:\Users\infin\AppData\Roaming\ghidra\ghidra_12.1.4_PUBLIC\preferences  
+2026-10-03 21:36:22 INFO  (ClassSearcher) Searching for classes...  
+2026-10-03 21:36:23 INFO  (ClassSearcher) Class search complete (811 ms)  
+2026-10-03 21:36:23 INFO  (DefaultSSLContextInitializer) Initializing SSL Context  
+2026-10-03 21:36:23 INFO  (SecureRandomFactory) Initializing Random Number Generator...  
+2026-10-03 21:36:23 INFO  (SecureRandomFactory) Random Number Generator initialization complete: SHA1PRNG  
+2026-10-03 21:36:23 INFO  (DefaultTrustManagerFactory) Trust manager disabled, cacerts have not been set  
+2026-10-03 21:36:23 INFO  (AnalyzeHeadless) Headless startup complete (2304 ms)  
+2026-10-03 21:36:23 INFO  (ClassSearcher) Class searcher loaded 59 extension points (20 false positives)  
+2026-10-03 21:36:23 INFO  (HeadlessAnalyzer) HEADLESS Script Paths:
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\SystemEmulation\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\DecompilerDependent\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\Decompiler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\SwiftDemangler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\JVM\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\BytePatterns\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\PIC\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\DATA\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\BSim\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\FunctionID\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\PDB\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Debug\Debugger\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\Base\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\Atmel\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\FileFormats\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\8051\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\WildcardAssembler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\VersionTracking\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\GnuDemangler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\MicrosoftCodeAnalyzer\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Debug\Debugger-rmi-trace\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\PyGhidra\ghidra_scripts
+    D:\cebuild\ce-custom\Scripts\ghidra  
+2026-10-03 21:36:23 INFO  (HeadlessAnalyzer) HEADLESS: execution starts  
+2026-10-03 21:36:23 INFO  (HeadlessAnalyzer) Opening existing project: C:\Users\infin\AppData\Local\Temp\vic3-ghidra-refresh-20261003\vic3-rev  
+2026-10-03 21:36:24 INFO  (HeadlessProject) Opening project: C:\Users\infin\AppData\Local\Temp\vic3-ghidra-refresh-20261003\vic3-rev  
+2026-10-03 21:36:24 INFO  (LocalBufferFile) Removed old presave file: C:\Users\infin\AppData\Local\Temp\vic3-ghidra-refresh-20261003\vic3-rev.rep\idata\00\~00000000.db\tmp15211095733912859939.ps  
+2026-10-03 21:36:25 INFO  (HeadlessAnalyzer) REPORT: Processing read-only project file: /victoria3.exe  
+2026-10-03 21:36:26 INFO  (HeadlessAnalyzer) REPORT: Execute script: ExportRefreshTree.java 'D:/cebuild/ce-custom/Output/ghidra_refresh_20261003' 'D:/cebuild/ce-custom/FakeCode/ghidra_refresh_20261003' 'D:/cebuild/ce-custom/Scripts/ghidra/refresh_names.tsv' 'discover'   
+2026-10-03 21:36:27 INFO  (HeadlessAnalyzer) SCRIPT: D:\cebuild\ce-custom\Scripts\ghidra\ExportRefreshTree.java  
+2026-10-03 21:36:27 INFO  (GhidraScript) ExportRefreshTree.java> ROOT 1411fbda0 BASE 140000000  
+2026-10-03 21:36:27 INFO  (GhidraScript) ExportRefreshTree.java> GRAPH_DONE FUNCTIONS 1 EDGES 0  
+2026-10-03 21:37:27 INFO  (LoggingInitialization) Using log config file: jar:file:/D:/cebuild/ghidra/ghidra_12.1.4_PUBLIC/Ghidra/Framework/Generic/lib/Generic.jar!/generic.log4j.xml  
+2026-10-03 21:37:27 INFO  (LoggingInitialization) Using log file: D:\cebuild\ce-custom\Output\ghidra_refresh_headless.log  
+2026-10-03 21:37:27 DEBUG (GhidraObjectInputFilter) Including serial input filter: FileSystem/data/client.rmi.serial.filter  
+2026-10-03 21:37:27 INFO  (Preferences) Loading user preferences: C:\Users\infin\AppData\Roaming\ghidra\ghidra_12.1.4_PUBLIC\preferences  
+2026-10-03 21:37:27 INFO  (ClassSearcher) Searching for classes...  
+2026-10-03 21:37:28 INFO  (ClassSearcher) Class search complete (783 ms)  
+2026-10-03 21:37:28 INFO  (DefaultSSLContextInitializer) Initializing SSL Context  
+2026-10-03 21:37:28 INFO  (SecureRandomFactory) Initializing Random Number Generator...  
+2026-10-03 21:37:28 INFO  (SecureRandomFactory) Random Number Generator initialization complete: SHA1PRNG  
+2026-10-03 21:37:28 INFO  (DefaultTrustManagerFactory) Trust manager disabled, cacerts have not been set  
+2026-10-03 21:37:29 INFO  (AnalyzeHeadless) Headless startup complete (1932 ms)  
+2026-10-03 21:37:29 INFO  (ClassSearcher) Class searcher loaded 59 extension points (20 false positives)  
+2026-10-03 21:37:29 INFO  (HeadlessAnalyzer) HEADLESS Script Paths:
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\SystemEmulation\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\DecompilerDependent\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\Decompiler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\SwiftDemangler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\JVM\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\BytePatterns\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\PIC\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\DATA\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\BSim\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\FunctionID\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\PDB\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Debug\Debugger\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\Base\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\Atmel\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\FileFormats\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\8051\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\WildcardAssembler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\VersionTracking\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\GnuDemangler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\MicrosoftCodeAnalyzer\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Debug\Debugger-rmi-trace\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\PyGhidra\ghidra_scripts
+    D:\cebuild\ce-custom\Scripts\ghidra  
+2026-10-03 21:37:29 INFO  (HeadlessAnalyzer) HEADLESS: execution starts  
+2026-10-03 21:37:29 INFO  (HeadlessAnalyzer) Opening existing project: C:\Users\infin\AppData\Local\Temp\vic3-ghidra-refresh-20261003\vic3-rev  
+2026-10-03 21:37:29 INFO  (HeadlessProject) Opening project: C:\Users\infin\AppData\Local\Temp\vic3-ghidra-refresh-20261003\vic3-rev  
+2026-10-03 21:37:30 INFO  (HeadlessAnalyzer) REPORT: Processing read-only project file: /victoria3.exe  
+2026-10-03 21:37:30 INFO  (HeadlessAnalyzer) REPORT: Execute script: ExportRefreshTree.java 'D:/cebuild/ce-custom/Output/ghidra_refresh_20261003' 'D:/cebuild/ce-custom/FakeCode/ghidra_refresh_20261003' 'D:/cebuild/ce-custom/Scripts/ghidra/refresh_names.tsv' 'discover'   
+2026-10-03 21:37:31 ERROR (HeadlessAnalyzer) ExportRefreshTree.java:201: error: cannot find symbol
+            Function next = currentProgram.getFunctionManager().getFunctionAfter(entry);
+                                                               ^
+  symbol:   method getFunctionAfter(ghidra.program.model.address.Address)
+  location: interface ghidra.program.model.listing.FunctionManager
+skipping D:\cebuild\ce-custom\Scripts\ghidra\ExportRefreshTree.java
+  
+2026-10-03 21:37:31 ERROR (HeadlessAnalyzer) REPORT SCRIPT ERROR: ExportRefreshTree.java : The class could not be found. It must be the public class of the .java file: ExportRefreshTree not found by e9d8c435 [1] ghidra.app.script.GhidraScriptLoadException: The class could not be found. It must be the public class of the .java file: ExportRefreshTree not found by e9d8c435 [1]
+	at ghidra.app.script.JavaScriptProvider.getScriptInstance(JavaScriptProvider.java:114)
+	at ghidra.app.util.headless.HeadlessAnalyzer.runScriptsList(HeadlessAnalyzer.java:917)
+	at ghidra.app.util.headless.HeadlessAnalyzer.analyzeProgram(HeadlessAnalyzer.java:1093)
+	at ghidra.app.util.headless.HeadlessAnalyzer.processFileNoImport(HeadlessAnalyzer.java:1191)
+	at ghidra.app.util.headless.HeadlessAnalyzer.processFolderNoImport(HeadlessAnalyzer.java:1363)
+	at ghidra.app.util.headless.HeadlessAnalyzer.processNoImport(HeadlessAnalyzer.java:1392)
+	at ghidra.app.util.headless.HeadlessAnalyzer.processLocal(HeadlessAnalyzer.java:449)
+	at ghidra.app.util.headless.AnalyzeHeadless.launch(AnalyzeHeadless.java:199)
+	at ghidra.GhidraLauncher.launch(GhidraLauncher.java:81)
+	at ghidra.Ghidra.main(Ghidra.java:54)
+Caused by: java.lang.ClassNotFoundException: ExportRefreshTree not found by e9d8c435 [1]
+	at org.apache.felix.framework.BundleWiringImpl.findClassOrResourceByDelegation(BundleWiringImpl.java:1591)
+	at org.apache.felix.framework.BundleWiringImpl.access$300(BundleWiringImpl.java:79)
+	at org.apache.felix.framework.BundleWiringImpl$BundleClassLoader.loadClass(BundleWiringImpl.java:1976)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	at org.apache.felix.framework.Felix.loadBundleClass(Felix.java:2116)
+	at org.apache.felix.framework.BundleImpl.loadClass(BundleImpl.java:986)
+	at ghidra.app.script.JavaScriptProvider.loadClass(JavaScriptProvider.java:166)
+	at ghidra.app.script.JavaScriptProvider.getScriptInstance(JavaScriptProvider.java:97)
+	... 9 more
+ 
+2026-10-03 21:37:46 INFO  (LoggingInitialization) Using log config file: jar:file:/D:/cebuild/ghidra/ghidra_12.1.4_PUBLIC/Ghidra/Framework/Generic/lib/Generic.jar!/generic.log4j.xml  
+2026-10-03 21:37:46 INFO  (LoggingInitialization) Using log file: D:\cebuild\ce-custom\Output\ghidra_refresh_headless.log  
+2026-10-03 21:37:46 DEBUG (GhidraObjectInputFilter) Including serial input filter: FileSystem/data/client.rmi.serial.filter  
+2026-10-03 21:37:46 INFO  (Preferences) Loading user preferences: C:\Users\infin\AppData\Roaming\ghidra\ghidra_12.1.4_PUBLIC\preferences  
+2026-10-03 21:37:46 INFO  (ClassSearcher) Searching for classes...  
+2026-10-03 21:37:47 INFO  (ClassSearcher) Class search complete (813 ms)  
+2026-10-03 21:37:47 INFO  (DefaultSSLContextInitializer) Initializing SSL Context  
+2026-10-03 21:37:47 INFO  (SecureRandomFactory) Initializing Random Number Generator...  
+2026-10-03 21:37:47 INFO  (SecureRandomFactory) Random Number Generator initialization complete: SHA1PRNG  
+2026-10-03 21:37:47 INFO  (DefaultTrustManagerFactory) Trust manager disabled, cacerts have not been set  
+2026-10-03 21:37:47 INFO  (AnalyzeHeadless) Headless startup complete (1954 ms)  
+2026-10-03 21:37:47 INFO  (ClassSearcher) Class searcher loaded 59 extension points (20 false positives)  
+2026-10-03 21:37:47 INFO  (HeadlessAnalyzer) HEADLESS Script Paths:
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\SystemEmulation\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\DecompilerDependent\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\Decompiler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\SwiftDemangler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\JVM\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\BytePatterns\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\PIC\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\DATA\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\BSim\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\FunctionID\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\PDB\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Debug\Debugger\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\Base\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\Atmel\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\FileFormats\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\8051\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\WildcardAssembler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\VersionTracking\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\GnuDemangler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\MicrosoftCodeAnalyzer\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Debug\Debugger-rmi-trace\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\PyGhidra\ghidra_scripts
+    D:\cebuild\ce-custom\Scripts\ghidra  
+2026-10-03 21:37:47 INFO  (HeadlessAnalyzer) HEADLESS: execution starts  
+2026-10-03 21:37:47 INFO  (HeadlessAnalyzer) Opening existing project: C:\Users\infin\AppData\Local\Temp\vic3-ghidra-refresh-20261003\vic3-rev  
+2026-10-03 21:37:48 INFO  (HeadlessProject) Opening project: C:\Users\infin\AppData\Local\Temp\vic3-ghidra-refresh-20261003\vic3-rev  
+2026-10-03 21:37:49 INFO  (HeadlessAnalyzer) REPORT: Processing read-only project file: /victoria3.exe  
+2026-10-03 21:37:49 INFO  (HeadlessAnalyzer) REPORT: Execute script: ExportRefreshTree.java 'D:/cebuild/ce-custom/Output/ghidra_refresh_20261003' 'D:/cebuild/ce-custom/FakeCode/ghidra_refresh_20261003' 'D:/cebuild/ce-custom/Scripts/ghidra/refresh_names.tsv' 'discover'   
+2026-10-03 21:37:50 INFO  (HeadlessAnalyzer) SCRIPT: D:\cebuild\ce-custom\Scripts\ghidra\ExportRefreshTree.java  
+2026-10-03 21:37:50 INFO  (GhidraScript) ExportRefreshTree.java> ROOT 1411fbda0 BASE 140000000  
+2026-10-03 21:37:51 ERROR (HeadlessAnalyzer) REPORT SCRIPT ERROR:  ghidra.program.database.function.OverlappingFunctionException: Unable to create function at 1406125dc due to overlap with range [1406125f2,1406125f7]
+	at ghidra.program.database.function.FunctionManagerDB.setFunctionBody(FunctionManagerDB.java:1000)
+	at ghidra.program.database.function.FunctionDB.setBody(FunctionDB.java:352)
+	at ExportRefreshTree.prepareFunction(ExportRefreshTree.java:199)
+	at ExportRefreshTree.run(ExportRefreshTree.java:65)
+	at ghidra.app.script.GhidraScript.executeNormal(GhidraScript.java:460)
+	at ghidra.app.script.GhidraScript.doExecute(GhidraScript.java:314)
+	at ghidra.app.script.GhidraScript.execute(GhidraScript.java:290)
+	at ghidra.app.util.headless.HeadlessAnalyzer.runScript(HeadlessAnalyzer.java:585)
+	at ghidra.app.util.headless.HeadlessAnalyzer.runScriptsList(HeadlessAnalyzer.java:937)
+	at ghidra.app.util.headless.HeadlessAnalyzer.analyzeProgram(HeadlessAnalyzer.java:1093)
+	at ghidra.app.util.headless.HeadlessAnalyzer.processFileNoImport(HeadlessAnalyzer.java:1191)
+	at ghidra.app.util.headless.HeadlessAnalyzer.processFolderNoImport(HeadlessAnalyzer.java:1363)
+	at ghidra.app.util.headless.HeadlessAnalyzer.processNoImport(HeadlessAnalyzer.java:1392)
+	at ghidra.app.util.headless.HeadlessAnalyzer.processLocal(HeadlessAnalyzer.java:449)
+	at ghidra.app.util.headless.AnalyzeHeadless.launch(AnalyzeHeadless.java:199)
+	at ghidra.GhidraLauncher.launch(GhidraLauncher.java:81)
+	at ghidra.Ghidra.main(Ghidra.java:54)
+ 
+2026-10-03 21:37:51 INFO  (HeadlessAnalyzer) REPORT: Discarding changes to the following read-only file: /victoria3.exe  
+2026-10-03 21:38:34 INFO  (LoggingInitialization) Using log config file: jar:file:/D:/cebuild/ghidra/ghidra_12.1.4_PUBLIC/Ghidra/Framework/Generic/lib/Generic.jar!/generic.log4j.xml  
+2026-10-03 21:38:34 INFO  (LoggingInitialization) Using log file: D:\cebuild\ce-custom\Output\ghidra_refresh_headless.log  
+2026-10-03 21:38:34 DEBUG (GhidraObjectInputFilter) Including serial input filter: FileSystem/data/client.rmi.serial.filter  
+2026-10-03 21:38:34 INFO  (Preferences) Loading user preferences: C:\Users\infin\AppData\Roaming\ghidra\ghidra_12.1.4_PUBLIC\preferences  
+2026-10-03 21:38:34 INFO  (ClassSearcher) Searching for classes...  
+2026-10-03 21:38:35 INFO  (ClassSearcher) Class search complete (816 ms)  
+2026-10-03 21:38:35 INFO  (DefaultSSLContextInitializer) Initializing SSL Context  
+2026-10-03 21:38:35 INFO  (SecureRandomFactory) Initializing Random Number Generator...  
+2026-10-03 21:38:35 INFO  (SecureRandomFactory) Random Number Generator initialization complete: SHA1PRNG  
+2026-10-03 21:38:35 INFO  (DefaultTrustManagerFactory) Trust manager disabled, cacerts have not been set  
+2026-10-03 21:38:35 INFO  (AnalyzeHeadless) Headless startup complete (2005 ms)  
+2026-10-03 21:38:35 INFO  (ClassSearcher) Class searcher loaded 59 extension points (20 false positives)  
+2026-10-03 21:38:35 INFO  (HeadlessAnalyzer) HEADLESS Script Paths:
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\SystemEmulation\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\DecompilerDependent\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\Decompiler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\SwiftDemangler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\JVM\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\BytePatterns\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\PIC\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\DATA\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\BSim\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\FunctionID\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\PDB\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Debug\Debugger\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\Base\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\Atmel\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\FileFormats\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\8051\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\WildcardAssembler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\VersionTracking\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\GnuDemangler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\MicrosoftCodeAnalyzer\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Debug\Debugger-rmi-trace\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\PyGhidra\ghidra_scripts
+    D:\cebuild\ce-custom\Scripts\ghidra  
+2026-10-03 21:38:35 INFO  (HeadlessAnalyzer) HEADLESS: execution starts  
+2026-10-03 21:38:35 INFO  (HeadlessAnalyzer) Opening existing project: C:\Users\infin\AppData\Local\Temp\vic3-ghidra-refresh-20261003\vic3-rev  
+2026-10-03 21:38:35 INFO  (HeadlessProject) Opening project: C:\Users\infin\AppData\Local\Temp\vic3-ghidra-refresh-20261003\vic3-rev  
+2026-10-03 21:38:37 INFO  (HeadlessAnalyzer) REPORT: Processing read-only project file: /victoria3.exe  
+2026-10-03 21:38:37 INFO  (HeadlessAnalyzer) REPORT: Execute script: ExportRefreshTree.java 'D:/cebuild/ce-custom/Output/ghidra_refresh_20261003' 'D:/cebuild/ce-custom/FakeCode/ghidra_refresh_20261003' 'D:/cebuild/ce-custom/Scripts/ghidra/refresh_names.tsv' 'discover'   
+2026-10-03 21:38:38 INFO  (HeadlessAnalyzer) SCRIPT: D:\cebuild\ce-custom\Scripts\ghidra\ExportRefreshTree.java  
+2026-10-03 21:38:38 INFO  (GhidraScript) ExportRefreshTree.java> ROOT 1411fbda0 BASE 140000000  
+2026-10-03 21:39:26 INFO  (LoggingInitialization) Using log config file: jar:file:/D:/cebuild/ghidra/ghidra_12.1.4_PUBLIC/Ghidra/Framework/Generic/lib/Generic.jar!/generic.log4j.xml  
+2026-10-03 21:39:26 INFO  (LoggingInitialization) Using log file: D:\cebuild\ce-custom\Output\ghidra_refresh_headless.log  
+2026-10-03 21:39:26 DEBUG (GhidraObjectInputFilter) Including serial input filter: FileSystem/data/client.rmi.serial.filter  
+2026-10-03 21:39:26 INFO  (Preferences) Loading user preferences: C:\Users\infin\AppData\Roaming\ghidra\ghidra_12.1.4_PUBLIC\preferences  
+2026-10-03 21:39:26 INFO  (ClassSearcher) Searching for classes...  
+2026-10-03 21:39:26 INFO  (ClassSearcher) Class search complete (793 ms)  
+2026-10-03 21:39:27 INFO  (DefaultSSLContextInitializer) Initializing SSL Context  
+2026-10-03 21:39:27 INFO  (SecureRandomFactory) Initializing Random Number Generator...  
+2026-10-03 21:39:27 INFO  (SecureRandomFactory) Random Number Generator initialization complete: SHA1PRNG  
+2026-10-03 21:39:27 INFO  (DefaultTrustManagerFactory) Trust manager disabled, cacerts have not been set  
+2026-10-03 21:39:27 INFO  (AnalyzeHeadless) Headless startup complete (2048 ms)  
+2026-10-03 21:39:27 INFO  (ClassSearcher) Class searcher loaded 59 extension points (20 false positives)  
+2026-10-03 21:39:27 INFO  (HeadlessAnalyzer) HEADLESS Script Paths:
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\SystemEmulation\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\DecompilerDependent\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\Decompiler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\SwiftDemangler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\JVM\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\BytePatterns\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\PIC\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\DATA\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\BSim\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\FunctionID\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\PDB\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Debug\Debugger\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\Base\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\Atmel\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\FileFormats\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\8051\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\WildcardAssembler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\VersionTracking\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\GnuDemangler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\MicrosoftCodeAnalyzer\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Debug\Debugger-rmi-trace\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\PyGhidra\ghidra_scripts
+    D:\cebuild\ce-custom\Scripts\ghidra  
+2026-10-03 21:39:27 INFO  (HeadlessAnalyzer) HEADLESS: execution starts  
+2026-10-03 21:39:27 INFO  (HeadlessAnalyzer) Opening existing project: C:\Users\infin\AppData\Local\Temp\vic3-ghidra-refresh-20261003\vic3-rev  
+2026-10-03 21:39:27 INFO  (HeadlessProject) Opening project: C:\Users\infin\AppData\Local\Temp\vic3-ghidra-refresh-20261003\vic3-rev  
+2026-10-03 21:39:27 INFO  (LocalBufferFile) Removed old presave file: C:\Users\infin\AppData\Local\Temp\vic3-ghidra-refresh-20261003\vic3-rev.rep\idata\00\~00000000.db\tmp11971277977082703896.ps  
+2026-10-03 21:39:29 INFO  (HeadlessAnalyzer) REPORT: Processing read-only project file: /victoria3.exe  
+2026-10-03 21:39:29 INFO  (HeadlessAnalyzer) REPORT: Execute script: ExportRefreshTree.java 'D:/cebuild/ce-custom/Output/ghidra_refresh_20261003' 'D:/cebuild/ce-custom/FakeCode/ghidra_refresh_20261003' 'D:/cebuild/ce-custom/Scripts/ghidra/refresh_names.tsv' 'discover'   
+2026-10-03 21:39:30 INFO  (HeadlessAnalyzer) SCRIPT: D:\cebuild\ce-custom\Scripts\ghidra\ExportRefreshTree.java  
+2026-10-03 21:39:30 INFO  (GhidraScript) ExportRefreshTree.java> ROOT 1411fbda0 BASE 140000000  
+2026-10-03 21:39:31 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 100 QUEUED 100  
+2026-10-03 21:39:31 ERROR (HeadlessAnalyzer) REPORT SCRIPT ERROR:  ghidra.program.database.function.OverlappingFunctionException: Unable to create function at 142934027 due to overlap with range [142934028,14293402c]
+	at ghidra.program.database.function.FunctionManagerDB.setFunctionBody(FunctionManagerDB.java:1000)
+	at ghidra.program.database.function.FunctionDB.setBody(FunctionDB.java:352)
+	at ExportRefreshTree.prepareFunction(ExportRefreshTree.java:222)
+	at ExportRefreshTree.run(ExportRefreshTree.java:65)
+	at ghidra.app.script.GhidraScript.executeNormal(GhidraScript.java:460)
+	at ghidra.app.script.GhidraScript.doExecute(GhidraScript.java:314)
+	at ghidra.app.script.GhidraScript.execute(GhidraScript.java:290)
+	at ghidra.app.util.headless.HeadlessAnalyzer.runScript(HeadlessAnalyzer.java:585)
+	at ghidra.app.util.headless.HeadlessAnalyzer.runScriptsList(HeadlessAnalyzer.java:937)
+	at ghidra.app.util.headless.HeadlessAnalyzer.analyzeProgram(HeadlessAnalyzer.java:1093)
+	at ghidra.app.util.headless.HeadlessAnalyzer.processFileNoImport(HeadlessAnalyzer.java:1191)
+	at ghidra.app.util.headless.HeadlessAnalyzer.processFolderNoImport(HeadlessAnalyzer.java:1363)
+	at ghidra.app.util.headless.HeadlessAnalyzer.processNoImport(HeadlessAnalyzer.java:1392)
+	at ghidra.app.util.headless.HeadlessAnalyzer.processLocal(HeadlessAnalyzer.java:449)
+	at ghidra.app.util.headless.AnalyzeHeadless.launch(AnalyzeHeadless.java:199)
+	at ghidra.GhidraLauncher.launch(GhidraLauncher.java:81)
+	at ghidra.Ghidra.main(Ghidra.java:54)
+ 
+2026-10-03 21:39:31 INFO  (HeadlessAnalyzer) REPORT: Discarding changes to the following read-only file: /victoria3.exe  
+2026-10-03 21:39:55 INFO  (LoggingInitialization) Using log config file: jar:file:/D:/cebuild/ghidra/ghidra_12.1.4_PUBLIC/Ghidra/Framework/Generic/lib/Generic.jar!/generic.log4j.xml  
+2026-10-03 21:39:55 INFO  (LoggingInitialization) Using log file: D:\cebuild\ce-custom\Output\ghidra_refresh_headless.log  
+2026-10-03 21:39:55 DEBUG (GhidraObjectInputFilter) Including serial input filter: FileSystem/data/client.rmi.serial.filter  
+2026-10-03 21:39:55 INFO  (Preferences) Loading user preferences: C:\Users\infin\AppData\Roaming\ghidra\ghidra_12.1.4_PUBLIC\preferences  
+2026-10-03 21:39:55 INFO  (ClassSearcher) Searching for classes...  
+2026-10-03 21:39:56 INFO  (ClassSearcher) Class search complete (802 ms)  
+2026-10-03 21:39:56 INFO  (DefaultSSLContextInitializer) Initializing SSL Context  
+2026-10-03 21:39:56 INFO  (SecureRandomFactory) Initializing Random Number Generator...  
+2026-10-03 21:39:56 INFO  (SecureRandomFactory) Random Number Generator initialization complete: SHA1PRNG  
+2026-10-03 21:39:56 INFO  (DefaultTrustManagerFactory) Trust manager disabled, cacerts have not been set  
+2026-10-03 21:39:56 INFO  (AnalyzeHeadless) Headless startup complete (1917 ms)  
+2026-10-03 21:39:56 INFO  (ClassSearcher) Class searcher loaded 59 extension points (20 false positives)  
+2026-10-03 21:39:56 INFO  (HeadlessAnalyzer) HEADLESS Script Paths:
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\SystemEmulation\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\DecompilerDependent\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\Decompiler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\SwiftDemangler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\JVM\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\BytePatterns\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\PIC\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\DATA\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\BSim\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\FunctionID\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\PDB\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Debug\Debugger\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\Base\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\Atmel\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\FileFormats\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\8051\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\WildcardAssembler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\VersionTracking\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\GnuDemangler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\MicrosoftCodeAnalyzer\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Debug\Debugger-rmi-trace\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\PyGhidra\ghidra_scripts
+    D:\cebuild\ce-custom\Scripts\ghidra  
+2026-10-03 21:39:56 INFO  (HeadlessAnalyzer) HEADLESS: execution starts  
+2026-10-03 21:39:56 INFO  (HeadlessAnalyzer) Opening existing project: C:\Users\infin\AppData\Local\Temp\vic3-ghidra-refresh-20261003\vic3-rev  
+2026-10-03 21:39:56 INFO  (HeadlessProject) Opening project: C:\Users\infin\AppData\Local\Temp\vic3-ghidra-refresh-20261003\vic3-rev  
+2026-10-03 21:39:58 INFO  (HeadlessAnalyzer) REPORT: Processing read-only project file: /victoria3.exe  
+2026-10-03 21:39:58 INFO  (HeadlessAnalyzer) REPORT: Execute script: ExportRefreshTree.java 'D:/cebuild/ce-custom/Output/ghidra_refresh_20261003' 'D:/cebuild/ce-custom/FakeCode/ghidra_refresh_20261003' 'D:/cebuild/ce-custom/Scripts/ghidra/refresh_names.tsv' 'discover'   
+2026-10-03 21:39:59 INFO  (HeadlessAnalyzer) SCRIPT: D:\cebuild\ce-custom\Scripts\ghidra\ExportRefreshTree.java  
+2026-10-03 21:39:59 INFO  (GhidraScript) ExportRefreshTree.java> ROOT 1411fbda0 BASE 140000000  
+2026-10-03 21:40:00 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 100 QUEUED 100  
+2026-10-03 21:40:00 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 200 QUEUED 100  
+2026-10-03 21:40:01 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 300 QUEUED 185  
+2026-10-03 21:40:01 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 400 QUEUED 222  
+2026-10-03 21:40:01 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 500 QUEUED 188  
+2026-10-03 21:40:01 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 600 QUEUED 189  
+2026-10-03 21:40:01 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 700 QUEUED 168  
+2026-10-03 21:40:01 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 800 QUEUED 159  
+2026-10-03 21:40:02 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 900 QUEUED 172  
+2026-10-03 21:40:02 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 1000 QUEUED 156  
+2026-10-03 21:40:02 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 1100 QUEUED 144  
+2026-10-03 21:40:02 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 1200 QUEUED 91  
+2026-10-03 21:40:02 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 1300 QUEUED 53  
+2026-10-03 21:40:02 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 1400 QUEUED 35  
+2026-10-03 21:40:02 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 1500 QUEUED 6  
+2026-10-03 21:40:02 INFO  (GhidraScript) ExportRefreshTree.java> GRAPH_DONE FUNCTIONS 1525 EDGES 8381  
+2026-10-03 21:40:03 INFO  (HeadlessAnalyzer) REPORT: Discarding changes to the following read-only file: /victoria3.exe  
+2026-10-03 21:41:19 INFO  (LoggingInitialization) Using log config file: jar:file:/D:/cebuild/ghidra/ghidra_12.1.4_PUBLIC/Ghidra/Framework/Generic/lib/Generic.jar!/generic.log4j.xml  
+2026-10-03 21:41:19 INFO  (LoggingInitialization) Using log file: D:\cebuild\ce-custom\Output\ghidra_refresh_headless.log  
+2026-10-03 21:41:19 DEBUG (GhidraObjectInputFilter) Including serial input filter: FileSystem/data/client.rmi.serial.filter  
+2026-10-03 21:41:19 INFO  (Preferences) Loading user preferences: C:\Users\infin\AppData\Roaming\ghidra\ghidra_12.1.4_PUBLIC\preferences  
+2026-10-03 21:41:19 INFO  (ClassSearcher) Searching for classes...  
+2026-10-03 21:41:20 INFO  (ClassSearcher) Class search complete (860 ms)  
+2026-10-03 21:41:20 INFO  (DefaultSSLContextInitializer) Initializing SSL Context  
+2026-10-03 21:41:20 INFO  (SecureRandomFactory) Initializing Random Number Generator...  
+2026-10-03 21:41:20 INFO  (SecureRandomFactory) Random Number Generator initialization complete: SHA1PRNG  
+2026-10-03 21:41:20 INFO  (DefaultTrustManagerFactory) Trust manager disabled, cacerts have not been set  
+2026-10-03 21:41:20 INFO  (AnalyzeHeadless) Headless startup complete (1969 ms)  
+2026-10-03 21:41:20 INFO  (ClassSearcher) Class searcher loaded 59 extension points (20 false positives)  
+2026-10-03 21:41:21 INFO  (HeadlessAnalyzer) HEADLESS Script Paths:
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\SystemEmulation\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\DecompilerDependent\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\Decompiler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\SwiftDemangler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\JVM\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\BytePatterns\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\PIC\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\DATA\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\BSim\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\FunctionID\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\PDB\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Debug\Debugger\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\Base\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\Atmel\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\FileFormats\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\8051\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\WildcardAssembler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\VersionTracking\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\GnuDemangler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\MicrosoftCodeAnalyzer\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Debug\Debugger-rmi-trace\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\PyGhidra\ghidra_scripts
+    D:\cebuild\ce-custom\Scripts\ghidra  
+2026-10-03 21:41:21 INFO  (HeadlessAnalyzer) HEADLESS: execution starts  
+2026-10-03 21:41:21 INFO  (HeadlessAnalyzer) Opening existing project: C:\Users\infin\AppData\Local\Temp\vic3-ghidra-refresh-20261003\vic3-rev  
+2026-10-03 21:41:21 INFO  (HeadlessProject) Opening project: C:\Users\infin\AppData\Local\Temp\vic3-ghidra-refresh-20261003\vic3-rev  
+2026-10-03 21:41:22 INFO  (HeadlessAnalyzer) REPORT: Processing read-only project file: /victoria3.exe  
+2026-10-03 21:41:22 INFO  (HeadlessAnalyzer) REPORT: Execute script: ExportRefreshTree.java 'D:/cebuild/ce-custom/Output/ghidra_refresh_20261003' 'D:/cebuild/ce-custom/FakeCode/ghidra_refresh_20261003' 'D:/cebuild/ce-custom/Scripts/ghidra/refresh_names.tsv'   
+2026-10-03 21:41:23 INFO  (HeadlessAnalyzer) SCRIPT: D:\cebuild\ce-custom\Scripts\ghidra\ExportRefreshTree.java  
+2026-10-03 21:41:24 INFO  (GhidraScript) ExportRefreshTree.java> ROOT 1411fbda0 BASE 140000000  
+2026-10-03 21:41:24 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 100 QUEUED 100  
+2026-10-03 21:41:24 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 200 QUEUED 101  
+2026-10-03 21:41:25 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 300 QUEUED 186  
+2026-10-03 21:41:25 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 400 QUEUED 223  
+2026-10-03 21:41:25 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 500 QUEUED 189  
+2026-10-03 21:41:25 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 600 QUEUED 190  
+2026-10-03 21:41:25 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 700 QUEUED 169  
+2026-10-03 21:41:26 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 800 QUEUED 159  
+2026-10-03 21:41:26 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 900 QUEUED 173  
+2026-10-03 21:41:26 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 1000 QUEUED 157  
+2026-10-03 21:41:26 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 1100 QUEUED 143  
+2026-10-03 21:41:26 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 1200 QUEUED 91  
+2026-10-03 21:41:26 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 1300 QUEUED 53  
+2026-10-03 21:41:26 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 1400 QUEUED 35  
+2026-10-03 21:41:26 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 1500 QUEUED 6  
+2026-10-03 21:41:26 INFO  (GhidraScript) ExportRefreshTree.java> GRAPH_DONE FUNCTIONS 1526 EDGES 8382  
+2026-10-03 21:41:34 INFO  (GhidraScript) ExportRefreshTree.java> EXPORT 100/1526 LAST 1026830  
+2026-10-03 21:41:39 WARN  (DecompileCallback) Decompiling 140c3cac0, pcode error at 140c3ce5c: Unable to resolve constructor at 140c3ce5c  
+2026-10-03 21:41:40 INFO  (GhidraScript) ExportRefreshTree.java> EXPORT 200/1526 LAST 417D4B0  
+2026-10-03 21:41:47 INFO  (GhidraScript) ExportRefreshTree.java> EXPORT 300/1526 LAST C4A5B0  
+2026-10-03 21:41:53 INFO  (GhidraScript) ExportRefreshTree.java> EXPORT 400/1526 LAST 3781410  
+2026-10-03 21:41:59 INFO  (GhidraScript) ExportRefreshTree.java> EXPORT 500/1526 LAST 13FA180  
+2026-10-03 21:42:05 INFO  (GhidraScript) ExportRefreshTree.java> EXPORT 600/1526 LAST 2CBDAD0  
+2026-10-03 21:42:12 INFO  (GhidraScript) ExportRefreshTree.java> EXPORT 700/1526 LAST 632000  
+2026-10-03 21:42:18 INFO  (GhidraScript) ExportRefreshTree.java> EXPORT 800/1526 LAST 3A51E30  
+2026-10-03 21:42:24 INFO  (GhidraScript) ExportRefreshTree.java> EXPORT 900/1526 LAST 4131A7C  
+2026-10-03 21:42:31 INFO  (GhidraScript) ExportRefreshTree.java> EXPORT 1000/1526 LAST 13C326E  
+2026-10-03 21:42:37 INFO  (GhidraScript) ExportRefreshTree.java> EXPORT 1100/1526 LAST 412626C  
+2026-10-03 21:42:43 INFO  (GhidraScript) ExportRefreshTree.java> EXPORT 1200/1526 LAST 4153428  
+2026-10-03 21:42:49 INFO  (GhidraScript) ExportRefreshTree.java> EXPORT 1300/1526 LAST 41288E0  
+2026-10-03 21:42:55 INFO  (GhidraScript) ExportRefreshTree.java> EXPORT 1400/1526 LAST 412AC00  
+2026-10-03 21:43:01 INFO  (GhidraScript) ExportRefreshTree.java> EXPORT 1500/1526 LAST 4169F98  
+2026-10-03 21:43:02 INFO  (GhidraScript) ExportRefreshTree.java> EXPORT 1526/1526 LAST 3AD4E21  
+2026-10-03 21:43:02 INFO  (GhidraScript) ExportRefreshTree.java> EXPORT_DONE 1526  
+2026-10-03 21:43:02 INFO  (HeadlessAnalyzer) REPORT: Discarding changes to the following read-only file: /victoria3.exe  
+2026-10-03 21:46:59 INFO  (LoggingInitialization) Using log config file: jar:file:/D:/cebuild/ghidra/ghidra_12.1.4_PUBLIC/Ghidra/Framework/Generic/lib/Generic.jar!/generic.log4j.xml  
+2026-10-03 21:46:59 INFO  (LoggingInitialization) Using log file: D:\cebuild\ce-custom\Output\ghidra_refresh_headless.log  
+2026-10-03 21:46:59 DEBUG (GhidraObjectInputFilter) Including serial input filter: FileSystem/data/client.rmi.serial.filter  
+2026-10-03 21:46:59 INFO  (Preferences) Loading user preferences: C:\Users\infin\AppData\Roaming\ghidra\ghidra_12.1.4_PUBLIC\preferences  
+2026-10-03 21:46:59 INFO  (ClassSearcher) Searching for classes...  
+2026-10-03 21:47:00 INFO  (ClassSearcher) Class search complete (825 ms)  
+2026-10-03 21:47:00 INFO  (DefaultSSLContextInitializer) Initializing SSL Context  
+2026-10-03 21:47:00 INFO  (SecureRandomFactory) Initializing Random Number Generator...  
+2026-10-03 21:47:00 INFO  (SecureRandomFactory) Random Number Generator initialization complete: SHA1PRNG  
+2026-10-03 21:47:00 INFO  (DefaultTrustManagerFactory) Trust manager disabled, cacerts have not been set  
+2026-10-03 21:47:00 INFO  (AnalyzeHeadless) Headless startup complete (2103 ms)  
+2026-10-03 21:47:00 INFO  (ClassSearcher) Class searcher loaded 59 extension points (20 false positives)  
+2026-10-03 21:47:01 INFO  (HeadlessAnalyzer) HEADLESS Script Paths:
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\SystemEmulation\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\DecompilerDependent\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\Decompiler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\SwiftDemangler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\JVM\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\BytePatterns\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\PIC\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\DATA\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\BSim\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\FunctionID\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\PDB\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Debug\Debugger\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\Base\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\Atmel\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\FileFormats\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\8051\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\WildcardAssembler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\VersionTracking\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\GnuDemangler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\MicrosoftCodeAnalyzer\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Debug\Debugger-rmi-trace\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\PyGhidra\ghidra_scripts
+    D:\cebuild\ce-custom\Scripts\ghidra  
+2026-10-03 21:47:01 INFO  (HeadlessAnalyzer) HEADLESS: execution starts  
+2026-10-03 21:47:01 INFO  (HeadlessAnalyzer) Opening existing project: C:\Users\infin\AppData\Local\Temp\vic3-ghidra-refresh-20261003\vic3-rev  
+2026-10-03 21:47:01 INFO  (HeadlessProject) Opening project: C:\Users\infin\AppData\Local\Temp\vic3-ghidra-refresh-20261003\vic3-rev  
+2026-10-03 21:47:02 INFO  (HeadlessAnalyzer) REPORT: Processing read-only project file: /victoria3.exe  
+2026-10-03 21:47:02 INFO  (HeadlessAnalyzer) REPORT: Execute script: ExportRefreshTree.java 'D:/cebuild/ce-custom/Output/ghidra_refresh_20261003' 'D:/cebuild/ce-custom/FakeCode/ghidra_refresh_20261003' 'D:/cebuild/ce-custom/Scripts/ghidra/refresh_names.tsv'   
+2026-10-03 21:47:03 ERROR (HeadlessAnalyzer) ExportRefreshTree.java:97: error: incompatible types: ghidra.program.model.address.Address cannot be converted to ghidra.program.model.symbol.Symbol
+                        ExternalLocation external = currentProgram.getExternalManager().getExternalLocation(target);
+                                                                                                            ^
+Note: Some messages have been simplified; recompile with -Xdiags:verbose to get full output
+skipping D:\cebuild\ce-custom\Scripts\ghidra\ExportRefreshTree.java
+  
+2026-10-03 21:47:03 ERROR (HeadlessAnalyzer) REPORT SCRIPT ERROR: ExportRefreshTree.java : The class could not be found. It must be the public class of the .java file: ExportRefreshTree not found by e9d8c435 [1] ghidra.app.script.GhidraScriptLoadException: The class could not be found. It must be the public class of the .java file: ExportRefreshTree not found by e9d8c435 [1]
+	at ghidra.app.script.JavaScriptProvider.getScriptInstance(JavaScriptProvider.java:114)
+	at ghidra.app.util.headless.HeadlessAnalyzer.runScriptsList(HeadlessAnalyzer.java:917)
+	at ghidra.app.util.headless.HeadlessAnalyzer.analyzeProgram(HeadlessAnalyzer.java:1093)
+	at ghidra.app.util.headless.HeadlessAnalyzer.processFileNoImport(HeadlessAnalyzer.java:1191)
+	at ghidra.app.util.headless.HeadlessAnalyzer.processFolderNoImport(HeadlessAnalyzer.java:1363)
+	at ghidra.app.util.headless.HeadlessAnalyzer.processNoImport(HeadlessAnalyzer.java:1392)
+	at ghidra.app.util.headless.HeadlessAnalyzer.processLocal(HeadlessAnalyzer.java:449)
+	at ghidra.app.util.headless.AnalyzeHeadless.launch(AnalyzeHeadless.java:199)
+	at ghidra.GhidraLauncher.launch(GhidraLauncher.java:81)
+	at ghidra.Ghidra.main(Ghidra.java:54)
+Caused by: java.lang.ClassNotFoundException: ExportRefreshTree not found by e9d8c435 [1]
+	at org.apache.felix.framework.BundleWiringImpl.findClassOrResourceByDelegation(BundleWiringImpl.java:1591)
+	at org.apache.felix.framework.BundleWiringImpl.access$300(BundleWiringImpl.java:79)
+	at org.apache.felix.framework.BundleWiringImpl$BundleClassLoader.loadClass(BundleWiringImpl.java:1976)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	at org.apache.felix.framework.Felix.loadBundleClass(Felix.java:2116)
+	at org.apache.felix.framework.BundleImpl.loadClass(BundleImpl.java:986)
+	at ghidra.app.script.JavaScriptProvider.loadClass(JavaScriptProvider.java:166)
+	at ghidra.app.script.JavaScriptProvider.getScriptInstance(JavaScriptProvider.java:97)
+	... 9 more
+ 
+2026-10-03 21:49:49 INFO  (LoggingInitialization) Using log config file: jar:file:/D:/cebuild/ghidra/ghidra_12.1.4_PUBLIC/Ghidra/Framework/Generic/lib/Generic.jar!/generic.log4j.xml  
+2026-10-03 21:49:49 INFO  (LoggingInitialization) Using log file: D:\cebuild\ce-custom\Output\ghidra_refresh_headless.log  
+2026-10-03 21:49:49 DEBUG (GhidraObjectInputFilter) Including serial input filter: FileSystem/data/client.rmi.serial.filter  
+2026-10-03 21:49:49 INFO  (Preferences) Loading user preferences: C:\Users\infin\AppData\Roaming\ghidra\ghidra_12.1.4_PUBLIC\preferences  
+2026-10-03 21:49:49 INFO  (ClassSearcher) Searching for classes...  
+2026-10-03 21:49:50 INFO  (ClassSearcher) Class search complete (811 ms)  
+2026-10-03 21:49:50 INFO  (DefaultSSLContextInitializer) Initializing SSL Context  
+2026-10-03 21:49:50 INFO  (SecureRandomFactory) Initializing Random Number Generator...  
+2026-10-03 21:49:50 INFO  (SecureRandomFactory) Random Number Generator initialization complete: SHA1PRNG  
+2026-10-03 21:49:50 INFO  (DefaultTrustManagerFactory) Trust manager disabled, cacerts have not been set  
+2026-10-03 21:49:51 INFO  (AnalyzeHeadless) Headless startup complete (1923 ms)  
+2026-10-03 21:49:51 INFO  (ClassSearcher) Class searcher loaded 59 extension points (20 false positives)  
+2026-10-03 21:49:51 INFO  (HeadlessAnalyzer) HEADLESS Script Paths:
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\SystemEmulation\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\DecompilerDependent\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\Decompiler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\SwiftDemangler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\JVM\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\BytePatterns\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\PIC\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\DATA\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\BSim\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\FunctionID\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\PDB\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Debug\Debugger\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\Base\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\Atmel\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\FileFormats\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Processors\8051\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\WildcardAssembler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\VersionTracking\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\GnuDemangler\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\MicrosoftCodeAnalyzer\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Debug\Debugger-rmi-trace\ghidra_scripts
+    D:\cebuild\ghidra\ghidra_12.1.4_PUBLIC\Ghidra\Features\PyGhidra\ghidra_scripts
+    D:\cebuild\ce-custom\Scripts\ghidra  
+2026-10-03 21:49:51 INFO  (HeadlessAnalyzer) HEADLESS: execution starts  
+2026-10-03 21:49:51 INFO  (HeadlessAnalyzer) Opening existing project: C:\Users\infin\AppData\Local\Temp\vic3-ghidra-refresh-20261003\vic3-rev  
+2026-10-03 21:49:51 INFO  (HeadlessProject) Opening project: C:\Users\infin\AppData\Local\Temp\vic3-ghidra-refresh-20261003\vic3-rev  
+2026-10-03 21:49:52 INFO  (HeadlessAnalyzer) REPORT: Processing read-only project file: /victoria3.exe  
+2026-10-03 21:49:52 INFO  (HeadlessAnalyzer) REPORT: Execute script: ExportRefreshTree.java 'D:/cebuild/ce-custom/Output/ghidra_refresh_20261003' 'D:/cebuild/ce-custom/FakeCode/ghidra_refresh_20261003' 'D:/cebuild/ce-custom/Scripts/ghidra/refresh_names.tsv'   
+2026-10-03 21:49:54 INFO  (HeadlessAnalyzer) SCRIPT: D:\cebuild\ce-custom\Scripts\ghidra\ExportRefreshTree.java  
+2026-10-03 21:49:54 INFO  (GhidraScript) ExportRefreshTree.java> ROOT 1411fbda0 BASE 140000000  
+2026-10-03 21:49:54 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 100 QUEUED 106  
+2026-10-03 21:49:55 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 200 QUEUED 116  
+2026-10-03 21:49:55 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 300 QUEUED 195  
+2026-10-03 21:49:55 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 400 QUEUED 214  
+2026-10-03 21:49:55 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 500 QUEUED 198  
+2026-10-03 21:49:55 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 600 QUEUED 187  
+2026-10-03 21:49:56 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 700 QUEUED 192  
+2026-10-03 21:49:56 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 800 QUEUED 157  
+2026-10-03 21:49:56 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 900 QUEUED 137  
+2026-10-03 21:49:56 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 1000 QUEUED 178  
+2026-10-03 21:49:56 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 1100 QUEUED 150  
+2026-10-03 21:49:56 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 1200 QUEUED 111  
+2026-10-03 21:49:57 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 1300 QUEUED 69  
+2026-10-03 21:49:57 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 1400 QUEUED 51  
+2026-10-03 21:49:57 INFO  (GhidraScript) ExportRefreshTree.java> DISCOVER 1500 QUEUED 24  
+2026-10-03 21:49:57 INFO  (GhidraScript) ExportRefreshTree.java> GRAPH_DONE FUNCTIONS 1588 EDGES 8382  
+2026-10-03 21:49:57 INFO  (GhidraScript) ExportRefreshTree.java> EXPORT 100/1588 LAST 417D4C0  
+2026-10-03 21:49:57 INFO  (GhidraScript) ExportRefreshTree.java> EXPORT 200/1588 LAST 417D4B0  
+2026-10-03 21:49:57 INFO  (GhidraScript) ExportRefreshTree.java> EXPORT 300/1588 LAST C4A5B0  
+2026-10-03 21:49:57 INFO  (GhidraScript) ExportRefreshTree.java> EXPORT 400/1588 LAST 3A24150  
+2026-10-03 21:49:57 INFO  (GhidraScript) ExportRefreshTree.java> EXPORT 500/1588 LAST 13FA180  
+2026-10-03 21:49:57 INFO  (GhidraScript) ExportRefreshTree.java> EXPORT 600/1588 LAST 2CBE550  
+2026-10-03 21:49:57 INFO  (GhidraScript) ExportRefreshTree.java> EXPORT 700/1588 LAST 19DF170  
+2026-10-03 21:49:57 INFO  (GhidraScript) ExportRefreshTree.java> EXPORT 800/1588 LAST 3A216F0  
+2026-10-03 21:49:57 INFO  (GhidraScript) ExportRefreshTree.java> EXPORT 900/1588 LAST 2B69A30  
+2026-10-03 21:49:57 INFO  (GhidraScript) ExportRefreshTree.java> EXPORT 1000/1588 LAST 13C3268  
+2026-10-03 21:49:57 INFO  (GhidraScript) ExportRefreshTree.java> EXPORT 1100/1588 LAST 4120D70  
+2026-10-03 21:49:57 INFO  (GhidraScript) ExportRefreshTree.java> EXPORT 1200/1588 LAST 4153428  
+2026-10-03 21:49:57 INFO  (GhidraScript) ExportRefreshTree.java> EXPORT 1300/1588 LAST 4128F20  
+2026-10-03 21:49:57 INFO  (GhidraScript) ExportRefreshTree.java> EXPORT 1400/1588 LAST 4129CB0  
+2026-10-03 21:49:57 INFO  (GhidraScript) ExportRefreshTree.java> EXPORT 1500/1588 LAST 4169F98  
+2026-10-03 21:49:57 INFO  (GhidraScript) ExportRefreshTree.java> EXPORT_DONE 1526  
+2026-10-03 21:49:57 INFO  (HeadlessAnalyzer) REPORT: Discarding changes to the following read-only file: /victoria3.exe  
