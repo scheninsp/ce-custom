@@ -7,21 +7,31 @@
 # Refresh ->ReadOrComputeDirectionalTradeAdvantage（+11FBDA0）
 
 ## ReadOrComputeDirectionalTradeAdvantage 
-读取指定州、商品和贸易方向的绝对贸易优势
-->
-BuildDirectionalTradeContext
-功能：按方向和商品构造贸易优势计算上下文
-+
-ComputeAbsoluteTradeAdvantage
-功能：把定点优势中间值写入方向商品缓存。
-->
-BuildStateGoodsDirectionValue
-功能：从州/市场、商品和方向构造绝对优势候选值。
-BuildMarketTradeFraction
-功能：从州关联市场对象读取贸易份额相关输入，并生成定点修正值。
+读取或计算指定州、商品和贸易方向的绝对贸易优势
 
 绝对贸易优势会被用来计算相对贸易优势，然后决定商品进口价格。
 来源于开发日志和wiki猜测（Docs\vic3_doc_copy\trade_center_model1.md）
+
+（1）计算X州贸易中心的单位绝对贸易优势 TA_raw
+TA_raw = B + Σ AdvantageContribution_k
+B = 100 基础值
+AdvantageContribution_k 各种加成
+
+（2）计算贸易中心的相对贸易优势 r
+单个 X 贸易中心的加权优势为：
+W_tc = TA_tc × Q_tc
+Q_tc：某个贸易中心，对某一种商品、在某一个贸易方向（进口或出口）上的交易量
+
+同一商品、同一贸易方向下，全球加权优势为：
+W_total = Σ(TA_j × Q_j)
+
+优势份额和交易量份额分别为：
+R_share = (TA_tc × Q_tc) / Σ(TA_j × Q_j)
+V_share = Q_tc / ΣQ_j
+
+最终计算得当前 X 贸易中心的相对贸易优势为：
+RelativeAdvantage = R_share / V_share - 1
+
 
 # Refresh ->UpdateCandidateShortage (UpdateCandidatePartA，+11FBA60)
 // 功能：计算候选商品的短缺指标，仅对进口商品返回非0值
@@ -29,17 +39,36 @@ BuildMarketTradeFraction
 shortage_unclamped = 1 - (supply/demand) / 0.5
 shortage = clamp(shortage_unclamped, 0, 0.5)
 
+
 # Refresh ->UpdateCandidateRevenue (UpdateCandidatePartB,+11FC080)
 // 功能：按增加或减少模式准备收益计算上下文，计算单位净收益和基础收益。
 计算单位净收益 `p`
 还会返回本次调整量的基础收益 `R = q × p`
 这份伪代码没有展开价差和单位净收益的内部公式。
 
+Refresh → UpdateCandidatePartB / UpdateCandidateRevenue（+11FC080）→ CalculateDirectionalPriceDifference（+140A6B0） 内部
+
+使用相对贸易优势 RelativeAdvantage 计算修正过的进出口成交价 
+r = RelativeAdvantage
+M = 1 + 0.25 × r
+出口成交价 P_export = P_world × M
+进口成交价 P_import = P_world / M
+P_world : 当前商品的世界市场价格
+
+修正后的进出口价格
+  → 方向价差 ΔP
+  → 单位净收益 p
+  → 基础收益 R = q × p
+
+
 # Refresh ->CalculateDesirability (+11FC320)
 // 功能：检查候选数量限制，并合成最终意愿评分。
 参考（`Docs\important_notes\刷新候选函数评分影响因子分析.md`）
 
 本市场方向量超过外部反方向可承接量的两倍时，候选直接无效
+
+R：基础收益
+
 D ≈ R
    - 25 × max(有效关税率, 0)
    + 补助差额评分

@@ -9,6 +9,7 @@ CheatEngine 7.7 安装路径在 `C:\Program Files\Cheat Engine`
 
 ### CheatEngine MCP
 CheatEngine MCP 以编译好的 dll 插件形式嵌入到 CheatEngine 软件中。其源码在 `D:\cebuild\CheatEngine.Mcp`，但版本可能有小的差别。
+`debugger_get_status` 的 `stateValid=false` 问题已经在 `get_stacktrace_register_at_breakpoint.py`采集流程中通过固定只读 Lua 查询解决，可以参考。
 
 ### Victoria3 游戏
 victoria3 游戏路径在 `D:\Games\Victoria3\Victoria 3`。其中的 `D:\Games\Victoria3\Victoria 3\Docs` 包含了一些游戏功能文档。
