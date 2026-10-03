@@ -1,0 +1,374 @@
+{
+  "schemaVersion": 1,
+  "operation": "lua",
+  "instanceId": "ce-72480-42f4ba0154dd4fbd8087223e0f808fda",
+  "request": {
+    "source": "-- 只读核对暂停现场、减少调用点与已有断点；不继续游戏。\nlocal context=debug_getCurrentContextTable(false)\nlocal addresses={}\nfor _,address in ipairs(debug_getBreakpointList() or {}) do addresses[#addresses+1]=string.format('%X',address) end\nreturn {pid=getOpenedProcessID(),stopped=type(context)=='table',\n    rip=type(context)=='table' and string.format('%X',context.RIP) or '',\n    addresses=addresses,removeInstruction=disassemble(getAddress('victoria3.exe+11FAF69')),\n    goodsId=readInteger(0x3A4012E4A60+0x10),goodsName=readString(0x3A4012E4A60+0x18,5,false)}",
+    "sourceFile": null
+  },
+  "actionAttempted": true,
+  "hostEffect": "completed",
+  "baseline": {
+    "info": {
+      "epoch": 1,
+      "hostVersion": "CheatEngineRuntimeVersionInfo { CheatEngineVersion = 7.7.0.10621, QualifiedCheatEngineBaseline = 7.7.0.10621, ClientAssemblyVersion = 1.0.0.0, SdkAssemblyVersion = 2.0.0.0, SdkPackageVersion = 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696, IsReviewedSdkPackage = True, IsOnQualifiedCheatEngineLine = True }",
+      "platform": "CheatEngineRuntimePlatformInfo { HostOperatingSystem = Windows, HostArchitecture = X64, CheatEngineBitness = CheatEngine.SDK.Engine.Runtime.PointerSize, TargetBackend = LocalProcess, TargetArchitecture = X64, TargetBitness = CheatEngine.SDK.Engine.Runtime.PointerSize, TargetAbi = Windows, TargetIsAndroid = False, ConfiguredPointerSizeBytes = 8, ConfiguredPointerSize = CheatEngine.SDK.Engine.Runtime.PointerSize, ConfiguredPointerSizeDiffersFromBitness = False }",
+      "pluginVersion": "2.0.0.0",
+      "pluginFileName": "CheatEngine.Mcp.dll",
+      "runtimeFileName": "CheatEngine.Mcp.dll",
+      "applicationName": "CheatEngine.Mcp",
+      "capabilities": [
+        {
+          "name": "Client.ProcessSelection",
+          "state": "Unknown",
+          "isAvailable": false,
+          "reason": "No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple.",
+          "evidence": "ClientCapabilityEvidence { Implementation = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client composes an operational adapter for this capability., IsSatisfied = True }, Package = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The loaded CheatEngine.SDK.Engine 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is exactly the reviewed package this Client build consumed (NuGet content hash NLEdZYJ9LKW3EFNB4X5snKCQf7ZS86GkCQ+El7o+S1XQcxHQGjS45Q1ap8lfjQuIwm004mQ3TPxo+ph1yvRrlQ==, read from the lock file at build time)., IsSatisfied = True }, Host = ClientCapabilityEvidenceGate { State = Satisfied, Reason = CheatEngine.SDK observed the selected-process primitive (Process.Current) in this snapshot., IsSatisfied = True }, LiveQualification = ClientCapabilityEvidenceGate { State = Unknown, Reason = No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple., IsSatisfied = False }, Policy = ClientCapabilityEvidenceGate { State = Satisfied, Reason = This capability has no additional activation policy opt-in., IsSatisfied = True }, Lifetime = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client activation is current., IsSatisfied = True }, AvailabilityState = Unknown, EffectiveReason = No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple., EffectiveReasonCode = LiveQualification }"
+        },
+        {
+          "name": "Client.TypedMemory",
+          "state": "Unknown",
+          "isAvailable": false,
+          "reason": "The runtime snapshot does not probe every host primitive required by this capability.",
+          "evidence": "ClientCapabilityEvidence { Implementation = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client composes an operational adapter for this capability., IsSatisfied = True }, Package = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The loaded CheatEngine.SDK.Engine 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is exactly the reviewed package this Client build consumed (NuGet content hash NLEdZYJ9LKW3EFNB4X5snKCQf7ZS86GkCQ+El7o+S1XQcxHQGjS45Q1ap8lfjQuIwm004mQ3TPxo+ph1yvRrlQ==, read from the lock file at build time)., IsSatisfied = True }, Host = ClientCapabilityEvidenceGate { State = Unknown, Reason = The runtime snapshot does not probe every host primitive required by this capability., IsSatisfied = False }, LiveQualification = ClientCapabilityEvidenceGate { State = Unknown, Reason = No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple., IsSatisfied = False }, Policy = ClientCapabilityEvidenceGate { State = Satisfied, Reason = This capability has no additional activation policy opt-in., IsSatisfied = True }, Lifetime = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client activation is current., IsSatisfied = True }, AvailabilityState = Unknown, EffectiveReason = The runtime snapshot does not probe every host primitive required by this capability., EffectiveReasonCode = Host }"
+        },
+        {
+          "name": "Client.PatternScanning",
+          "state": "Unknown",
+          "isAvailable": false,
+          "reason": "The runtime snapshot does not probe every host primitive required by this capability.",
+          "evidence": "ClientCapabilityEvidence { Implementation = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client composes an operational adapter for this capability., IsSatisfied = True }, Package = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The loaded CheatEngine.SDK.Engine 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is exactly the reviewed package this Client build consumed (NuGet content hash NLEdZYJ9LKW3EFNB4X5snKCQf7ZS86GkCQ+El7o+S1XQcxHQGjS45Q1ap8lfjQuIwm004mQ3TPxo+ph1yvRrlQ==, read from the lock file at build time)., IsSatisfied = True }, Host = ClientCapabilityEvidenceGate { State = Unknown, Reason = The runtime snapshot does not probe every host primitive required by this capability., IsSatisfied = False }, LiveQualification = ClientCapabilityEvidenceGate { State = Unknown, Reason = No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple., IsSatisfied = False }, Policy = ClientCapabilityEvidenceGate { State = Satisfied, Reason = This capability has no additional activation policy opt-in., IsSatisfied = True }, Lifetime = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client activation is current., IsSatisfied = True }, AvailabilityState = Unknown, EffectiveReason = The runtime snapshot does not probe every host primitive required by this capability., EffectiveReasonCode = Host }"
+        },
+        {
+          "name": "Client.ValueScanning",
+          "state": "Unknown",
+          "isAvailable": false,
+          "reason": "The runtime snapshot does not probe every host primitive required by this capability.",
+          "evidence": "ClientCapabilityEvidence { Implementation = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client composes an operational adapter for this capability; its API is experimental (CECLIENT5001) until its live scenarios pass., IsSatisfied = True }, Package = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The loaded CheatEngine.SDK.Engine 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is exactly the reviewed package this Client build consumed (NuGet content hash NLEdZYJ9LKW3EFNB4X5snKCQf7ZS86GkCQ+El7o+S1XQcxHQGjS45Q1ap8lfjQuIwm004mQ3TPxo+ph1yvRrlQ==, read from the lock file at build time)., IsSatisfied = True }, Host = ClientCapabilityEvidenceGate { State = Unknown, Reason = The runtime snapshot does not probe every host primitive required by this capability., IsSatisfied = False }, LiveQualification = ClientCapabilityEvidenceGate { State = Unknown, Reason = No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple., IsSatisfied = False }, Policy = ClientCapabilityEvidenceGate { State = Satisfied, Reason = This capability has no additional activation policy opt-in., IsSatisfied = True }, Lifetime = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client activation is current., IsSatisfied = True }, AvailabilityState = Unknown, EffectiveReason = The runtime snapshot does not probe every host primitive required by this capability., EffectiveReasonCode = Host }"
+        },
+        {
+          "name": "Client.Inspection",
+          "state": "Unknown",
+          "isAvailable": false,
+          "reason": "The runtime snapshot does not probe every host primitive required by this capability.",
+          "evidence": "ClientCapabilityEvidence { Implementation = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client composes an operational adapter for this capability., IsSatisfied = True }, Package = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The loaded CheatEngine.SDK.Engine 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is exactly the reviewed package this Client build consumed (NuGet content hash NLEdZYJ9LKW3EFNB4X5snKCQf7ZS86GkCQ+El7o+S1XQcxHQGjS45Q1ap8lfjQuIwm004mQ3TPxo+ph1yvRrlQ==, read from the lock file at build time)., IsSatisfied = True }, Host = ClientCapabilityEvidenceGate { State = Unknown, Reason = The runtime snapshot does not probe every host primitive required by this capability., IsSatisfied = False }, LiveQualification = ClientCapabilityEvidenceGate { State = Unknown, Reason = No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple., IsSatisfied = False }, Policy = ClientCapabilityEvidenceGate { State = Satisfied, Reason = This capability has no additional activation policy opt-in., IsSatisfied = True }, Lifetime = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client activation is current., IsSatisfied = True }, AvailabilityState = Unknown, EffectiveReason = The runtime snapshot does not probe every host primitive required by this capability., EffectiveReasonCode = Host }"
+        },
+        {
+          "name": "Client.Tables",
+          "state": "Unknown",
+          "isAvailable": false,
+          "reason": "The runtime snapshot does not probe every host primitive required by this capability.",
+          "evidence": "ClientCapabilityEvidence { Implementation = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client composes an operational adapter for this capability., IsSatisfied = True }, Package = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The loaded CheatEngine.SDK.Engine 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is exactly the reviewed package this Client build consumed (NuGet content hash NLEdZYJ9LKW3EFNB4X5snKCQf7ZS86GkCQ+El7o+S1XQcxHQGjS45Q1ap8lfjQuIwm004mQ3TPxo+ph1yvRrlQ==, read from the lock file at build time)., IsSatisfied = True }, Host = ClientCapabilityEvidenceGate { State = Unknown, Reason = The runtime snapshot does not probe every host primitive required by this capability., IsSatisfied = False }, LiveQualification = ClientCapabilityEvidenceGate { State = Unknown, Reason = No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple., IsSatisfied = False }, Policy = ClientCapabilityEvidenceGate { State = Satisfied, Reason = This capability has no additional activation policy opt-in., IsSatisfied = True }, Lifetime = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client activation is current., IsSatisfied = True }, AvailabilityState = Unknown, EffectiveReason = The runtime snapshot does not probe every host primitive required by this capability., EffectiveReasonCode = Host }"
+        },
+        {
+          "name": "Client.ProtectedLua",
+          "state": "Unknown",
+          "isAvailable": false,
+          "reason": "The runtime snapshot does not probe every host primitive required by this capability.",
+          "evidence": "ClientCapabilityEvidence { Implementation = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client composes an operational adapter for this capability., IsSatisfied = True }, Package = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The loaded CheatEngine.SDK.Engine 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is exactly the reviewed package this Client build consumed (NuGet content hash NLEdZYJ9LKW3EFNB4X5snKCQf7ZS86GkCQ+El7o+S1XQcxHQGjS45Q1ap8lfjQuIwm004mQ3TPxo+ph1yvRrlQ==, read from the lock file at build time)., IsSatisfied = True }, Host = ClientCapabilityEvidenceGate { State = Unknown, Reason = The runtime snapshot does not probe every host primitive required by this capability., IsSatisfied = False }, LiveQualification = ClientCapabilityEvidenceGate { State = Unknown, Reason = No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple., IsSatisfied = False }, Policy = ClientCapabilityEvidenceGate { State = Satisfied, Reason = This capability has no additional activation policy opt-in., IsSatisfied = True }, Lifetime = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client activation is current., IsSatisfied = True }, AvailabilityState = Unknown, EffectiveReason = The runtime snapshot does not probe every host primitive required by this capability., EffectiveReasonCode = Host }"
+        },
+        {
+          "name": "Client.UnsafeLuaExecution",
+          "state": "Unknown",
+          "isAvailable": false,
+          "reason": "The runtime snapshot does not probe every host primitive required by this capability.",
+          "evidence": "ClientCapabilityEvidence { Implementation = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client composes an operational adapter for this capability., IsSatisfied = True }, Package = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The loaded CheatEngine.SDK.Engine 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is exactly the reviewed package this Client build consumed (NuGet content hash NLEdZYJ9LKW3EFNB4X5snKCQf7ZS86GkCQ+El7o+S1XQcxHQGjS45Q1ap8lfjQuIwm004mQ3TPxo+ph1yvRrlQ==, read from the lock file at build time)., IsSatisfied = True }, Host = ClientCapabilityEvidenceGate { State = Unknown, Reason = The runtime snapshot does not probe every host primitive required by this capability., IsSatisfied = False }, LiveQualification = ClientCapabilityEvidenceGate { State = Unknown, Reason = Client.UnsafeLuaExecution is never host-qualified: no live scenario covers it., IsSatisfied = False }, Policy = ClientCapabilityEvidenceGate { State = Satisfied, Reason = Unsafe Lua execution was explicitly enabled for this activation., IsSatisfied = True }, Lifetime = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client activation is current., IsSatisfied = True }, AvailabilityState = Unknown, EffectiveReason = The runtime snapshot does not probe every host primitive required by this capability., EffectiveReasonCode = Host }"
+        },
+        {
+          "name": "Client.Allocations",
+          "state": "Unknown",
+          "isAvailable": false,
+          "reason": "The runtime snapshot does not probe every host primitive required by this capability.",
+          "evidence": "ClientCapabilityEvidence { Implementation = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client composes an operational adapter for this capability; its API is experimental (CECLIENT5002) until its live scenarios pass., IsSatisfied = True }, Package = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The loaded CheatEngine.SDK.Engine 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is exactly the reviewed package this Client build consumed (NuGet content hash NLEdZYJ9LKW3EFNB4X5snKCQf7ZS86GkCQ+El7o+S1XQcxHQGjS45Q1ap8lfjQuIwm004mQ3TPxo+ph1yvRrlQ==, read from the lock file at build time)., IsSatisfied = True }, Host = ClientCapabilityEvidenceGate { State = Unknown, Reason = The runtime snapshot does not probe every host primitive required by this capability., IsSatisfied = False }, LiveQualification = ClientCapabilityEvidenceGate { State = Unknown, Reason = No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple., IsSatisfied = False }, Policy = ClientCapabilityEvidenceGate { State = Satisfied, Reason = This capability has no additional activation policy opt-in., IsSatisfied = True }, Lifetime = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client activation is current., IsSatisfied = True }, AvailabilityState = Unknown, EffectiveReason = The runtime snapshot does not probe every host primitive required by this capability., EffectiveReasonCode = Host }"
+        },
+        {
+          "name": "Client.Assembly",
+          "state": "Unknown",
+          "isAvailable": false,
+          "reason": "The runtime snapshot does not probe every host primitive required by this capability.",
+          "evidence": "ClientCapabilityEvidence { Implementation = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client composes an operational adapter for this capability; its API is experimental (CECLIENT5003) until its live scenarios pass., IsSatisfied = True }, Package = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The loaded CheatEngine.SDK.Engine 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is exactly the reviewed package this Client build consumed (NuGet content hash NLEdZYJ9LKW3EFNB4X5snKCQf7ZS86GkCQ+El7o+S1XQcxHQGjS45Q1ap8lfjQuIwm004mQ3TPxo+ph1yvRrlQ==, read from the lock file at build time)., IsSatisfied = True }, Host = ClientCapabilityEvidenceGate { State = Unknown, Reason = The runtime snapshot does not probe every host primitive required by this capability., IsSatisfied = False }, LiveQualification = ClientCapabilityEvidenceGate { State = Unknown, Reason = No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple., IsSatisfied = False }, Policy = ClientCapabilityEvidenceGate { State = Satisfied, Reason = This capability has no additional activation policy opt-in., IsSatisfied = True }, Lifetime = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client activation is current., IsSatisfied = True }, AvailabilityState = Unknown, EffectiveReason = The runtime snapshot does not probe every host primitive required by this capability., EffectiveReasonCode = Host }"
+        },
+        {
+          "name": "Client.AutoAssemblerPatches",
+          "state": "Unknown",
+          "isAvailable": false,
+          "reason": "The runtime snapshot does not probe every host primitive required by this capability.",
+          "evidence": "ClientCapabilityEvidence { Implementation = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client composes an operational adapter for this capability; its API is experimental (CECLIENT5004) until its live scenarios pass., IsSatisfied = True }, Package = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The loaded CheatEngine.SDK.Engine 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is exactly the reviewed package this Client build consumed (NuGet content hash NLEdZYJ9LKW3EFNB4X5snKCQf7ZS86GkCQ+El7o+S1XQcxHQGjS45Q1ap8lfjQuIwm004mQ3TPxo+ph1yvRrlQ==, read from the lock file at build time)., IsSatisfied = True }, Host = ClientCapabilityEvidenceGate { State = Unknown, Reason = The runtime snapshot does not probe every host primitive required by this capability., IsSatisfied = False }, LiveQualification = ClientCapabilityEvidenceGate { State = Unknown, Reason = No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple., IsSatisfied = False }, Policy = ClientCapabilityEvidenceGate { State = Satisfied, Reason = Auto Assembler patches were explicitly enabled for this activation., IsSatisfied = True }, Lifetime = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client activation is current., IsSatisfied = True }, AvailabilityState = Unknown, EffectiveReason = The runtime snapshot does not probe every host primitive required by this capability., EffectiveReasonCode = Host }"
+        }
+      ],
+      "gates": {
+        "autoAssembler": true,
+        "unsafeLua": true,
+        "targetCodeExecution": true,
+        "kernelAccess": true
+      }
+    },
+    "overview": {
+      "runtime": {
+        "epoch": 1,
+        "hostVersion": "CheatEngineRuntimeVersionInfo { CheatEngineVersion = 7.7.0.10621, QualifiedCheatEngineBaseline = 7.7.0.10621, ClientAssemblyVersion = 1.0.0.0, SdkAssemblyVersion = 2.0.0.0, SdkPackageVersion = 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696, IsReviewedSdkPackage = True, IsOnQualifiedCheatEngineLine = True }",
+        "platform": "CheatEngineRuntimePlatformInfo { HostOperatingSystem = Windows, HostArchitecture = X64, CheatEngineBitness = CheatEngine.SDK.Engine.Runtime.PointerSize, TargetBackend = LocalProcess, TargetArchitecture = X64, TargetBitness = CheatEngine.SDK.Engine.Runtime.PointerSize, TargetAbi = Windows, TargetIsAndroid = False, ConfiguredPointerSizeBytes = 8, ConfiguredPointerSize = CheatEngine.SDK.Engine.Runtime.PointerSize, ConfiguredPointerSizeDiffersFromBitness = False }",
+        "pluginVersion": "2.0.0.0",
+        "pluginFileName": "CheatEngine.Mcp.dll",
+        "runtimeFileName": "CheatEngine.Mcp.dll",
+        "applicationName": "CheatEngine.Mcp",
+        "capabilities": [
+          {
+            "name": "Client.ProcessSelection",
+            "state": "Unknown",
+            "isAvailable": false,
+            "reason": "No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple.",
+            "evidence": "ClientCapabilityEvidence { Implementation = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client composes an operational adapter for this capability., IsSatisfied = True }, Package = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The loaded CheatEngine.SDK.Engine 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is exactly the reviewed package this Client build consumed (NuGet content hash NLEdZYJ9LKW3EFNB4X5snKCQf7ZS86GkCQ+El7o+S1XQcxHQGjS45Q1ap8lfjQuIwm004mQ3TPxo+ph1yvRrlQ==, read from the lock file at build time)., IsSatisfied = True }, Host = ClientCapabilityEvidenceGate { State = Satisfied, Reason = CheatEngine.SDK observed the selected-process primitive (Process.Current) in this snapshot., IsSatisfied = True }, LiveQualification = ClientCapabilityEvidenceGate { State = Unknown, Reason = No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple., IsSatisfied = False }, Policy = ClientCapabilityEvidenceGate { State = Satisfied, Reason = This capability has no additional activation policy opt-in., IsSatisfied = True }, Lifetime = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client activation is current., IsSatisfied = True }, AvailabilityState = Unknown, EffectiveReason = No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple., EffectiveReasonCode = LiveQualification }"
+          },
+          {
+            "name": "Client.TypedMemory",
+            "state": "Unknown",
+            "isAvailable": false,
+            "reason": "The runtime snapshot does not probe every host primitive required by this capability.",
+            "evidence": "ClientCapabilityEvidence { Implementation = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client composes an operational adapter for this capability., IsSatisfied = True }, Package = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The loaded CheatEngine.SDK.Engine 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is exactly the reviewed package this Client build consumed (NuGet content hash NLEdZYJ9LKW3EFNB4X5snKCQf7ZS86GkCQ+El7o+S1XQcxHQGjS45Q1ap8lfjQuIwm004mQ3TPxo+ph1yvRrlQ==, read from the lock file at build time)., IsSatisfied = True }, Host = ClientCapabilityEvidenceGate { State = Unknown, Reason = The runtime snapshot does not probe every host primitive required by this capability., IsSatisfied = False }, LiveQualification = ClientCapabilityEvidenceGate { State = Unknown, Reason = No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple., IsSatisfied = False }, Policy = ClientCapabilityEvidenceGate { State = Satisfied, Reason = This capability has no additional activation policy opt-in., IsSatisfied = True }, Lifetime = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client activation is current., IsSatisfied = True }, AvailabilityState = Unknown, EffectiveReason = The runtime snapshot does not probe every host primitive required by this capability., EffectiveReasonCode = Host }"
+          },
+          {
+            "name": "Client.PatternScanning",
+            "state": "Unknown",
+            "isAvailable": false,
+            "reason": "The runtime snapshot does not probe every host primitive required by this capability.",
+            "evidence": "ClientCapabilityEvidence { Implementation = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client composes an operational adapter for this capability., IsSatisfied = True }, Package = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The loaded CheatEngine.SDK.Engine 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is exactly the reviewed package this Client build consumed (NuGet content hash NLEdZYJ9LKW3EFNB4X5snKCQf7ZS86GkCQ+El7o+S1XQcxHQGjS45Q1ap8lfjQuIwm004mQ3TPxo+ph1yvRrlQ==, read from the lock file at build time)., IsSatisfied = True }, Host = ClientCapabilityEvidenceGate { State = Unknown, Reason = The runtime snapshot does not probe every host primitive required by this capability., IsSatisfied = False }, LiveQualification = ClientCapabilityEvidenceGate { State = Unknown, Reason = No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple., IsSatisfied = False }, Policy = ClientCapabilityEvidenceGate { State = Satisfied, Reason = This capability has no additional activation policy opt-in., IsSatisfied = True }, Lifetime = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client activation is current., IsSatisfied = True }, AvailabilityState = Unknown, EffectiveReason = The runtime snapshot does not probe every host primitive required by this capability., EffectiveReasonCode = Host }"
+          },
+          {
+            "name": "Client.ValueScanning",
+            "state": "Unknown",
+            "isAvailable": false,
+            "reason": "The runtime snapshot does not probe every host primitive required by this capability.",
+            "evidence": "ClientCapabilityEvidence { Implementation = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client composes an operational adapter for this capability; its API is experimental (CECLIENT5001) until its live scenarios pass., IsSatisfied = True }, Package = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The loaded CheatEngine.SDK.Engine 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is exactly the reviewed package this Client build consumed (NuGet content hash NLEdZYJ9LKW3EFNB4X5snKCQf7ZS86GkCQ+El7o+S1XQcxHQGjS45Q1ap8lfjQuIwm004mQ3TPxo+ph1yvRrlQ==, read from the lock file at build time)., IsSatisfied = True }, Host = ClientCapabilityEvidenceGate { State = Unknown, Reason = The runtime snapshot does not probe every host primitive required by this capability., IsSatisfied = False }, LiveQualification = ClientCapabilityEvidenceGate { State = Unknown, Reason = No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple., IsSatisfied = False }, Policy = ClientCapabilityEvidenceGate { State = Satisfied, Reason = This capability has no additional activation policy opt-in., IsSatisfied = True }, Lifetime = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client activation is current., IsSatisfied = True }, AvailabilityState = Unknown, EffectiveReason = The runtime snapshot does not probe every host primitive required by this capability., EffectiveReasonCode = Host }"
+          },
+          {
+            "name": "Client.Inspection",
+            "state": "Unknown",
+            "isAvailable": false,
+            "reason": "The runtime snapshot does not probe every host primitive required by this capability.",
+            "evidence": "ClientCapabilityEvidence { Implementation = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client composes an operational adapter for this capability., IsSatisfied = True }, Package = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The loaded CheatEngine.SDK.Engine 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is exactly the reviewed package this Client build consumed (NuGet content hash NLEdZYJ9LKW3EFNB4X5snKCQf7ZS86GkCQ+El7o+S1XQcxHQGjS45Q1ap8lfjQuIwm004mQ3TPxo+ph1yvRrlQ==, read from the lock file at build time)., IsSatisfied = True }, Host = ClientCapabilityEvidenceGate { State = Unknown, Reason = The runtime snapshot does not probe every host primitive required by this capability., IsSatisfied = False }, LiveQualification = ClientCapabilityEvidenceGate { State = Unknown, Reason = No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple., IsSatisfied = False }, Policy = ClientCapabilityEvidenceGate { State = Satisfied, Reason = This capability has no additional activation policy opt-in., IsSatisfied = True }, Lifetime = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client activation is current., IsSatisfied = True }, AvailabilityState = Unknown, EffectiveReason = The runtime snapshot does not probe every host primitive required by this capability., EffectiveReasonCode = Host }"
+          },
+          {
+            "name": "Client.Tables",
+            "state": "Unknown",
+            "isAvailable": false,
+            "reason": "The runtime snapshot does not probe every host primitive required by this capability.",
+            "evidence": "ClientCapabilityEvidence { Implementation = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client composes an operational adapter for this capability., IsSatisfied = True }, Package = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The loaded CheatEngine.SDK.Engine 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is exactly the reviewed package this Client build consumed (NuGet content hash NLEdZYJ9LKW3EFNB4X5snKCQf7ZS86GkCQ+El7o+S1XQcxHQGjS45Q1ap8lfjQuIwm004mQ3TPxo+ph1yvRrlQ==, read from the lock file at build time)., IsSatisfied = True }, Host = ClientCapabilityEvidenceGate { State = Unknown, Reason = The runtime snapshot does not probe every host primitive required by this capability., IsSatisfied = False }, LiveQualification = ClientCapabilityEvidenceGate { State = Unknown, Reason = No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple., IsSatisfied = False }, Policy = ClientCapabilityEvidenceGate { State = Satisfied, Reason = This capability has no additional activation policy opt-in., IsSatisfied = True }, Lifetime = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client activation is current., IsSatisfied = True }, AvailabilityState = Unknown, EffectiveReason = The runtime snapshot does not probe every host primitive required by this capability., EffectiveReasonCode = Host }"
+          },
+          {
+            "name": "Client.ProtectedLua",
+            "state": "Unknown",
+            "isAvailable": false,
+            "reason": "The runtime snapshot does not probe every host primitive required by this capability.",
+            "evidence": "ClientCapabilityEvidence { Implementation = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client composes an operational adapter for this capability., IsSatisfied = True }, Package = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The loaded CheatEngine.SDK.Engine 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is exactly the reviewed package this Client build consumed (NuGet content hash NLEdZYJ9LKW3EFNB4X5snKCQf7ZS86GkCQ+El7o+S1XQcxHQGjS45Q1ap8lfjQuIwm004mQ3TPxo+ph1yvRrlQ==, read from the lock file at build time)., IsSatisfied = True }, Host = ClientCapabilityEvidenceGate { State = Unknown, Reason = The runtime snapshot does not probe every host primitive required by this capability., IsSatisfied = False }, LiveQualification = ClientCapabilityEvidenceGate { State = Unknown, Reason = No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple., IsSatisfied = False }, Policy = ClientCapabilityEvidenceGate { State = Satisfied, Reason = This capability has no additional activation policy opt-in., IsSatisfied = True }, Lifetime = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client activation is current., IsSatisfied = True }, AvailabilityState = Unknown, EffectiveReason = The runtime snapshot does not probe every host primitive required by this capability., EffectiveReasonCode = Host }"
+          },
+          {
+            "name": "Client.UnsafeLuaExecution",
+            "state": "Unknown",
+            "isAvailable": false,
+            "reason": "The runtime snapshot does not probe every host primitive required by this capability.",
+            "evidence": "ClientCapabilityEvidence { Implementation = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client composes an operational adapter for this capability., IsSatisfied = True }, Package = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The loaded CheatEngine.SDK.Engine 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is exactly the reviewed package this Client build consumed (NuGet content hash NLEdZYJ9LKW3EFNB4X5snKCQf7ZS86GkCQ+El7o+S1XQcxHQGjS45Q1ap8lfjQuIwm004mQ3TPxo+ph1yvRrlQ==, read from the lock file at build time)., IsSatisfied = True }, Host = ClientCapabilityEvidenceGate { State = Unknown, Reason = The runtime snapshot does not probe every host primitive required by this capability., IsSatisfied = False }, LiveQualification = ClientCapabilityEvidenceGate { State = Unknown, Reason = Client.UnsafeLuaExecution is never host-qualified: no live scenario covers it., IsSatisfied = False }, Policy = ClientCapabilityEvidenceGate { State = Satisfied, Reason = Unsafe Lua execution was explicitly enabled for this activation., IsSatisfied = True }, Lifetime = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client activation is current., IsSatisfied = True }, AvailabilityState = Unknown, EffectiveReason = The runtime snapshot does not probe every host primitive required by this capability., EffectiveReasonCode = Host }"
+          },
+          {
+            "name": "Client.Allocations",
+            "state": "Unknown",
+            "isAvailable": false,
+            "reason": "The runtime snapshot does not probe every host primitive required by this capability.",
+            "evidence": "ClientCapabilityEvidence { Implementation = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client composes an operational adapter for this capability; its API is experimental (CECLIENT5002) until its live scenarios pass., IsSatisfied = True }, Package = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The loaded CheatEngine.SDK.Engine 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is exactly the reviewed package this Client build consumed (NuGet content hash NLEdZYJ9LKW3EFNB4X5snKCQf7ZS86GkCQ+El7o+S1XQcxHQGjS45Q1ap8lfjQuIwm004mQ3TPxo+ph1yvRrlQ==, read from the lock file at build time)., IsSatisfied = True }, Host = ClientCapabilityEvidenceGate { State = Unknown, Reason = The runtime snapshot does not probe every host primitive required by this capability., IsSatisfied = False }, LiveQualification = ClientCapabilityEvidenceGate { State = Unknown, Reason = No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple., IsSatisfied = False }, Policy = ClientCapabilityEvidenceGate { State = Satisfied, Reason = This capability has no additional activation policy opt-in., IsSatisfied = True }, Lifetime = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client activation is current., IsSatisfied = True }, AvailabilityState = Unknown, EffectiveReason = The runtime snapshot does not probe every host primitive required by this capability., EffectiveReasonCode = Host }"
+          },
+          {
+            "name": "Client.Assembly",
+            "state": "Unknown",
+            "isAvailable": false,
+            "reason": "The runtime snapshot does not probe every host primitive required by this capability.",
+            "evidence": "ClientCapabilityEvidence { Implementation = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client composes an operational adapter for this capability; its API is experimental (CECLIENT5003) until its live scenarios pass., IsSatisfied = True }, Package = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The loaded CheatEngine.SDK.Engine 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is exactly the reviewed package this Client build consumed (NuGet content hash NLEdZYJ9LKW3EFNB4X5snKCQf7ZS86GkCQ+El7o+S1XQcxHQGjS45Q1ap8lfjQuIwm004mQ3TPxo+ph1yvRrlQ==, read from the lock file at build time)., IsSatisfied = True }, Host = ClientCapabilityEvidenceGate { State = Unknown, Reason = The runtime snapshot does not probe every host primitive required by this capability., IsSatisfied = False }, LiveQualification = ClientCapabilityEvidenceGate { State = Unknown, Reason = No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple., IsSatisfied = False }, Policy = ClientCapabilityEvidenceGate { State = Satisfied, Reason = This capability has no additional activation policy opt-in., IsSatisfied = True }, Lifetime = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client activation is current., IsSatisfied = True }, AvailabilityState = Unknown, EffectiveReason = The runtime snapshot does not probe every host primitive required by this capability., EffectiveReasonCode = Host }"
+          },
+          {
+            "name": "Client.AutoAssemblerPatches",
+            "state": "Unknown",
+            "isAvailable": false,
+            "reason": "The runtime snapshot does not probe every host primitive required by this capability.",
+            "evidence": "ClientCapabilityEvidence { Implementation = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client composes an operational adapter for this capability; its API is experimental (CECLIENT5004) until its live scenarios pass., IsSatisfied = True }, Package = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The loaded CheatEngine.SDK.Engine 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is exactly the reviewed package this Client build consumed (NuGet content hash NLEdZYJ9LKW3EFNB4X5snKCQf7ZS86GkCQ+El7o+S1XQcxHQGjS45Q1ap8lfjQuIwm004mQ3TPxo+ph1yvRrlQ==, read from the lock file at build time)., IsSatisfied = True }, Host = ClientCapabilityEvidenceGate { State = Unknown, Reason = The runtime snapshot does not probe every host primitive required by this capability., IsSatisfied = False }, LiveQualification = ClientCapabilityEvidenceGate { State = Unknown, Reason = No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple., IsSatisfied = False }, Policy = ClientCapabilityEvidenceGate { State = Satisfied, Reason = Auto Assembler patches were explicitly enabled for this activation., IsSatisfied = True }, Lifetime = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client activation is current., IsSatisfied = True }, AvailabilityState = Unknown, EffectiveReason = The runtime snapshot does not probe every host primitive required by this capability., EffectiveReasonCode = Host }"
+          }
+        ],
+        "gates": {
+          "autoAssembler": true,
+          "unsafeLua": true,
+          "targetCodeExecution": true,
+          "kernelAccess": true
+        }
+      },
+      "process": {
+        "isOpen": true,
+        "processId": 43884,
+        "processName": "victoria3",
+        "pointerSize": 8,
+        "selectionEpoch": 0
+      },
+      "resourceCount": 0,
+      "jobCount": 0
+    },
+    "fingerprint": {
+      "runtimeEpoch": 1,
+      "processId": 43884,
+      "selectionEpoch": 0,
+      "pointerSize": 8
+    },
+    "resources": {
+      "resourceCount": 0,
+      "jobCount": 0
+    }
+  },
+  "status": {},
+  "luaResponse": {
+    "ok": true,
+    "hostEffect": "completed",
+    "returnValues": [
+      {
+        "rip": "7FF777E0C2B0",
+        "removeInstruction": "7FF777CEAF69 - E8 D2CAE2FF - call 7FF777B17A40",
+        "goodsName": "wood",
+        "pid": 43884,
+        "stopped": true,
+        "addresses": [
+          "7FF777E0C2B0",
+          "7FF777CED93B"
+        ],
+        "goodsId": 10
+      }
+    ],
+    "droppedOpaqueCount": 0
+  },
+  "result": [
+    {
+      "rip": "7FF777E0C2B0",
+      "removeInstruction": "7FF777CEAF69 - E8 D2CAE2FF - call 7FF777B17A40",
+      "goodsName": "wood",
+      "pid": 43884,
+      "stopped": true,
+      "addresses": [
+        "7FF777E0C2B0",
+        "7FF777CED93B"
+      ],
+      "goodsId": 10
+    }
+  ],
+  "finalOverview": {
+    "runtime": {
+      "epoch": 1,
+      "hostVersion": "CheatEngineRuntimeVersionInfo { CheatEngineVersion = 7.7.0.10621, QualifiedCheatEngineBaseline = 7.7.0.10621, ClientAssemblyVersion = 1.0.0.0, SdkAssemblyVersion = 2.0.0.0, SdkPackageVersion = 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696, IsReviewedSdkPackage = True, IsOnQualifiedCheatEngineLine = True }",
+      "platform": "CheatEngineRuntimePlatformInfo { HostOperatingSystem = Windows, HostArchitecture = X64, CheatEngineBitness = CheatEngine.SDK.Engine.Runtime.PointerSize, TargetBackend = LocalProcess, TargetArchitecture = X64, TargetBitness = CheatEngine.SDK.Engine.Runtime.PointerSize, TargetAbi = Windows, TargetIsAndroid = False, ConfiguredPointerSizeBytes = 8, ConfiguredPointerSize = CheatEngine.SDK.Engine.Runtime.PointerSize, ConfiguredPointerSizeDiffersFromBitness = False }",
+      "pluginVersion": "2.0.0.0",
+      "pluginFileName": "CheatEngine.Mcp.dll",
+      "runtimeFileName": "CheatEngine.Mcp.dll",
+      "applicationName": "CheatEngine.Mcp",
+      "capabilities": [
+        {
+          "name": "Client.ProcessSelection",
+          "state": "Unknown",
+          "isAvailable": false,
+          "reason": "No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple.",
+          "evidence": "ClientCapabilityEvidence { Implementation = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client composes an operational adapter for this capability., IsSatisfied = True }, Package = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The loaded CheatEngine.SDK.Engine 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is exactly the reviewed package this Client build consumed (NuGet content hash NLEdZYJ9LKW3EFNB4X5snKCQf7ZS86GkCQ+El7o+S1XQcxHQGjS45Q1ap8lfjQuIwm004mQ3TPxo+ph1yvRrlQ==, read from the lock file at build time)., IsSatisfied = True }, Host = ClientCapabilityEvidenceGate { State = Satisfied, Reason = CheatEngine.SDK observed the selected-process primitive (Process.Current) in this snapshot., IsSatisfied = True }, LiveQualification = ClientCapabilityEvidenceGate { State = Unknown, Reason = No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple., IsSatisfied = False }, Policy = ClientCapabilityEvidenceGate { State = Satisfied, Reason = This capability has no additional activation policy opt-in., IsSatisfied = True }, Lifetime = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client activation is current., IsSatisfied = True }, AvailabilityState = Unknown, EffectiveReason = No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple., EffectiveReasonCode = LiveQualification }"
+        },
+        {
+          "name": "Client.TypedMemory",
+          "state": "Unknown",
+          "isAvailable": false,
+          "reason": "The runtime snapshot does not probe every host primitive required by this capability.",
+          "evidence": "ClientCapabilityEvidence { Implementation = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client composes an operational adapter for this capability., IsSatisfied = True }, Package = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The loaded CheatEngine.SDK.Engine 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is exactly the reviewed package this Client build consumed (NuGet content hash NLEdZYJ9LKW3EFNB4X5snKCQf7ZS86GkCQ+El7o+S1XQcxHQGjS45Q1ap8lfjQuIwm004mQ3TPxo+ph1yvRrlQ==, read from the lock file at build time)., IsSatisfied = True }, Host = ClientCapabilityEvidenceGate { State = Unknown, Reason = The runtime snapshot does not probe every host primitive required by this capability., IsSatisfied = False }, LiveQualification = ClientCapabilityEvidenceGate { State = Unknown, Reason = No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple., IsSatisfied = False }, Policy = ClientCapabilityEvidenceGate { State = Satisfied, Reason = This capability has no additional activation policy opt-in., IsSatisfied = True }, Lifetime = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client activation is current., IsSatisfied = True }, AvailabilityState = Unknown, EffectiveReason = The runtime snapshot does not probe every host primitive required by this capability., EffectiveReasonCode = Host }"
+        },
+        {
+          "name": "Client.PatternScanning",
+          "state": "Unknown",
+          "isAvailable": false,
+          "reason": "The runtime snapshot does not probe every host primitive required by this capability.",
+          "evidence": "ClientCapabilityEvidence { Implementation = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client composes an operational adapter for this capability., IsSatisfied = True }, Package = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The loaded CheatEngine.SDK.Engine 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is exactly the reviewed package this Client build consumed (NuGet content hash NLEdZYJ9LKW3EFNB4X5snKCQf7ZS86GkCQ+El7o+S1XQcxHQGjS45Q1ap8lfjQuIwm004mQ3TPxo+ph1yvRrlQ==, read from the lock file at build time)., IsSatisfied = True }, Host = ClientCapabilityEvidenceGate { State = Unknown, Reason = The runtime snapshot does not probe every host primitive required by this capability., IsSatisfied = False }, LiveQualification = ClientCapabilityEvidenceGate { State = Unknown, Reason = No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple., IsSatisfied = False }, Policy = ClientCapabilityEvidenceGate { State = Satisfied, Reason = This capability has no additional activation policy opt-in., IsSatisfied = True }, Lifetime = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client activation is current., IsSatisfied = True }, AvailabilityState = Unknown, EffectiveReason = The runtime snapshot does not probe every host primitive required by this capability., EffectiveReasonCode = Host }"
+        },
+        {
+          "name": "Client.ValueScanning",
+          "state": "Unknown",
+          "isAvailable": false,
+          "reason": "The runtime snapshot does not probe every host primitive required by this capability.",
+          "evidence": "ClientCapabilityEvidence { Implementation = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client composes an operational adapter for this capability; its API is experimental (CECLIENT5001) until its live scenarios pass., IsSatisfied = True }, Package = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The loaded CheatEngine.SDK.Engine 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is exactly the reviewed package this Client build consumed (NuGet content hash NLEdZYJ9LKW3EFNB4X5snKCQf7ZS86GkCQ+El7o+S1XQcxHQGjS45Q1ap8lfjQuIwm004mQ3TPxo+ph1yvRrlQ==, read from the lock file at build time)., IsSatisfied = True }, Host = ClientCapabilityEvidenceGate { State = Unknown, Reason = The runtime snapshot does not probe every host primitive required by this capability., IsSatisfied = False }, LiveQualification = ClientCapabilityEvidenceGate { State = Unknown, Reason = No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple., IsSatisfied = False }, Policy = ClientCapabilityEvidenceGate { State = Satisfied, Reason = This capability has no additional activation policy opt-in., IsSatisfied = True }, Lifetime = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client activation is current., IsSatisfied = True }, AvailabilityState = Unknown, EffectiveReason = The runtime snapshot does not probe every host primitive required by this capability., EffectiveReasonCode = Host }"
+        },
+        {
+          "name": "Client.Inspection",
+          "state": "Unknown",
+          "isAvailable": false,
+          "reason": "The runtime snapshot does not probe every host primitive required by this capability.",
+          "evidence": "ClientCapabilityEvidence { Implementation = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client composes an operational adapter for this capability., IsSatisfied = True }, Package = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The loaded CheatEngine.SDK.Engine 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is exactly the reviewed package this Client build consumed (NuGet content hash NLEdZYJ9LKW3EFNB4X5snKCQf7ZS86GkCQ+El7o+S1XQcxHQGjS45Q1ap8lfjQuIwm004mQ3TPxo+ph1yvRrlQ==, read from the lock file at build time)., IsSatisfied = True }, Host = ClientCapabilityEvidenceGate { State = Unknown, Reason = The runtime snapshot does not probe every host primitive required by this capability., IsSatisfied = False }, LiveQualification = ClientCapabilityEvidenceGate { State = Unknown, Reason = No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple., IsSatisfied = False }, Policy = ClientCapabilityEvidenceGate { State = Satisfied, Reason = This capability has no additional activation policy opt-in., IsSatisfied = True }, Lifetime = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client activation is current., IsSatisfied = True }, AvailabilityState = Unknown, EffectiveReason = The runtime snapshot does not probe every host primitive required by this capability., EffectiveReasonCode = Host }"
+        },
+        {
+          "name": "Client.Tables",
+          "state": "Unknown",
+          "isAvailable": false,
+          "reason": "The runtime snapshot does not probe every host primitive required by this capability.",
+          "evidence": "ClientCapabilityEvidence { Implementation = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client composes an operational adapter for this capability., IsSatisfied = True }, Package = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The loaded CheatEngine.SDK.Engine 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is exactly the reviewed package this Client build consumed (NuGet content hash NLEdZYJ9LKW3EFNB4X5snKCQf7ZS86GkCQ+El7o+S1XQcxHQGjS45Q1ap8lfjQuIwm004mQ3TPxo+ph1yvRrlQ==, read from the lock file at build time)., IsSatisfied = True }, Host = ClientCapabilityEvidenceGate { State = Unknown, Reason = The runtime snapshot does not probe every host primitive required by this capability., IsSatisfied = False }, LiveQualification = ClientCapabilityEvidenceGate { State = Unknown, Reason = No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple., IsSatisfied = False }, Policy = ClientCapabilityEvidenceGate { State = Satisfied, Reason = This capability has no additional activation policy opt-in., IsSatisfied = True }, Lifetime = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client activation is current., IsSatisfied = True }, AvailabilityState = Unknown, EffectiveReason = The runtime snapshot does not probe every host primitive required by this capability., EffectiveReasonCode = Host }"
+        },
+        {
+          "name": "Client.ProtectedLua",
+          "state": "Unknown",
+          "isAvailable": false,
+          "reason": "The runtime snapshot does not probe every host primitive required by this capability.",
+          "evidence": "ClientCapabilityEvidence { Implementation = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client composes an operational adapter for this capability., IsSatisfied = True }, Package = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The loaded CheatEngine.SDK.Engine 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is exactly the reviewed package this Client build consumed (NuGet content hash NLEdZYJ9LKW3EFNB4X5snKCQf7ZS86GkCQ+El7o+S1XQcxHQGjS45Q1ap8lfjQuIwm004mQ3TPxo+ph1yvRrlQ==, read from the lock file at build time)., IsSatisfied = True }, Host = ClientCapabilityEvidenceGate { State = Unknown, Reason = The runtime snapshot does not probe every host primitive required by this capability., IsSatisfied = False }, LiveQualification = ClientCapabilityEvidenceGate { State = Unknown, Reason = No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple., IsSatisfied = False }, Policy = ClientCapabilityEvidenceGate { State = Satisfied, Reason = This capability has no additional activation policy opt-in., IsSatisfied = True }, Lifetime = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client activation is current., IsSatisfied = True }, AvailabilityState = Unknown, EffectiveReason = The runtime snapshot does not probe every host primitive required by this capability., EffectiveReasonCode = Host }"
+        },
+        {
+          "name": "Client.UnsafeLuaExecution",
+          "state": "Unknown",
+          "isAvailable": false,
+          "reason": "The runtime snapshot does not probe every host primitive required by this capability.",
+          "evidence": "ClientCapabilityEvidence { Implementation = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client composes an operational adapter for this capability., IsSatisfied = True }, Package = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The loaded CheatEngine.SDK.Engine 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is exactly the reviewed package this Client build consumed (NuGet content hash NLEdZYJ9LKW3EFNB4X5snKCQf7ZS86GkCQ+El7o+S1XQcxHQGjS45Q1ap8lfjQuIwm004mQ3TPxo+ph1yvRrlQ==, read from the lock file at build time)., IsSatisfied = True }, Host = ClientCapabilityEvidenceGate { State = Unknown, Reason = The runtime snapshot does not probe every host primitive required by this capability., IsSatisfied = False }, LiveQualification = ClientCapabilityEvidenceGate { State = Unknown, Reason = Client.UnsafeLuaExecution is never host-qualified: no live scenario covers it., IsSatisfied = False }, Policy = ClientCapabilityEvidenceGate { State = Satisfied, Reason = Unsafe Lua execution was explicitly enabled for this activation., IsSatisfied = True }, Lifetime = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client activation is current., IsSatisfied = True }, AvailabilityState = Unknown, EffectiveReason = The runtime snapshot does not probe every host primitive required by this capability., EffectiveReasonCode = Host }"
+        },
+        {
+          "name": "Client.Allocations",
+          "state": "Unknown",
+          "isAvailable": false,
+          "reason": "The runtime snapshot does not probe every host primitive required by this capability.",
+          "evidence": "ClientCapabilityEvidence { Implementation = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client composes an operational adapter for this capability; its API is experimental (CECLIENT5002) until its live scenarios pass., IsSatisfied = True }, Package = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The loaded CheatEngine.SDK.Engine 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is exactly the reviewed package this Client build consumed (NuGet content hash NLEdZYJ9LKW3EFNB4X5snKCQf7ZS86GkCQ+El7o+S1XQcxHQGjS45Q1ap8lfjQuIwm004mQ3TPxo+ph1yvRrlQ==, read from the lock file at build time)., IsSatisfied = True }, Host = ClientCapabilityEvidenceGate { State = Unknown, Reason = The runtime snapshot does not probe every host primitive required by this capability., IsSatisfied = False }, LiveQualification = ClientCapabilityEvidenceGate { State = Unknown, Reason = No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple., IsSatisfied = False }, Policy = ClientCapabilityEvidenceGate { State = Satisfied, Reason = This capability has no additional activation policy opt-in., IsSatisfied = True }, Lifetime = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client activation is current., IsSatisfied = True }, AvailabilityState = Unknown, EffectiveReason = The runtime snapshot does not probe every host primitive required by this capability., EffectiveReasonCode = Host }"
+        },
+        {
+          "name": "Client.Assembly",
+          "state": "Unknown",
+          "isAvailable": false,
+          "reason": "The runtime snapshot does not probe every host primitive required by this capability.",
+          "evidence": "ClientCapabilityEvidence { Implementation = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client composes an operational adapter for this capability; its API is experimental (CECLIENT5003) until its live scenarios pass., IsSatisfied = True }, Package = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The loaded CheatEngine.SDK.Engine 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is exactly the reviewed package this Client build consumed (NuGet content hash NLEdZYJ9LKW3EFNB4X5snKCQf7ZS86GkCQ+El7o+S1XQcxHQGjS45Q1ap8lfjQuIwm004mQ3TPxo+ph1yvRrlQ==, read from the lock file at build time)., IsSatisfied = True }, Host = ClientCapabilityEvidenceGate { State = Unknown, Reason = The runtime snapshot does not probe every host primitive required by this capability., IsSatisfied = False }, LiveQualification = ClientCapabilityEvidenceGate { State = Unknown, Reason = No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple., IsSatisfied = False }, Policy = ClientCapabilityEvidenceGate { State = Satisfied, Reason = This capability has no additional activation policy opt-in., IsSatisfied = True }, Lifetime = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client activation is current., IsSatisfied = True }, AvailabilityState = Unknown, EffectiveReason = The runtime snapshot does not probe every host primitive required by this capability., EffectiveReasonCode = Host }"
+        },
+        {
+          "name": "Client.AutoAssemblerPatches",
+          "state": "Unknown",
+          "isAvailable": false,
+          "reason": "The runtime snapshot does not probe every host primitive required by this capability.",
+          "evidence": "ClientCapabilityEvidence { Implementation = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client composes an operational adapter for this capability; its API is experimental (CECLIENT5004) until its live scenarios pass., IsSatisfied = True }, Package = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The loaded CheatEngine.SDK.Engine 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is exactly the reviewed package this Client build consumed (NuGet content hash NLEdZYJ9LKW3EFNB4X5snKCQf7ZS86GkCQ+El7o+S1XQcxHQGjS45Q1ap8lfjQuIwm004mQ3TPxo+ph1yvRrlQ==, read from the lock file at build time)., IsSatisfied = True }, Host = ClientCapabilityEvidenceGate { State = Unknown, Reason = The runtime snapshot does not probe every host primitive required by this capability., IsSatisfied = False }, LiveQualification = ClientCapabilityEvidenceGate { State = Unknown, Reason = No Client qualification receipt for profile ce-7.7.0.10621-x64-managed-hostfxr with CheatEngine.SDK 2.0.0+325c47b573f8bd39a247f1d0101f110fa36c1696 is embedded in this build; SDK-branch receipts never qualify the Client tuple., IsSatisfied = False }, Policy = ClientCapabilityEvidenceGate { State = Satisfied, Reason = Auto Assembler patches were explicitly enabled for this activation., IsSatisfied = True }, Lifetime = ClientCapabilityEvidenceGate { State = Satisfied, Reason = The Client activation is current., IsSatisfied = True }, AvailabilityState = Unknown, EffectiveReason = The runtime snapshot does not probe every host primitive required by this capability., EffectiveReasonCode = Host }"
+        }
+      ],
+      "gates": {
+        "autoAssembler": true,
+        "unsafeLua": true,
+        "targetCodeExecution": true,
+        "kernelAccess": true
+      }
+    },
+    "process": {
+      "isOpen": true,
+      "processId": 43884,
+      "processName": "victoria3",
+      "pointerSize": 8,
+      "selectionEpoch": 0
+    },
+    "resourceCount": 0,
+    "jobCount": 0
+  },
+  "manualVerificationRequired": true,
+  "error": null,
+  "exitCode": 0,
+  "startedAt": "2026-10-03T08:54:10.237457+00:00",
+  "sourceSha256": "cc3bba0a5bf72ce74d64706e555447bc61faf871ff7af9a7dbce75480bc5f8d9",
+  "gatewayClose": {
+    "attempted": true,
+    "ok": true
+  },
+  "reportPath": "Output\\cycle_count\\lua_20261003T085410237457Z_8d83e3c08677.json",
+  "gatewayLog": "Output\\cycle_count\\lua_20261003T085410237457Z_8d83e3c08677.gateway.log",
+  "finishedAt": "2026-10-03T08:54:10.881843+00:00",
+  "finalState": "completed"
+}

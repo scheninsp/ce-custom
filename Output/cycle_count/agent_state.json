@@ -1,0 +1,366 @@
+{
+  "schemaVersion": 1,
+  "id": "484703c32f78489ebbee68a91c8465d8",
+  "phase": "complete",
+  "instanceId": "ce-72480-42f4ba0154dd4fbd8087223e0f808fda",
+  "fingerprint": {
+    "runtimeEpoch": 1,
+    "processId": 43884,
+    "selectionEpoch": 0,
+    "pointerSize": 8
+  },
+  "base": "7FF776AF0000",
+  "originalConditions": {
+    "boundary": {
+      "address": "7FF777E0C2B0",
+      "threadIdAfter": "60D0",
+      "mode": "inspect",
+      "threadIdBefore": "60D0",
+      "readbackConditionType": "complex",
+      "backend": "native-ui",
+      "readbackCondition": "",
+      "created": false,
+      "ok": true,
+      "row": {
+        "address": "7FF777E0C2B0",
+        "fields": [
+          "1",
+          "On Execute",
+          "Hardware Breakpoint (0)",
+          "Break",
+          "Yes"
+        ]
+      },
+      "error": "",
+      "condition": "",
+      "conditionType": "complex",
+      "conditionReadbackMatched": true,
+      "phase": "completed"
+    },
+    "add": {
+      "address": "7FF777CED93B",
+      "threadIdAfter": "60D0",
+      "mode": "inspect",
+      "threadIdBefore": "60D0",
+      "readbackConditionType": "complex",
+      "backend": "native-ui",
+      "readbackCondition": "if RCX ~= 0x3A484D9F8E8 then return false end\r\nassert(math.type(RDX) == 'integer' and RDX ~= 0, 'Invalid goods pointer')\r\nlocal goodsId = readInteger(RDX + 0x10)\r\nassert(goodsId ~= nil, 'Cannot read goods ID')\r\nreturn goodsId == 10",
+      "created": false,
+      "ok": true,
+      "row": {
+        "address": "7FF777CED93B",
+        "fields": [
+          "1",
+          "On Execute",
+          "Hardware Breakpoint (1)",
+          "Break",
+          "Yes"
+        ]
+      },
+      "error": "",
+      "condition": "",
+      "conditionType": "complex",
+      "conditionReadbackMatched": true,
+      "phase": "completed"
+    },
+    "remove": {
+      "address": "7FF777CEAF69",
+      "threadIdAfter": "60D0",
+      "mode": "inspect",
+      "threadIdBefore": "60D0",
+      "readbackConditionType": "complex",
+      "backend": "native-ui",
+      "readbackCondition": "if RCX ~= 0x3A484D9F8E8 then return false end\r\nassert(math.type(RDX) == 'integer' and RDX ~= 0, 'Invalid goods pointer')\r\nlocal goodsId = readInteger(RDX + 0x10)\r\nassert(goodsId ~= nil, 'Cannot read goods ID')\r\nreturn goodsId == 10",
+      "created": false,
+      "ok": true,
+      "row": {
+        "address": "7FF777CEAF69",
+        "fields": [
+          "1",
+          "On Execute",
+          "Hardware Breakpoint (2)",
+          "Break",
+          "Yes"
+        ]
+      },
+      "error": "",
+      "condition": "",
+      "conditionType": "complex",
+      "conditionReadbackMatched": true,
+      "phase": "completed"
+    }
+  },
+  "conditions": {
+    "remove": "local watch = tradeCycleAgent\nif type(watch) ~= 'table' or watch.id ~= \"484703c32f78489ebbee68a91c8465d8\" then return true end\n-- 校验真实命中并复制事件；无入参，返回是否停下，错误由外层保存。\nlocal ok, stop = pcall(function()\n    assert(#watch.events < 10000, 'Event limit reached')\n    local kind = \"remove\"\n    assert(RIP == watch.addresses[kind], 'Unexpected breakpoint address')\n    if kind ~= 'boundary' then\n        watch.evaluations.all = watch.evaluations.all + 1\n        if RCX ~= watch.tableAddress then return false end\n        watch.evaluations.state = watch.evaluations.state + 1\n        assert(math.type(RDX) == 'integer' and RDX ~= 0, 'Invalid goods pointer')\n        local id = readInteger(RDX + 0x10)\n        assert(id ~= nil, 'Cannot read goods ID')\n        if id ~= watch.goodsId then return false end\n        assert(RBP == 0 or RBP == 1, 'Invalid trade direction')\n        assert(math.type(RBX) == 'integer' and RBX >= 0, 'Invalid quantity')\n    end\n    local caller = readQword(RSP)\n    assert(math.type(caller) == 'integer', 'Cannot read caller')\n    local event = {sequence=#watch.events+1, kind=kind, counted=watch.armed,\n        ip=string.format('%X', RIP), sp=string.format('%X', RSP),\n        thread=string.format('%X', THREADID), caller=string.format('%X', caller)}\n    if kind ~= 'boundary' then\n        event.key = kind .. '_' .. tostring(RBP)\n        event.quantityRaw = tostring(RBX)\n        event.goods = string.format('%X', RDX)\n        event.goodsId = watch.goodsId\n        event.tableAddress = string.format('%X', RCX)\n    else\n        watch.armed = false\n    end\n    watch.events[#watch.events+1] = event\n    return true\nend)\nif not ok then\n    watch.errors = watch.errors + 1\n    watch.lastError = tostring(stop)\n    return true\nend\nreturn stop",
+    "add": "local watch = tradeCycleAgent\nif type(watch) ~= 'table' or watch.id ~= \"484703c32f78489ebbee68a91c8465d8\" then return true end\n-- 校验真实命中并复制事件；无入参，返回是否停下，错误由外层保存。\nlocal ok, stop = pcall(function()\n    assert(#watch.events < 10000, 'Event limit reached')\n    local kind = \"add\"\n    assert(RIP == watch.addresses[kind], 'Unexpected breakpoint address')\n    if kind ~= 'boundary' then\n        watch.evaluations.all = watch.evaluations.all + 1\n        if RCX ~= watch.tableAddress then return false end\n        watch.evaluations.state = watch.evaluations.state + 1\n        assert(math.type(RDX) == 'integer' and RDX ~= 0, 'Invalid goods pointer')\n        local id = readInteger(RDX + 0x10)\n        assert(id ~= nil, 'Cannot read goods ID')\n        if id ~= watch.goodsId then return false end\n        assert(RBP == 0 or RBP == 1, 'Invalid trade direction')\n        assert(math.type(RBX) == 'integer' and RBX >= 0, 'Invalid quantity')\n    end\n    local caller = readQword(RSP)\n    assert(math.type(caller) == 'integer', 'Cannot read caller')\n    local event = {sequence=#watch.events+1, kind=kind, counted=watch.armed,\n        ip=string.format('%X', RIP), sp=string.format('%X', RSP),\n        thread=string.format('%X', THREADID), caller=string.format('%X', caller)}\n    if kind ~= 'boundary' then\n        event.key = kind .. '_' .. tostring(RBP)\n        event.quantityRaw = tostring(RBX)\n        event.goods = string.format('%X', RDX)\n        event.goodsId = watch.goodsId\n        event.tableAddress = string.format('%X', RCX)\n    else\n        watch.armed = false\n    end\n    watch.events[#watch.events+1] = event\n    return true\nend)\nif not ok then\n    watch.errors = watch.errors + 1\n    watch.lastError = tostring(stop)\n    return true\nend\nreturn stop",
+    "boundary": "local watch = tradeCycleAgent\nif type(watch) ~= 'table' or watch.id ~= \"484703c32f78489ebbee68a91c8465d8\" then return true end\n-- 校验真实命中并复制事件；无入参，返回是否停下，错误由外层保存。\nlocal ok, stop = pcall(function()\n    assert(#watch.events < 10000, 'Event limit reached')\n    local kind = \"boundary\"\n    assert(RIP == watch.addresses[kind], 'Unexpected breakpoint address')\n    if kind ~= 'boundary' then\n        watch.evaluations.all = watch.evaluations.all + 1\n        if RCX ~= watch.tableAddress then return false end\n        watch.evaluations.state = watch.evaluations.state + 1\n        assert(math.type(RDX) == 'integer' and RDX ~= 0, 'Invalid goods pointer')\n        local id = readInteger(RDX + 0x10)\n        assert(id ~= nil, 'Cannot read goods ID')\n        if id ~= watch.goodsId then return false end\n        assert(RBP == 0 or RBP == 1, 'Invalid trade direction')\n        assert(math.type(RBX) == 'integer' and RBX >= 0, 'Invalid quantity')\n    end\n    local caller = readQword(RSP)\n    assert(math.type(caller) == 'integer', 'Cannot read caller')\n    local event = {sequence=#watch.events+1, kind=kind, counted=watch.armed,\n        ip=string.format('%X', RIP), sp=string.format('%X', RSP),\n        thread=string.format('%X', THREADID), caller=string.format('%X', caller)}\n    if kind ~= 'boundary' then\n        event.key = kind .. '_' .. tostring(RBP)\n        event.quantityRaw = tostring(RBX)\n        event.goods = string.format('%X', RDX)\n        event.goodsId = watch.goodsId\n        event.tableAddress = string.format('%X', RCX)\n    else\n        watch.armed = false\n    end\n    watch.events[#watch.events+1] = event\n    return true\nend)\nif not ok then\n    watch.errors = watch.errors + 1\n    watch.lastError = tostring(stop)\n    return true\nend\nreturn stop"
+  },
+  "lastSequence": 3,
+  "pending": null,
+  "initial": {
+    "capacityUsed": 126,
+    "instructions": {
+      "diagnostic": "7FF777CED5C9 - 41 8B 86 581D0000  - mov eax,[r14+00001D58]",
+      "add": "7FF777CED93B - E8 30A0E2FF - call 7FF777B17970",
+      "boundary": "7FF777E0C2B0 - 40 55 - push rbp",
+      "remove": "7FF777CEAF69 - E8 D2CAE2FF - call 7FF777B17A40"
+    },
+    "goods": "3A4012E4A60",
+    "tableAddress": "3A484D9F8E8",
+    "watch": false,
+    "context": {
+      "THREADID": "60D0",
+      "R14": "3A484D9DB60",
+      "RIP": "7FF777CED5C9",
+      "RBX": "3A573942770",
+      "RDX": "0",
+      "RBP": "8C5DE8DD30",
+      "RCX": "0",
+      "RSP": "8C5DE8D870"
+    },
+    "addresses": {
+      "diagnostic": "7FF777CED5C9",
+      "add": "7FF777CED93B",
+      "boundary": "7FF777E0C2B0",
+      "remove": "7FF777CEAF69"
+    },
+    "goodsId": 10,
+    "state": "3A484D9DB60",
+    "present": true,
+    "goodsKey": "wood",
+    "storage": "3A52C902A00",
+    "pid": 43884,
+    "capacityLimit": 126,
+    "base": "7FF776AF0000",
+    "capacityRaw": "-1900000"
+  },
+  "start": {
+    "capacityUsed": 126,
+    "instructions": {
+      "diagnostic": "7FF777CED5C9 - 41 8B 86 581D0000  - mov eax,[r14+00001D58]",
+      "add": "7FF777CED93B - E8 30A0E2FF - call 7FF777B17970",
+      "boundary": "7FF777E0C2B0 - 40 55 - push rbp",
+      "remove": "7FF777CEAF69 - E8 D2CAE2FF - call 7FF777B17A40"
+    },
+    "goods": "3A4012E4A60",
+    "tableAddress": "3A484D9F8E8",
+    "watch": {
+      "tableAddress": 4005138397416,
+      "events": [
+        {
+          "ip": "7FF777E0C2B0",
+          "caller": "7FF7772A8563",
+          "sequence": 1,
+          "thread": "60D0",
+          "kind": "boundary",
+          "counted": false,
+          "sp": "8C5DE8EEE8"
+        }
+      ],
+      "id": "484703c32f78489ebbee68a91c8465d8",
+      "conditions": {
+        "remove": "local watch = tradeCycleAgent\nif type(watch) ~= 'table' or watch.id ~= \"484703c32f78489ebbee68a91c8465d8\" then return true end\n-- 校验真实命中并复制事件；无入参，返回是否停下，错误由外层保存。\nlocal ok, stop = pcall(function()\n    assert(#watch.events < 10000, 'Event limit reached')\n    local kind = \"remove\"\n    assert(RIP == watch.addresses[kind], 'Unexpected breakpoint address')\n    if kind ~= 'boundary' then\n        watch.evaluations.all = watch.evaluations.all + 1\n        if RCX ~= watch.tableAddress then return false end\n        watch.evaluations.state = watch.evaluations.state + 1\n        assert(math.type(RDX) == 'integer' and RDX ~= 0, 'Invalid goods pointer')\n        local id = readInteger(RDX + 0x10)\n        assert(id ~= nil, 'Cannot read goods ID')\n        if id ~= watch.goodsId then return false end\n        assert(RBP == 0 or RBP == 1, 'Invalid trade direction')\n        assert(math.type(RBX) == 'integer' and RBX >= 0, 'Invalid quantity')\n    end\n    local caller = readQword(RSP)\n    assert(math.type(caller) == 'integer', 'Cannot read caller')\n    local event = {sequence=#watch.events+1, kind=kind, counted=watch.armed,\n        ip=string.format('%X', RIP), sp=string.format('%X', RSP),\n        thread=string.format('%X', THREADID), caller=string.format('%X', caller)}\n    if kind ~= 'boundary' then\n        event.key = kind .. '_' .. tostring(RBP)\n        event.quantityRaw = tostring(RBX)\n        event.goods = string.format('%X', RDX)\n        event.goodsId = watch.goodsId\n        event.tableAddress = string.format('%X', RCX)\n    else\n        watch.armed = false\n    end\n    watch.events[#watch.events+1] = event\n    return true\nend)\nif not ok then\n    watch.errors = watch.errors + 1\n    watch.lastError = tostring(stop)\n    return true\nend\nreturn stop",
+        "add": "local watch = tradeCycleAgent\nif type(watch) ~= 'table' or watch.id ~= \"484703c32f78489ebbee68a91c8465d8\" then return true end\n-- 校验真实命中并复制事件；无入参，返回是否停下，错误由外层保存。\nlocal ok, stop = pcall(function()\n    assert(#watch.events < 10000, 'Event limit reached')\n    local kind = \"add\"\n    assert(RIP == watch.addresses[kind], 'Unexpected breakpoint address')\n    if kind ~= 'boundary' then\n        watch.evaluations.all = watch.evaluations.all + 1\n        if RCX ~= watch.tableAddress then return false end\n        watch.evaluations.state = watch.evaluations.state + 1\n        assert(math.type(RDX) == 'integer' and RDX ~= 0, 'Invalid goods pointer')\n        local id = readInteger(RDX + 0x10)\n        assert(id ~= nil, 'Cannot read goods ID')\n        if id ~= watch.goodsId then return false end\n        assert(RBP == 0 or RBP == 1, 'Invalid trade direction')\n        assert(math.type(RBX) == 'integer' and RBX >= 0, 'Invalid quantity')\n    end\n    local caller = readQword(RSP)\n    assert(math.type(caller) == 'integer', 'Cannot read caller')\n    local event = {sequence=#watch.events+1, kind=kind, counted=watch.armed,\n        ip=string.format('%X', RIP), sp=string.format('%X', RSP),\n        thread=string.format('%X', THREADID), caller=string.format('%X', caller)}\n    if kind ~= 'boundary' then\n        event.key = kind .. '_' .. tostring(RBP)\n        event.quantityRaw = tostring(RBX)\n        event.goods = string.format('%X', RDX)\n        event.goodsId = watch.goodsId\n        event.tableAddress = string.format('%X', RCX)\n    else\n        watch.armed = false\n    end\n    watch.events[#watch.events+1] = event\n    return true\nend)\nif not ok then\n    watch.errors = watch.errors + 1\n    watch.lastError = tostring(stop)\n    return true\nend\nreturn stop",
+        "boundary": "local watch = tradeCycleAgent\nif type(watch) ~= 'table' or watch.id ~= \"484703c32f78489ebbee68a91c8465d8\" then return true end\n-- 校验真实命中并复制事件；无入参，返回是否停下，错误由外层保存。\nlocal ok, stop = pcall(function()\n    assert(#watch.events < 10000, 'Event limit reached')\n    local kind = \"boundary\"\n    assert(RIP == watch.addresses[kind], 'Unexpected breakpoint address')\n    if kind ~= 'boundary' then\n        watch.evaluations.all = watch.evaluations.all + 1\n        if RCX ~= watch.tableAddress then return false end\n        watch.evaluations.state = watch.evaluations.state + 1\n        assert(math.type(RDX) == 'integer' and RDX ~= 0, 'Invalid goods pointer')\n        local id = readInteger(RDX + 0x10)\n        assert(id ~= nil, 'Cannot read goods ID')\n        if id ~= watch.goodsId then return false end\n        assert(RBP == 0 or RBP == 1, 'Invalid trade direction')\n        assert(math.type(RBX) == 'integer' and RBX >= 0, 'Invalid quantity')\n    end\n    local caller = readQword(RSP)\n    assert(math.type(caller) == 'integer', 'Cannot read caller')\n    local event = {sequence=#watch.events+1, kind=kind, counted=watch.armed,\n        ip=string.format('%X', RIP), sp=string.format('%X', RSP),\n        thread=string.format('%X', THREADID), caller=string.format('%X', caller)}\n    if kind ~= 'boundary' then\n        event.key = kind .. '_' .. tostring(RBP)\n        event.quantityRaw = tostring(RBX)\n        event.goods = string.format('%X', RDX)\n        event.goodsId = watch.goodsId\n        event.tableAddress = string.format('%X', RCX)\n    else\n        watch.armed = false\n    end\n    watch.events[#watch.events+1] = event\n    return true\nend)\nif not ok then\n    watch.errors = watch.errors + 1\n    watch.lastError = tostring(stop)\n    return true\nend\nreturn stop"
+      },
+      "evaluations": {
+        "all": 234,
+        "state": 0
+      },
+      "addresses": {
+        "remove": 140700843683689,
+        "diagnostic": 140700843693513,
+        "boundary": 140700844868272,
+        "add": 140700843694395
+      },
+      "goodsId": 10,
+      "errors": 0,
+      "armed": true,
+      "lastError": ""
+    },
+    "context": {
+      "THREADID": "60D0",
+      "R14": "3A53587E4F0",
+      "RIP": "7FF777E0C2B0",
+      "RBX": "0",
+      "RDX": "8C5DE8F020",
+      "RBP": "8C5DE8EFF0",
+      "RCX": "3A46E25DC00",
+      "RSP": "8C5DE8EEE8"
+    },
+    "addresses": {
+      "diagnostic": "7FF777CED5C9",
+      "add": "7FF777CED93B",
+      "boundary": "7FF777E0C2B0",
+      "remove": "7FF777CEAF69"
+    },
+    "goodsId": 10,
+    "state": "3A484D9DB60",
+    "present": true,
+    "goodsKey": "wood",
+    "storage": "3A52C902A00",
+    "pid": 43884,
+    "capacityLimit": 126,
+    "base": "7FF776AF0000",
+    "capacityRaw": "-1900000"
+  },
+  "startEvent": {
+    "ip": "7FF777E0C2B0",
+    "caller": "7FF7772A8563",
+    "sequence": 1,
+    "thread": "60D0",
+    "kind": "boundary",
+    "counted": false,
+    "sp": "8C5DE8EEE8"
+  },
+  "startDate": "1884-08-25",
+  "startSequence": 1,
+  "end": {
+    "capacityUsed": 126,
+    "instructions": {
+      "diagnostic": "7FF777CED5C9 - 41 8B 86 581D0000  - mov eax,[r14+00001D58]",
+      "add": "7FF777CED93B - E8 30A0E2FF - call 7FF777B17970",
+      "boundary": "7FF777E0C2B0 - 40 55 - push rbp",
+      "remove": "7FF777CEAF69 - E8 D2CAE2FF - call 7FF777B17A40"
+    },
+    "goods": "3A4012E4A60",
+    "tableAddress": "3A484D9F8E8",
+    "watch": {
+      "tableAddress": 4005138397416,
+      "events": [
+        {
+          "ip": "7FF777E0C2B0",
+          "caller": "7FF7772A8563",
+          "sequence": 1,
+          "thread": "60D0",
+          "kind": "boundary",
+          "counted": false,
+          "sp": "8C5DE8EEE8"
+        },
+        {
+          "ip": "7FF777CED93B",
+          "goods": "3A4012E4A60",
+          "tableAddress": "3A484D9F8E8",
+          "quantityRaw": "1500000",
+          "key": "add_0",
+          "thread": "60D0",
+          "caller": "60",
+          "counted": true,
+          "goodsId": 10,
+          "kind": "add",
+          "sequence": 2,
+          "sp": "8C5DE8D870"
+        },
+        {
+          "ip": "7FF777E0C2B0",
+          "caller": "7FF7772A8563",
+          "sequence": 3,
+          "thread": "60D0",
+          "kind": "boundary",
+          "counted": true,
+          "sp": "8C5DE8EEE8"
+        }
+      ],
+      "id": "484703c32f78489ebbee68a91c8465d8",
+      "conditions": {
+        "remove": "local watch = tradeCycleAgent\nif type(watch) ~= 'table' or watch.id ~= \"484703c32f78489ebbee68a91c8465d8\" then return true end\n-- 校验真实命中并复制事件；无入参，返回是否停下，错误由外层保存。\nlocal ok, stop = pcall(function()\n    assert(#watch.events < 10000, 'Event limit reached')\n    local kind = \"remove\"\n    assert(RIP == watch.addresses[kind], 'Unexpected breakpoint address')\n    if kind ~= 'boundary' then\n        watch.evaluations.all = watch.evaluations.all + 1\n        if RCX ~= watch.tableAddress then return false end\n        watch.evaluations.state = watch.evaluations.state + 1\n        assert(math.type(RDX) == 'integer' and RDX ~= 0, 'Invalid goods pointer')\n        local id = readInteger(RDX + 0x10)\n        assert(id ~= nil, 'Cannot read goods ID')\n        if id ~= watch.goodsId then return false end\n        assert(RBP == 0 or RBP == 1, 'Invalid trade direction')\n        assert(math.type(RBX) == 'integer' and RBX >= 0, 'Invalid quantity')\n    end\n    local caller = readQword(RSP)\n    assert(math.type(caller) == 'integer', 'Cannot read caller')\n    local event = {sequence=#watch.events+1, kind=kind, counted=watch.armed,\n        ip=string.format('%X', RIP), sp=string.format('%X', RSP),\n        thread=string.format('%X', THREADID), caller=string.format('%X', caller)}\n    if kind ~= 'boundary' then\n        event.key = kind .. '_' .. tostring(RBP)\n        event.quantityRaw = tostring(RBX)\n        event.goods = string.format('%X', RDX)\n        event.goodsId = watch.goodsId\n        event.tableAddress = string.format('%X', RCX)\n    else\n        watch.armed = false\n    end\n    watch.events[#watch.events+1] = event\n    return true\nend)\nif not ok then\n    watch.errors = watch.errors + 1\n    watch.lastError = tostring(stop)\n    return true\nend\nreturn stop",
+        "add": "local watch = tradeCycleAgent\nif type(watch) ~= 'table' or watch.id ~= \"484703c32f78489ebbee68a91c8465d8\" then return true end\n-- 校验真实命中并复制事件；无入参，返回是否停下，错误由外层保存。\nlocal ok, stop = pcall(function()\n    assert(#watch.events < 10000, 'Event limit reached')\n    local kind = \"add\"\n    assert(RIP == watch.addresses[kind], 'Unexpected breakpoint address')\n    if kind ~= 'boundary' then\n        watch.evaluations.all = watch.evaluations.all + 1\n        if RCX ~= watch.tableAddress then return false end\n        watch.evaluations.state = watch.evaluations.state + 1\n        assert(math.type(RDX) == 'integer' and RDX ~= 0, 'Invalid goods pointer')\n        local id = readInteger(RDX + 0x10)\n        assert(id ~= nil, 'Cannot read goods ID')\n        if id ~= watch.goodsId then return false end\n        assert(RBP == 0 or RBP == 1, 'Invalid trade direction')\n        assert(math.type(RBX) == 'integer' and RBX >= 0, 'Invalid quantity')\n    end\n    local caller = readQword(RSP)\n    assert(math.type(caller) == 'integer', 'Cannot read caller')\n    local event = {sequence=#watch.events+1, kind=kind, counted=watch.armed,\n        ip=string.format('%X', RIP), sp=string.format('%X', RSP),\n        thread=string.format('%X', THREADID), caller=string.format('%X', caller)}\n    if kind ~= 'boundary' then\n        event.key = kind .. '_' .. tostring(RBP)\n        event.quantityRaw = tostring(RBX)\n        event.goods = string.format('%X', RDX)\n        event.goodsId = watch.goodsId\n        event.tableAddress = string.format('%X', RCX)\n    else\n        watch.armed = false\n    end\n    watch.events[#watch.events+1] = event\n    return true\nend)\nif not ok then\n    watch.errors = watch.errors + 1\n    watch.lastError = tostring(stop)\n    return true\nend\nreturn stop",
+        "boundary": "local watch = tradeCycleAgent\nif type(watch) ~= 'table' or watch.id ~= \"484703c32f78489ebbee68a91c8465d8\" then return true end\n-- 校验真实命中并复制事件；无入参，返回是否停下，错误由外层保存。\nlocal ok, stop = pcall(function()\n    assert(#watch.events < 10000, 'Event limit reached')\n    local kind = \"boundary\"\n    assert(RIP == watch.addresses[kind], 'Unexpected breakpoint address')\n    if kind ~= 'boundary' then\n        watch.evaluations.all = watch.evaluations.all + 1\n        if RCX ~= watch.tableAddress then return false end\n        watch.evaluations.state = watch.evaluations.state + 1\n        assert(math.type(RDX) == 'integer' and RDX ~= 0, 'Invalid goods pointer')\n        local id = readInteger(RDX + 0x10)\n        assert(id ~= nil, 'Cannot read goods ID')\n        if id ~= watch.goodsId then return false end\n        assert(RBP == 0 or RBP == 1, 'Invalid trade direction')\n        assert(math.type(RBX) == 'integer' and RBX >= 0, 'Invalid quantity')\n    end\n    local caller = readQword(RSP)\n    assert(math.type(caller) == 'integer', 'Cannot read caller')\n    local event = {sequence=#watch.events+1, kind=kind, counted=watch.armed,\n        ip=string.format('%X', RIP), sp=string.format('%X', RSP),\n        thread=string.format('%X', THREADID), caller=string.format('%X', caller)}\n    if kind ~= 'boundary' then\n        event.key = kind .. '_' .. tostring(RBP)\n        event.quantityRaw = tostring(RBX)\n        event.goods = string.format('%X', RDX)\n        event.goodsId = watch.goodsId\n        event.tableAddress = string.format('%X', RCX)\n    else\n        watch.armed = false\n    end\n    watch.events[#watch.events+1] = event\n    return true\nend)\nif not ok then\n    watch.errors = watch.errors + 1\n    watch.lastError = tostring(stop)\n    return true\nend\nreturn stop"
+      },
+      "evaluations": {
+        "all": 668,
+        "state": 2
+      },
+      "addresses": {
+        "remove": 140700843683689,
+        "diagnostic": 140700843693513,
+        "boundary": 140700844868272,
+        "add": 140700843694395
+      },
+      "goodsId": 10,
+      "errors": 0,
+      "armed": false,
+      "lastError": ""
+    },
+    "context": {
+      "THREADID": "60D0",
+      "R14": "3A53587E4F0",
+      "RIP": "7FF777E0C2B0",
+      "RBX": "0",
+      "RDX": "8C5DE8F020",
+      "RBP": "8C5DE8EFF0",
+      "RCX": "3A46E25DC00",
+      "RSP": "8C5DE8EEE8"
+    },
+    "addresses": {
+      "diagnostic": "7FF777CED5C9",
+      "add": "7FF777CED93B",
+      "boundary": "7FF777E0C2B0",
+      "remove": "7FF777CEAF69"
+    },
+    "goodsId": 10,
+    "state": "3A484D9DB60",
+    "present": true,
+    "goodsKey": "wood",
+    "storage": "3A52C902A00",
+    "pid": 43884,
+    "capacityLimit": 126,
+    "base": "7FF776AF0000",
+    "capacityRaw": "-2000000"
+  },
+  "endEvent": {
+    "ip": "7FF777E0C2B0",
+    "caller": "7FF7772A8563",
+    "sequence": 3,
+    "thread": "60D0",
+    "kind": "boundary",
+    "counted": true,
+    "sp": "8C5DE8EEE8"
+  },
+  "endDate": "1884-09-01",
+  "summary": {
+    "add_0": {
+      "count": 1,
+      "quantityRaw": "1500000"
+    },
+    "remove_0": {
+      "count": 0,
+      "quantityRaw": "0"
+    },
+    "add_1": {
+      "count": 0,
+      "quantityRaw": "0"
+    },
+    "remove_1": {
+      "count": 0,
+      "quantityRaw": "0"
+    }
+  },
+  "events": [
+    {
+      "ip": "7FF777CED93B",
+      "goods": "3A4012E4A60",
+      "tableAddress": "3A484D9F8E8",
+      "quantityRaw": "1500000",
+      "key": "add_0",
+      "thread": "60D0",
+      "caller": "60",
+      "counted": true,
+      "goodsId": 10,
+      "kind": "add",
+      "sequence": 2,
+      "sp": "8C5DE8D870"
+    }
+  ],
+  "reconciliation": {
+    "expectedCapacityDelta": "-100000",
+    "actualCapacityDelta": "-100000",
+    "matched": true
+  },
+  "limitations": [
+    "Submit calls, not independently verified writes.",
+    "Dates supplied by user; game sub-day phase not read.",
+    "Thread restrictions are not exposed by the native breakpoint row.",
+    "No positive target-submit hit is implied by a zero result."
+  ]
+}

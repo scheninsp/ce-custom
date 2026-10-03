@@ -1,3 +1,6 @@
+# Refresh
+按照目前的监控，大概率每周对每个贸易中心，每种商品，只会运行一次，所以每周每个贸易中心，每种商品只会有一次量的增减。
+
 # Refresh ->CalculateQuantityPerCapacity (+122AB50)
 
 ## CalculateQuantityPerCapacity
