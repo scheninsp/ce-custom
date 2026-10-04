@@ -1,0 +1,48 @@
+{
+  "runId": "20261004T120732521776Z_f478461e",
+  "startedAt": "2026-10-04T12:07:32.521776+00:00",
+  "expectedCount": 1,
+  "before": 96,
+  "after": 96,
+  "instanceId": "ce-27656-feb613268bc942f3b77a51a1385c8c93",
+  "ceResourcesBefore": {
+    "resourceCount": 0,
+    "jobCount": 0
+  },
+  "runtimeEpoch": 1,
+  "processId": 12472,
+  "selectionEpoch": 0,
+  "pointerSize": 8,
+  "status": "failed",
+  "updatedAt": "2026-10-04T12:07:33.313442+00:00",
+  "successCount": 0,
+  "failedCount": 1,
+  "processedCount": 1,
+  "instructionCount": 0,
+  "results": [
+    {
+      "address": "3ACE43D",
+      "expected_bytes": "",
+      "file": "opcode_3ACE43D.md",
+      "status": "failed",
+      "capturedAt": "2026-10-04T12:07:33.259382+00:00",
+      "beforeCount": 0,
+      "afterCount": 0,
+      "instructionCount": 0,
+      "error": "{\"error\": {\"kind\": \"memory_read_failed\", \"message\": \"Cheat Engine could not read the target memory.\", \"operation\": \"Assembly.Disassemble\", \"hostEffect\": \"unknown\", \"retryable\": false, \"hint\": \"Check that the address is mapped and readable with memory_get_address_info.\"}}"
+    }
+  ],
+  "residueCheck": {
+    "state": "unchanged",
+    "before": {
+      "resourceCount": 0,
+      "jobCount": 0
+    },
+    "after": {
+      "resourceCount": 0,
+      "jobCount": 0
+    },
+    "checkedAt": "2026-10-04T12:07:33.266323+00:00",
+    "reason": null
+  }
+}

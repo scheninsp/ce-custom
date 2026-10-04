@@ -43,6 +43,9 @@ Docs文件夹允许在文档中复制伪代码函数的内容，但是必须在 
 ## 调试进程启动记录
 2026.10.3 18:32 第一次 victoria3.exe 进程结束
 所有第一次进程执行期间产生的文档和记录都被放入各个文件夹下的"2026-10-3-process1"子文件夹。
+每次进程执行，victoria3.exe+11FD470 形式的函数地址通常是保持不变的。
+
+2026.10.4 19:16 第二次 victoria3.exe 进程启动（当前轮次）
 
 ## Ghidra 反编译资料入口
 `Refresh`（`victoria3.exe+11FBDA0`）的定位与分析见 [Docs/ghidra_refresh_20261003.md](Docs/ghidra_refresh_20261003.md)。
