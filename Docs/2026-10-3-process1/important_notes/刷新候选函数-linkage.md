@@ -1,5 +1,90 @@
+
+
+
+
+# UpdateStateTrades
+每周末尾触发一次
+末尾的证据是断点时UI还停在周进度条的末尾，而非下一周的开头。
+但是这不能严格证明游戏的上一周末尾和下一周开头是有去别的
+
+```text
+UpdateStateTrades(+131C2B0)
+    ├─ 准备本轮共享数据（+13260F0）
+    ├─ 遍历州，建立贸易调整条目（+11FD230）
+    ├─ 按剩余预算排序
+    ├─ 循环准备候选并调用 TryAdjustStateTrade(+11FD470)
+    └─ 结束后执行收尾批处理（+1326430）
+```
+
+## 遍历全球所有州，建立贸易调整条目
+
+ReadCountryModifier(state, selector0334)
+读取州所在国的 selector0334 modifier，推测是`country_disallow_trade_bool`  ，国家级“禁止贸易”布尔修正，对应孤立主义（`law_isolationism`）。
+
+if ReadTradePotential(state) <= 0:
+    continue
+州的贸易潜力要>0
+
+entry = BuildTradeAdjustmentEntry(state)
+这里会在 entry 中初始化本轮的贸易调整预算。
+
+entries.append(entry)
+
+| 偏移 | 含义 |
+|---|---|
+| `entry+00` | 本次初始操作预算 `B` |
+| `entry+04` | 剩余操作预算，排序和后续扣减使用 |
+| `entry+08` | 州对象引用/句柄 |
+| `entry+0C` | 分组键，可能对应市场或相关贸易对象 |
+| `entry+10`、`entry+60` | 临时贸易数值表 |
+| `entry+B0` | 增加候选，后续保存商品、方向、评分、数量等 |
+| `entry+F8` | 减少候选，结构与增加候选类似 |
+
+SortByRemainingBudgetDescending(entries)
+本轮优先处理剩余贸易调整预算较多的州。
+这个函数有点蠢，为了性能直接牺牲逻辑了。
+
+接下来是一个 while 循环
+while(anyAdjusted)
+{
+移除所有已经没有剩余预算的州
+
+对剩余的所有 entries
+// 为每个条目重新选择一个减少候选商品和一个增加候选商品。
+PrepareCandidatesForEntries(entries, groupedTables, aggregateTables, seed)
+
+设置 anyAdjusted = false
+for entry in entries:
+    adjusted = TryAdjustStateTrade(entry,tables，aggregateTables)
+
+    //任意一个entry如果调整过，说明整体商品贸易分布发生了改变，PrepareCandidatesForEntries 对每个州的结果可能会发生变化。因此需要继续迭代。
+    
+    //迭代直到所有项目都不需要调整，或者 entries 前面已经清空
+    anyAdjusted = anyAdjusted or adjusted
+}
+
+# BuildTradeAdjustmentEntry
+功能：为一个州创建本轮贸易调整条目，计算初始操作预算，并初始化后续候选选择、临时表和候选槽位。
+就是一个变量初始化，提供一个空的 Entry 初始状态容器。
+
+预算 ≈ 本州每周可进行的贸易调整次数
+budget = state_weekly_trades_add
+       + 其他可能的州级修正
+       + 可能的基础值/缩放
+
+`game/common/defines/00_ai.txt` 还明确说明：贸易中心成功执行一次贸易消耗 1 次 weekly trade，失败执行则消耗总 weekly trades 的 `0.2`。
+
+一个州的贸易中心提供的预算  =
+贸易中心等级 x 满员百分比 x state_weekly_trades_add（1）
+
+# PrepareCandidatesForEntries
+
+
+
+------------------
+
 # Refresh
-按照目前的监控，大概率每周对每个贸易中心，每种商品，只会运行一次，所以每周每个贸易中心，每种商品只会有一次量的增减。
+根据最新的商品数量，刷新候选商品的评分
 
 # Refresh ->CalculateQuantityPerCapacity (+122AB50)
 
