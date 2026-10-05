@@ -68,18 +68,122 @@ for entry in entries:
 就是一个变量初始化，提供一个空的 Entry 初始状态容器。
 
 预算 ≈ 本州每周可进行的贸易调整次数
-budget = state_weekly_trades_add
-       + 其他可能的州级修正
-       + 可能的基础值/缩放
 
 `game/common/defines/00_ai.txt` 还明确说明：贸易中心成功执行一次贸易消耗 1 次 weekly trade，失败执行则消耗总 weekly trades 的 `0.2`。
 
-一个州的贸易中心提供的预算  =
-贸易中心等级 x 满员百分比 x state_weekly_trades_add（1）
+WeeklyTradeTotal =  1
+            + Σ(贸易中心等级 × staffing 百分比 × Weekly Trades/级)
+            + 其他 Weekly Trades 修正
+这一部分是基于贸易中心等级，满员率，和事件等其他修正，得到WeeklyTrade总值
+
+预算 = max(1, trunc_toward_zero(WeeklyTradeTotal))
+保证从 WeeklyTrade 机制计算出的预算绝不会<1 （大概对应每周调整一次贸易）
+
+Build entry 之后 entry 中就会有州的 Budget 了。
 
 # PrepareCandidatesForEntries
+功能：对本轮仍有预算的所有条目重新选择一个减少候选和一个增加候选。
+这个减少候选，和增加候选，被分别写入entry+F8，entry+B0
+
+选择减少候选的函数 SelectReductionCandidate
+选择增加候选的函数 SelectIncreaseCandidate
+
+## SelectReductionCandidate
+
+signedUnits = ReadGoodsValue(state.table1D88, goods) / 100000
+读取当前该州所有已经在贸易中的商品的占用的贸易容量
+前分析对应正值出口、负值进口
+
+如果最近刚增加过贸易量的商品，8周内不会减少。
+
+遍历州已存在贸易商品列表，挑选 best（评分最低商品）
+best = null
+for goods in 州已存在贸易商品列表
+
+    //输入 state 州状态对象，和 goods（遍历中的一种商品） 
+    candidate = MakeCandidate(
+        state,
+        goods,
+        direction = (signedUnits > 0 ? 1 : 0),
+        mode = REDUCTION
+    )
+
+    //刷新 candidate 商品的评分
+    Refresh(candidate, context)
+
+    if candidate.score < best.score
+        best = candidate
+    elseif candidate.score = best.score
+        随机挑选二者一个作为 best
+
+return best    
 
 
+best = SelectReductionCandidate()  //best 就是返回值
+
+
+## SelectIncreaseCandidate
+
+前提：
+PassCountryAndMarketFilters 
+//如果商品在该国或者该州禁止贸易的列表中则不进入后续处理
+//例如事件禁酒，禁鸦片，或者条约禁止贸易某种商品
+GoodsCanBeTraded //是可贸易的货物，排除本地商品如运力
+ExistingTradeHasOppositeDirection  //如果已存在反方向贸易则不在此方向贸易中增加此类货物
+
+//对两个方向，分别遍历所有可用商品类型
+//注意是对两个方向最终只挑选出一个评分最高的，也就是进出口两个方向只能一次更新调整一个商品
+for direction in [0, 1]:
+    for goods in GoodsDatabase:
+        //流程和 SelectReductionCandidate 内循环基本一致
+        //先把当前商品作为 candidate，然后更新它的评分
+        candidate = MakeCandidate(
+            state,
+            goods,
+            direction,
+            mode = INCREASE
+        )
+
+        Refresh(candidate, context) 
+
+        //若评分未达到可增加的阈限，则继续遍历其他商品
+        if not MeetsIncreaseThreshold(candidate):
+            continue
+
+        //挑选评分最高的
+        if candidate.score > best.score:
+            best = candidate
+        elseif candidate.score = best.score
+            随机挑选二者一个作为 best
+        
+return best
+
+best = SelectIncreaseCandidate()  
+
+
+-----------------
+
+# MakeCandidate
+初始化 candidate 对象，包含下面字段
+```cpp
+function MakeCandidate(state, goods, direction, mode):
+    candidate = stack_storage(0x48)
+    candidate.goods       = goods                    // +00，8 字节商品指针
+    candidate.direction   = direction                // +08，1 字节方向
+    candidate.baseRevenue = 0                        // +10，8 字节基础收益
+    candidate.unitRevenue = 0                        // +18，8 字节单位净收益
+    candidate.score       = 0                        // +20，8 字节最终意愿评分
+    candidate.stateRef    = load_u32(state + 0x08)    // +28，4 字节州引用
+    candidate.mode        = mode                     // +2C，4 字节评估模式
+    candidate.shortage    = 0                        // +30，8 字节短缺评分项
+    candidate.quantity    = 0                        // +38，8 字节本次单位容量交易量
+    candidate.advantage   = 0                        // +40，8 字节方向性贸易优势
+    // +09..+0F 未见初始化，不把结构填充字节假定为已清零。
+    return candidate
+```
+
+candidate 的信息会被用在 Refresh 中，作为读写的容器。
+初始化的时候基本都是空的，Refresh 过程中会逐渐填充它。
 
 ------------------
 

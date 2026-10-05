@@ -319,16 +319,6 @@ function PrepareCandidatesWorker(shared, entry):
 
 `+131D540` 的直接反汇编见 [function_7FF777E0D540.md](../../../Output/2026-10-3-process1/goal3_static_20261002/function_7FF777E0D540.md)。该函数先用 `entry+0C` 查找共享表，再调用 `+122AC50` 和 `+122B320`，分别把约 `0x48` 字节的结果写入 `entry+F8` 和 `entry+B0`。候选选择的进一步伪代码见 [州贸易调整函数的候选准备函数.md](州贸易调整函数的候选准备函数.md)；`+131D170` 的调度关系见 [goal3_static_disassembly.md](../intermediates/goal3_static_disassembly.md) 第 5.1 节。
 
-调用关系的关键证据在批处理函数 `+1326280`：串行分支的 `+1326405` 有一条直接 `call victoria3.exe+131D540`。而 `UpdateStateTrades(+131C2B0)` 在 `+131D170` 调用 `+1326280`。因此完整链路是：
-
-```text
-UpdateStateTrades(+131C2B0)
-    └─ +131D170
-       └─ +1326280（批处理/并行调度）
-          └─ +131D540（串行工作体）
-```
-
-在 `+1326280` 的其他分支中，工作体可能通过任务/回调机制间接执行，所以静态调用图未必在每条路径都显示 `+131D540` 的直接 `call`。搜索时应使用 `+131D540`、`7FF777E0D540` 或对应反汇编文件名，而不是搜索 `PrepareCandidatesWorker`。
 
 ### 10.3 `CalculateTradeAdjustmentBudget`（`victoria3.exe+12295A0`）当前可确认的功能
 
@@ -360,6 +350,11 @@ function CalculateTradeAdjustmentBudget(state):
 因此当前最可信的解释是：`0x0099` 是 `state_weekly_trades_add` 的内部修正 selector，`+12295A0` 从已经按生产方式 staffing 汇总的州修正表中取出该值，再通过 Value Calculator 转换为 `entry+00` 所需的整数预算。
 
 游戏目录已经提供了更直接的语义证据。`game/localization/english/modifiers_l_english.yml` 将 `state_weekly_trades_add` 描述为“一个州每周可以进行的贸易调整次数”；简体中文对应文本是“提高或降低一个州每周可以进行的贸易数量”。`game/common/defines/00_ai.txt` 还明确说明：贸易中心成功执行一次贸易消耗 1 次 weekly trade，失败执行则消耗总 weekly trades 的 `0.2`。因此这里的“预算”就是该州本周可尝试的贸易调整次数，失败扣除比例也与反汇编中按初始预算比例扣除的现象相符。
+
+贸易中心的“贸易数量”生产方式（小规模、普通、大宗等）主要改变每次贸易的货物数量，不直接增加 Weekly Trades。相关定义见：
+- [11_private_infrastructure.txt (line 353)](D:/Games/Victoria3/Victoria 3/game/common/production_methods/11_private_infrastructure.txt:353)
+- [production_methods.md (line 6)](D:/Games/Victoria3/Victoria 3/game/common/production_methods/production_methods.md:6)
+
 
 贸易中心生产方式在 `game/common/production_methods/11_private_infrastructure.txt` 中按 workforce 缩放提供 `state_weekly_trades_add = 1`，而 `state_trade_capacity_add = 10` 是另一项独立修正。`game/common/production_methods/production_methods.md` 对 `workforce_scaled` 的定义是：修正按建筑 staffing level 缩放，staffing level 的范围是 `0.0` 到建筑等级。因此，对贸易中心等级 `L`、有效 staffing level `W`（`0 <= W <= L`）而言，脚本层面的贡献可写成：
 
@@ -738,3 +733,138 @@ max(
     )
 )
 ```
+绝大部分情况下 Weekly Trades/级 = state_weekly_trades_add 配置 = 1，贸易中心生产方式不影响此值。
+重新把公式拆成易于理解的两个部分
+WeeklyTradeTotal =  1
+            + Σ(贸易中心等级 × staffing 百分比 × Weekly Trades/级)
+            + 其他 Weekly Trades 修正
+这一部分是基于贸易中心等级，满员率，和事件等其他修正，得到WeeklyTrade总值
+
+预算 = max(1, trunc_toward_zero(WeeklyTradeTotal))
+保证从 WeeklyTrade 机制计算出的预算绝不会<1 （大概对应每周调整一次贸易）
+
+-------------------------
+
+
+### 10.7 验证国际市场接入度
+
+
+state+0x68 不是固定绝对地址。它是“某个州对象的基址 + 十六进制 68”。目前记录里没有该州对象的实际基址。
+已确认读取它的指令是：
+victoria3.exe+1229B00 - 49 8B 5F 68           - mov rbx,[r15+68]
+你要监控的数据地址则是断点命中时的 R15 + 0x68。
+
+先修一些建筑使九州基建使用量超上限，国际市场接入度降到94%
+然后设置断点条件
+```
+local v = readQword(R15 + 0x68)
+return v ~= nil and v >= 94000 and v <= 95000
+```
+R15=3E3A2D8DB60
+3E3A2D8DB60+68
+
+
+**提问**：我现在断在“victoria3.exe+1229B00 - 49 8B 5F 68           - mov rbx,[r15+68] ” 。而且追加的条件断点 “local v = readQword(R15 + 0x68)
+return v ~= nil and v >= 94000 and v <= 95000”  最终观察到 ”R15=3E3A2D8DB60
+3E3A2D8DB60+68“  。你能通过访问此时 CE 的信息，来找到当前断点的对应州是否是九州？
+
+
+可以确认：**当前断点对应的是九州州对象。**
+
+我通过 CE 当前暂停进程读取了：
+
+```text
+R15 = 3E3A2D8DB60
+[R15+0x68] = 94177
+```
+
+这对应比例：
+
+```text
+94177 / 100000 = 0.94177
+```
+
+同时在同一个 `R15` 对象内发现了州名称本地化键：
+
+```text
+R15+0x1AA8
+  → HUB_NAME_STATE_KYUSHU_city_japanese
+  → HUB_NAME_STATE_KYUSHU_port_japanese
+  → HUB_NAME_STATE_KYUSHU_farm_japanese
+  → HUB_NAME_STATE_KYUSHU_mine_japanese
+```
+
+因此，这次命中的对象确实是 `STATE_KYUSHU`，而不是仅凭数值或地址推测。
+
+当前现场可记录为：
+
+```text
+州对象基址：3E3A2D8DB60
+state+0x68：3E3A2D8DBC8
+字段值：94177
+比例：约 94.177%
+```
+
+这也验证了你的条件断点：
+
+```lua
+local v = readQword(R15 + 0x68)
+return v ~= nil and v >= 94000 and v <= 95000
+```
+
+确实筛中了九州对象的该字段。需要注意的是，这只能确认 `state+0x68` 在九州当前为约 `0.94177`；它仍然不能单独证明该字段的业务名称就是“国际市场接入度”。
+
+
+把断点的 Lua 条件改为只判断九州对象地址：
+return R15 == 0x3E3A2D8DB60
+这样下一次到达 victoria3.exe+1229B00 时，只要处理的是这个九州对象，就会暂停，不再限制该字段的数值。适合观察它是否随国际市场接入度变化。
+
+等九州铁路修好，国际市场接入度重新回到UI显示 99%
+再次断住之后
+[R15 + 0x68] = 99615
+
+这样可以基本证明 state+0x68 就是州的国际市场接入度。
+
+
+### 事件对 state_weekly_trades_add 的修正，归属于公式哪一部分
+
+**提问** ： game\common\static_modifiers\00_ip4_04_modifiers.txt 里两处 ”state_weekly_trades_add = 2“   是直接加在 “Σ(贸易中心等级 × staffing 百分比 × Weekly Trades/级)“ 这里面内部的 Weekly Trades/级 上，还是加在 ”其他 Weekly Trades 修正” 上，你能通过目前的信息推断出来吗？
+
+**它们加在“其他 Weekly Trades 修正”上，是州级总量直接加 2，不是把贸易中心每级的 `1` 改成 `3`。**现有配置和施加代码足以支持这个判断。
+
+两类来源的缩放方式不同：
+
+| 来源 | 配置位置 | 贡献方式 |
+|---|---|---|
+| 贸易中心生产方式 | `state_modifiers → workforce_scaled` | 按有效 staffing level 缩放 |
+| `spc_secure_port`、`pyrenean_smuggling` | 静态修正中的直接 `state_weekly_trades_add = 2` | 每个生效修正给目标州总量加 2 |
+
+施加范围也有明确证据：
+
+- [carlist_war_events.txt](</D:/Games/Victoria3/Victoria 3/game/events/iberia_events/carlist_war_events.txt:552>)：在巴斯克州的 `random_scope_state` 中添加 `spc_secure_port`。
+- [00_global.txt](</D:/Games/Victoria3/Victoria 3/game/common/history/global/00_global.txt:210>)：给筛选出的巴斯克州添加 `pyrenean_smuggling`。
+
+因此，在修正按默认强度施加时：
+
+```text
+T = Σ(贸易中心等级 × staffing 百分比 × 生产方式 Weekly Trades/级)
+    + 2 × 是否有 spc_secure_port
+    + 2 × 是否有 pyrenean_smuggling
+    + 其他生效的州级 Weekly Trades 加法贡献
+```
+
+例如，10 级贸易中心、80% staffing、每级提供 1，另有一个上述静态修正：
+
+```text
+贸易中心贡献 = 10 × 0.8 × 1 = 8
+静态修正贡献 = 2
+T = 8 + 2 = 10
+```
+
+**这个静态 `+2` 不随贸易中心等级或 staffing 缩放，但汇总之后仍受预算函数中的国际市场接入度倍率影响。**沿用当前预算结构：
+
+```text
+预算 = max(1, 向零截断((1 + T) × min(国际市场接入度, 1)))
+```
+
+文件里定义了两处 `+2`，也不代表所有州自动获得 `+4`；只有实际被施加且仍生效的修正，才计入该州的总量。
