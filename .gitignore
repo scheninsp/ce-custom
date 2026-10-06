@@ -4,10 +4,5 @@ __pycache__/
 Docs/netdata
 FakeCode/ghidra_refresh_20261003
 FakeCode/ghidra_disassembly
-Output/2026-10-3-process1
-Output/2026-10-4-process2
-Output/cycle_count
-Output/ghidra_refresh_20261003
-Output/opcodes
-Output/streg_*
+Output/*
 LearnTradeHardWay.md

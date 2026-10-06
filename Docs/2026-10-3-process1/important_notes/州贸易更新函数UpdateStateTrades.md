@@ -43,6 +43,10 @@ function UpdateStateTrades(manager):
             continue
 
         entry = BuildTradeAdjustmentEntry(state)     // +11FD230
+        // 构造函数内部：initialBudget = CalculateTradeAdjustmentBudget(state)（+12295A0）；
+        // entry.field00 = entry.initialBudget = initialBudget；
+        // entry.field04 = entry.remaining = initialBudget。
+        // 本批次只在这里初始化预算，后续各轮不会重新补充预算。
         entries.append(entry)                        // 单条记录步长约 0x140
 
     // 剩余预算较大的条目优先处理。
@@ -52,7 +56,7 @@ function UpdateStateTrades(manager):
     aggregateTables = CreateAggregateTradeTables()
 
     do:
-        // 删除本轮已经没有剩余预算的条目。
+        // 删除 entry.remaining（entry+04）<= 0 的条目。
         RemoveEntriesWithNonPositiveBudget(entries)  // +131CEE0 附近
         if entries.empty:
             break
@@ -70,16 +74,65 @@ function UpdateStateTrades(manager):
         for entry in entries:
             tables = groupedTables.lookupOrCreate(entry.field0C)
 
-            adjusted = TryAdjustStateTrade(
-                entry,
-                tables,
-                aggregateTables
-            )                                             // +11FD470
+            // 以下内联展开 TryAdjustStateTrade（victoria3.exe+11FD470）。
+            // 原调用点只调用该函数；预算扣减实际发生在它内部。
+            adjusted = false
+            state = Resolve(entry.stateRef)
+            if not state.isValid() or entry.remaining <= 0:
+                continue
+
+            initializing = GameState.flag148
+            if not valid(entry.remove.goods) and not valid(entry.add.goods):
+                if not initializing:
+                    entry.remaining = 0
+                continue
+
+            context = BuildContext(entry, tables, aggregateTables) // +11FD370；简写表参数
+            if valid(entry.remove.goods): Refresh(entry.remove, context) // +11FBDA0
+            if valid(entry.add.goods): Refresh(entry.add, context)       // +11FBDA0
+
+            used = state.field1D5C
+            limit = state.field1D58
+            removed = false
+            if valid(entry.remove.goods):
+                maintain = 25fp
+                if initializing: maintain = MulFixed(maintain, 0.75fp)
+                betterReplacement = (
+                    used >= limit and entry.remove.goods != entry.add.goods
+                    and MulFixed(entry.remove.score, 2fp) < entry.add.score
+                )
+                if betterReplacement or entry.remove.score < maintain:
+                    RemoveOneTradeUnit(entry.remove, context) // +11FAF20
+                    removed = true
+
+            if not removed and used >= limit:
+                entry.remaining = 0
+                continue
+
+            added = MeetsIncreaseThreshold(entry.add) // +11FBC80
+            if added:
+                // 此处省略商品容量、数量和价值表的增加写回；详见州贸易调整函数.md。
+                if not initializing:
+                    RecordTradeIncreaseDate(state, entry.add.goods) // +122BED0
+
+            if added or removed:
+                // 同次既移除又增加，也只消耗一次成功预算。
+                entry.remaining -= 1
+                RefreshCapacityCaches(state) // +122BF50
+                NotifyStateChange(state, 3)   // +C46410
+                adjusted = true
+            else:
+                if initializing:
+                    entry.remaining -= 1
+                else:
+                    entry.remaining -= max(1, round(entry.initialBudget * 0.2))
 
             anyAdjusted = anyAdjusted or adjusted
 
         RenderFrameIfNeeded()
     while anyAdjusted
+    // 每个继续迭代的轮次至少有一次成功，剩余正预算之和至少减少 1；
+    // 无成功时直接退出，即使某些条目仍有预算。终止不要求评分达到固定点。
 
     // 具体写回范围仍需继续从 +1326430 展开确认。
     RunFinalizationBatch(manager.states)             // +1326430
@@ -868,3 +921,48 @@ T = 8 + 2 = 10
 ```
 
 文件里定义了两处 `+2`，也不代表所有州自动获得 `+4`；只有实际被施加且仍生效的修正，才计入该州的总量。
+
+## 十一、Refresh 函数为什么在一个循环内，前后两轮 entries 遍历都要调用
+
+**提问**：Docs\2026-10-3-process1\important_notes\州贸易更新函数UpdateStateTrades.md 在 UpdateStateTrades 中，为什么 L65 PrepareCandidatesForEntries 内部已经对所有 entries 更新条目时，内部对每个商品都调用了 Refresh 更新了它们的评分，但是 L91,92 又对两个候选商品又都调用了一次 Refresh？
+
+**因为 L65 算的是“选谁”，L91、92 算的是“轮到这个州执行时，这两个候选现在是否还值得调整”。** 两次之间，评分的输入和评分本身都可能变化。
+
+有两个具体原因。
+
+**1．所有州先选候选，再逐州执行；前面州的调整会改变共享贸易表。**
+
+代码顺序是：
+
+```text
+为所有 entries 选择候选
+→ 执行州 A 的调整，修改共享贸易表
+→ 执行州 B 的调整
+→ 执行州 C 的调整
+```
+
+所以州 B 在 L65 选中某商品时用到的贸易数据，到 B 执行 L91、92 时可能已经改变。即使 B 自己尚未调整，其他州的贸易变化也可能影响它的数量限制、收益和评分。
+
+这是有实际写入依据的：[TryAdjustStateTrade 反汇编](/D:/cebuild/ce-custom/Output/2026-10-3-process1/goal3_static_20261002/function_7FF777CED470.md:280) 中，`+11FD94E/+11FD961/+11FD974/+11FDA1C` 会更新传入的数量及加权价值表。因此再次 `Refresh` 能让执行判断使用包含前面调整结果的当前上下文。
+
+**2．候选选择使用的评分还经过随机扰动，执行前需要重新计算业务评分。**
+
+选择函数并非只做：
+
+```text
+Refresh → 比较评分
+```
+
+而是会做：
+
+```text
+Refresh → 随机扰动评分 → 比较并保存候选
+```
+
+而且扰动后的值会写进候选的 `+20` 评分字段，一起复制到 `entry`。例如[增加候选反汇编](/D:/cebuild/ce-custom/Output/2026-10-3-process1/goal3_static_20261002/function_7FF777D1B320.md:388) 的 `+122B8E0` 写入该字段，后面再比较、复制整个候选。
+
+执行前重新 `Refresh` 会覆盖这个评分，后面的维持门槛、增加门槛，以及“增加评分是否超过减少评分的两倍”等判断，就使用重新计算的业务评分。**即使共享表没有变化，这次刷新也可能有意义。**
+
+还有一个关键区别：**L91、92 只重新评估已经选中的两个候选，不重新遍历所有商品。** 如果选中的增加商品现在不达标，本次可能放弃增加；不会立即寻找另一个商品。只有外层继续下一轮时，才重新选择候选。
+
+所以这里的行为是：**批量选择候选，再在逐州执行前复核评分和数量。** `Refresh` 刷新的是候选结构中的计算字段，并不是给所有商品更新一个永久有效的全局评分。
